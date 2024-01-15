@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
 import com.cc221009.ccl3_leafminder.data.PlantsDatabase
 import com.cc221009.ccl3_leafminder.ui.theme.CCL3_LeafminderTheme
+import com.cc221009.ccl3_leafminder.ui.view_model.MainViewModel
 
 
 class MainActivity : ComponentActivity() {
