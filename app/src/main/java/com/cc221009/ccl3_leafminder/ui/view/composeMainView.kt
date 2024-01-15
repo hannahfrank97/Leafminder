@@ -65,19 +65,19 @@ fun MainView(
 
                 composable(Screen.AddView.route){
                     mainViewModel.selectScreen(Screen.HomeView)
-                    HomeView(mainViewModel, navController) }
+                    AddView(mainViewModel, navController) }
 
                 composable(Screen.DetailView.route){
                     mainViewModel.selectScreen(Screen.HomeView)
-                    HomeView(mainViewModel, navController) }
+                    DetailView(mainViewModel, navController) }
 
                 composable(Screen.EditView.route){
                     mainViewModel.selectScreen(Screen.HomeView)
-                    HomeView(mainViewModel, navController) }
+                    EditView(mainViewModel, navController) }
 
                 composable(Screen.PlantListView.route){
                     mainViewModel.selectScreen(Screen.HomeView)
-                    HomeView(mainViewModel, navController) }
+                    PlantListView(mainViewModel, navController) }
 
 
             }
