@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -61,7 +62,7 @@ fun AddView(mainViewModel: MainViewModel, navController: NavController){
 
         // Textfield Name
         DefaultTextField("Name", "Name")
-        
+
         AddPlantInfoContainer()
 
         AddPlantSpeciesContainer()
@@ -89,24 +90,26 @@ fun AddPlantInfoContainer(
         DefaultTextField("Since when do you have your plant?", "Select date")
 
         AddParameterContainer("size") {
-            IconButtonsItem("small", R.drawable.placeholder, "small")
-            IconButtonsItem("medium", R.drawable.placeholder, "medium")
-            IconButtonsItem("large", R.drawable.placeholder, "large")
+            IconButtonsItem("small", R.drawable.placeholder, "small", modifier = Modifier.weight(1f))
+            IconButtonsItem("medium", R.drawable.placeholder, "medium", modifier = Modifier.weight(1f))
+            IconButtonsItem("large", R.drawable.placeholder, "large", modifier = Modifier.weight(1f))
         }
 
         AddParameterContainer("location") {
-            IconButtonsItem("light", R.drawable.placeholder, "light")
-            IconButtonsItem("half-light", R.drawable.placeholder, "half-light")
-            IconButtonsItem("half-shadow", R.drawable.placeholder, "half-shadow")
-            IconButtonsItem("shadow", R.drawable.placeholder, "shadow")
+            IconButtonsItem("light", R.drawable.placeholder, "light", modifier = Modifier.weight(1f))
+            IconButtonsItem("half-light", R.drawable.placeholder, "half-light", modifier = Modifier.weight(1f))
+            IconButtonsItem("half-shadow", R.drawable.placeholder, "half-shadow", modifier = Modifier.weight(1f))
+            IconButtonsItem("shadow", R.drawable.placeholder, "shadow", modifier = Modifier.weight(1f))
         }
 
         AddParameterContainer("wellbeing") {
-            IconButtonsItem("great", R.drawable.placeholder, "great")
-            IconButtonsItem("okay", R.drawable.placeholder, "okay")
-            IconButtonsItem("miserable", R.drawable.placeholder, "miserable")
+            IconButtonsItem("great", R.drawable.placeholder, "great", modifier = Modifier.weight(1f))
+            IconButtonsItem("okay", R.drawable.placeholder, "okay", modifier = Modifier.weight(1f))
+            IconButtonsItem("miserable", R.drawable.placeholder, "miserable", modifier = Modifier.weight(1f))
         }
     }
+    Spacer(modifier = Modifier.height(20.dp))
+
 
 }
 
@@ -117,11 +120,11 @@ fun AddParameterContainer(
     ) {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         Text(text = headline)
         Row(
-
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             content()
         }
@@ -132,13 +135,15 @@ fun AddParameterContainer(
 fun IconButtonsItem(
     headline: String,
     imgPath: Int,
-    imgDescription: String
+    imgDescription: String,
+    modifier: Modifier = Modifier
 ) {
 
     Button(
         modifier = Modifier
             .fillMaxWidth(0.3f)
-            .height(60.dp),
+            .height(60.dp)
+            .then(modifier),
         onClick = {
             //Logic for adding Image
         }
@@ -168,13 +173,15 @@ fun AddPlantSpeciesContainer() {
 
         Row(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            APIIconItem("Location", "api value", R.drawable.placeholder, "location icon")
-            APIIconItem("Watering", "api value", R.drawable.placeholder, "watering icon")
-            APIIconItem("Poisinousness", "api value", R.drawable.placeholder, "poisonousness icon")
+            APIIconItem("Location", "api value", R.drawable.placeholder, "location icon", modifier = Modifier.weight(1f))
+            APIIconItem("Watering", "api value", R.drawable.placeholder, "watering icon", modifier = Modifier.weight(1f))
+            APIIconItem("Poisinousness", "api value", R.drawable.placeholder, "poisonousness icon", modifier = Modifier.weight(1f))
         }
     }
+    Spacer(modifier = Modifier.height(20.dp))
 }
 
 @Composable
@@ -182,14 +189,16 @@ fun APIIconItem(
     headline: String,
     apiValue: String,
     imgPath: Int,
-    imgDescription: String
+    imgDescription: String,
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = Modifier
             .background(colorScheme.surface)
             .padding(20.dp)
             .fillMaxWidth(0.3f)
-            .height(100.dp),
+            .height(100.dp)
+            .then(modifier),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -220,6 +229,8 @@ fun AddPlantWateringContainer() {
 
         WateringFrequencySelector("How frequent do you want to water your plant?")
     }
+    Spacer(modifier = Modifier.height(20.dp))
+
 }
 
 @Composable
@@ -277,8 +288,8 @@ fun PlantImage(
         modifier = Modifier
             .padding(bottom = 20.dp)
             .border(2.dp, colorScheme.outline, RoundedCornerShape(10.dp))
-            .height(50.dp)
-            .width(50.dp),
+            .height(100.dp)
+            .width(100.dp),
         onClick = { onClickLogic() }
     ) {
         Image(
