@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.cc221009.ccl3_leafminder"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
