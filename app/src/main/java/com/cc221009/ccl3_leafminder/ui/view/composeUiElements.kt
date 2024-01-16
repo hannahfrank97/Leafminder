@@ -2,6 +2,7 @@ package com.cc221009.ccl3_leafminder.ui.view
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -69,19 +70,24 @@ fun Header(
 fun DefaultTextField(headline: String, placeholderText: String) {
     var textSaver by rememberSaveable(stateSaver = TextFieldValue.Saver) { mutableStateOf(TextFieldValue("")) }
 
-    Text(text = headline)
+    Column() {
 
-    TextField(
-        value = textSaver,
-        onValueChange = { newTextValue -> textSaver = newTextValue },
-        label = { Text(text = placeholderText) },
-        placeholder = { Text(text = placeholderText) },
-        modifier = Modifier
-            .padding(bottom = 20.dp)
-            .border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(10.dp))
-            .fillMaxSize(0.8f)
-            .height(50.dp)
-    )
+        Text(text = headline)
+
+        TextField(
+            value = textSaver,
+            onValueChange = { newTextValue -> textSaver = newTextValue },
+            label = { Text(text = placeholderText) },
+            placeholder = { Text(text = placeholderText) },
+            modifier = Modifier
+                .border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(10.dp))
+                .height(50.dp)
+                .padding(bottom = 20.dp)
+                .fillMaxSize()
+        )
+    }
+
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

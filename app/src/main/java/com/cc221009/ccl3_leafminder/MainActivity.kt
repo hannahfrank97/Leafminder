@@ -19,7 +19,6 @@ import com.cc221009.ccl3_leafminder.ui.theme.CCL3_LeafminderTheme
 import com.cc221009.ccl3_leafminder.ui.view.MainView
 import com.cc221009.ccl3_leafminder.ui.view_model.MainViewModel
 
-
 class MainActivity : ComponentActivity() {
     private val plantdb by lazy {
         Room.databaseBuilder(this, PlantsDatabase::class.java, "plantDatabase.db")
@@ -33,7 +32,6 @@ class MainActivity : ComponentActivity() {
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
                     return MainViewModel(plantdb.dao) as T
                 }
-
             }
         })
 
