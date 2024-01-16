@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.cc221009.ccl3_leafminder"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -31,12 +31,13 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
+
     buildFeatures {
         compose = true
     }
@@ -77,4 +78,6 @@ dependencies {
     // room
     implementation("androidx.room:room-ktx:2.5.2")
     implementation("androidx.media3:media3-common:1.2.0")
+    ksp("androidx.room:room-compiler:2.5.0")
 }
+
