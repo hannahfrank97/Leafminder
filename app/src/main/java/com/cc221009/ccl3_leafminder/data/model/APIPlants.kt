@@ -6,8 +6,12 @@ package com.cc221009.ccl3_leafminder.data.model
     val watering: String,
     val sunlight: List<String>,
     val default_image: PlantImage,
-    val poisonous_to_humans: Boolean,
 
+
+)
+data class APIDetails (
+    val id: Int,
+    val poisonous_to_humans: Boolean,
 )
 
 data class PlantImage(
