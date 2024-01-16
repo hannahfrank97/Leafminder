@@ -19,7 +19,6 @@ import com.cc221009.ccl3_leafminder.ui.theme.CCL3_LeafminderTheme
 import com.cc221009.ccl3_leafminder.ui.view.MainView
 import com.cc221009.ccl3_leafminder.ui.view_model.MainViewModel
 
-
 class MainActivity : ComponentActivity() {
     private val plantdb by lazy {
         Room.databaseBuilder(this, PlantsDatabase::class.java, "plantDatabase.db")
@@ -29,11 +28,10 @@ class MainActivity : ComponentActivity() {
 
     private val mainViewModel by viewModels<MainViewModel>(
         factoryProducer = {
-            object: ViewModelProvider.Factory {
+            object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
                     return MainViewModel(plantdb.dao) as T
                 }
-
             }
         })
 
@@ -50,23 +48,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-}
-
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    CCL3_LeafminderTheme {
-        Greeting("Android")
     }
 }
