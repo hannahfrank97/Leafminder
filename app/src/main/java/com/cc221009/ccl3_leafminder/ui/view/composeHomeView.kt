@@ -37,7 +37,6 @@ fun HomeView(mainViewModel: MainViewModel, navController: NavController){
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
 
