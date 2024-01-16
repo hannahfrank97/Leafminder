@@ -1,7 +1,6 @@
 package com.cc221009.ccl3_leafminder.data
 
 import com.cc221009.ccl3_leafminder.data.model.PlantImage
-import com.cc221009.ccl3_leafminder.data.model.plantAPIService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -9,9 +8,9 @@ import kotlinx.coroutines.withContext
 
 class PlantsRepository(private val apiPlantsService: APIPlantsService) {
     suspend fun getPlantsWithDetails(apiKey:String): List<APIPlantsWithDetails> {
-        val plants = apiPlantsService.getlistAPIPlants(apiKey).execute().body() ?: emptyList()
+        val plantsAPI = apiPlantsService.getlistAPIPlants(apiKey).execute().body() ?: emptyList()
         return withContext(Dispatchers.IO) {
-            plants.map { plant ->
+            plantsAPI.map { plant ->
                 async {
                     val details = apiPlantsService.getAPIDetails(plant.id, apiKey).execute().body()
                     APIPlantsWithDetails(
@@ -29,8 +28,6 @@ class PlantsRepository(private val apiPlantsService: APIPlantsService) {
         }
 
     }
-
-
         data class APIPlantsWithDetails(
             val id: Int,
             val scientific_name: String,
