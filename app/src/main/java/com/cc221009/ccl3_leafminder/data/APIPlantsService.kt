@@ -5,7 +5,7 @@ import androidx.room.Query
 import com.cc221009.ccl3_leafminder.data.model.APIPlants
 import retrofit2.http.GET
 
-interface APIPlantsService {
-    @GET("APIplants")
+/*interface APIPlantsService {
+    @GET("species-list")
     fun listAPIPlants(@Query("apiKey") apiKey:String): Call<List<APIPlants>>
-}
+}*/
