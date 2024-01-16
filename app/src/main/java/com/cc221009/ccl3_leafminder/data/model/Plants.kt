@@ -9,7 +9,6 @@ data class Plants(
     val date: String,
     val size: String,
     val wellbeing: String,
-    val species: String,
     val wateringDate: String,
     val wateringFrequency: String,
     val imagePath: String,

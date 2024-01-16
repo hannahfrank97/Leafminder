@@ -76,4 +76,9 @@ dependencies {
     // room
     implementation("androidx.room:room-ktx:2.5.2")
     implementation("androidx.media3:media3-common:1.2.0")
+
+    //library for API
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
 }
