@@ -30,62 +30,68 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.List
+import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
 
 
 import java.io.File
 import java.util.concurrent.ExecutorService
 
 // https://kotlinlang.org/docs/sealed-classes.html
-sealed class Screen(val route: String){
-    object HomeView: Screen("homeView")
-    object AddView: Screen("addView")
-    object DetailView: Screen("detailView")
-    object EditView: Screen("editView")
-    object PlantListView: Screen("plantListView")
+sealed class Screen(val route: String) {
+    object HomeView : Screen("homeView")
+    object AddView : Screen("addView")
+    object DetailView : Screen("detailView")
+    object EditView : Screen("editView")
+    object PlantListView : Screen("plantListView")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainView(
     mainViewModel: MainViewModel
-){
+) {
     val navController = rememberNavController()
 
     Scaffold(
-        bottomBar = {BottomNavigationBar(navController)}
+        bottomBar = { BottomNavigationBar(navController) }
     ) {
         NavHost(
-                navController = navController,
-                modifier = Modifier.padding(it),
-                startDestination = Screen.HomeView.route
-            ){
-                composable(Screen.HomeView.route){
-                    mainViewModel.selectScreen(Screen.HomeView)
-                    HomeView(mainViewModel, navController) }
-
-                composable(Screen.AddView.route){
-                    mainViewModel.selectScreen(Screen.HomeView)
-                    AddView(mainViewModel, navController) }
-
-                composable(Screen.DetailView.route){
-                    mainViewModel.selectScreen(Screen.HomeView)
-                    DetailView(mainViewModel, navController) }
-
-                composable(Screen.EditView.route){
-                    mainViewModel.selectScreen(Screen.HomeView)
-                    EditView(mainViewModel, navController) }
-
-                composable(Screen.PlantListView.route){
-                    mainViewModel.selectScreen(Screen.HomeView)
-                    PlantListView(mainViewModel, navController) }
-
-
+            navController = navController,
+            modifier = Modifier.padding(it),
+            startDestination = Screen.HomeView.route
+        ) {
+            composable(Screen.HomeView.route) {
+                mainViewModel.selectScreen(Screen.HomeView)
+                HomeView(mainViewModel, navController)
             }
+
+            composable(Screen.AddView.route) {
+                mainViewModel.selectScreen(Screen.HomeView)
+                AddView(navController = navController)
+            }
+
+            composable(Screen.DetailView.route) {
+                mainViewModel.selectScreen(Screen.HomeView)
+                DetailView(mainViewModel, navController)
+            }
+
+            composable(Screen.EditView.route) {
+                mainViewModel.selectScreen(Screen.HomeView)
+                EditView(mainViewModel, navController)
+            }
+
+            composable(Screen.PlantListView.route) {
+                mainViewModel.selectScreen(Screen.HomeView)
+                PlantListView(mainViewModel, navController)
+            }
+
+
         }
     }
+}
 
 @Composable
-fun BottomNavigationBar(navController: NavHostController){
+fun BottomNavigationBar(navController: NavHostController) {
     BottomNavigation(backgroundColor = MaterialTheme.colorScheme.primary) {
         NavigationBarItem(
             selected = true,

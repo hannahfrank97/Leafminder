@@ -28,6 +28,9 @@ class PlantsRepository(private val apiPlantsService: APIPlantsService) {
         }
 
     }
+
+
+
         data class APIPlantsWithDetails(
             val id: Int,
             val scientific_name: String,

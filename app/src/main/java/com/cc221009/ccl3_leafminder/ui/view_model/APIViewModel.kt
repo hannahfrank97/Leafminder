@@ -11,6 +11,9 @@ import kotlinx.coroutines.launch
 
 class APIViewModel (private val repository: PlantsRepository,apiKey: String): ViewModel() {
     val plantsDetails = MutableLiveData<List<APIPlantsWithDetails>>()
+
+
+
     init {
         viewModelScope.launch {
             try {

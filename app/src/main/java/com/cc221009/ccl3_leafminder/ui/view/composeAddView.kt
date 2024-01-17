@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,29 +18,34 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.room.util.TableInfo
 import com.cc221009.ccl3_leafminder.R
-import com.cc221009.ccl3_leafminder.ui.view_model.MainViewModel
+import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
+
+data class AddUIState(
+    val name: TextFieldValue,
+    val setName: (TextFieldValue) -> Unit,
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddView(mainViewModel: MainViewModel, navController: NavController){
+fun AddView(
+    vm: AddPlantViewModel = viewModel(), navController: NavController
+) {
+    val state by vm.uiState.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -61,7 +65,9 @@ fun AddView(mainViewModel: MainViewModel, navController: NavController){
         })
 
         // Textfield Name
-        DefaultTextField("Name", "Name")
+        DefaultTextField(
+            "Name", "Name", text = state.name, onValueChange = state.setName
+        )
 
         AddPlantInfoContainer()
 
@@ -87,25 +93,47 @@ fun AddPlantInfoContainer(
             .background(colorScheme.secondary)
             .padding(20.dp)
     ) {
-        DefaultTextField("Since when do you have your plant?", "Select date")
+        // TODO: Connect to Viewmodel
+        DefaultTextField("Since when do you have your plant?",
+            "Select date",
+            text = TextFieldValue(""),
+            onValueChange = { })
 
         AddParameterContainer("size") {
-            IconButtonsItem("small", R.drawable.placeholder, "small", modifier = Modifier.weight(1f))
-            IconButtonsItem("medium", R.drawable.placeholder, "medium", modifier = Modifier.weight(1f))
-            IconButtonsItem("large", R.drawable.placeholder, "large", modifier = Modifier.weight(1f))
+            IconButtonsItem(
+                "small", R.drawable.placeholder, "small", modifier = Modifier.weight(1f)
+            )
+            IconButtonsItem(
+                "medium", R.drawable.placeholder, "medium", modifier = Modifier.weight(1f)
+            )
+            IconButtonsItem(
+                "large", R.drawable.placeholder, "large", modifier = Modifier.weight(1f)
+            )
         }
 
         AddParameterContainer("location") {
-            IconButtonsItem("light", R.drawable.placeholder, "light", modifier = Modifier.weight(1f))
-            IconButtonsItem("half-light", R.drawable.placeholder, "half-light", modifier = Modifier.weight(1f))
-            IconButtonsItem("half-shadow", R.drawable.placeholder, "half-shadow", modifier = Modifier.weight(1f))
-            IconButtonsItem("shadow", R.drawable.placeholder, "shadow", modifier = Modifier.weight(1f))
+            IconButtonsItem(
+                "light", R.drawable.placeholder, "light", modifier = Modifier.weight(1f)
+            )
+            IconButtonsItem(
+                "half-light", R.drawable.placeholder, "half-light", modifier = Modifier.weight(1f)
+            )
+            IconButtonsItem(
+                "half-shadow", R.drawable.placeholder, "half-shadow", modifier = Modifier.weight(1f)
+            )
+            IconButtonsItem(
+                "shadow", R.drawable.placeholder, "shadow", modifier = Modifier.weight(1f)
+            )
         }
 
         AddParameterContainer("wellbeing") {
-            IconButtonsItem("great", R.drawable.placeholder, "great", modifier = Modifier.weight(1f))
+            IconButtonsItem(
+                "great", R.drawable.placeholder, "great", modifier = Modifier.weight(1f)
+            )
             IconButtonsItem("okay", R.drawable.placeholder, "okay", modifier = Modifier.weight(1f))
-            IconButtonsItem("miserable", R.drawable.placeholder, "miserable", modifier = Modifier.weight(1f))
+            IconButtonsItem(
+                "miserable", R.drawable.placeholder, "miserable", modifier = Modifier.weight(1f)
+            )
         }
     }
     Spacer(modifier = Modifier.height(20.dp))
@@ -115,12 +143,10 @@ fun AddPlantInfoContainer(
 
 @Composable
 fun AddParameterContainer(
-        headline: String,
-        content: @Composable () -> Unit
-    ) {
+    headline: String, content: @Composable () -> Unit
+) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
     ) {
         Text(text = headline)
         Row(
@@ -133,21 +159,15 @@ fun AddParameterContainer(
 
 @Composable
 fun IconButtonsItem(
-    headline: String,
-    imgPath: Int,
-    imgDescription: String,
-    modifier: Modifier = Modifier
+    headline: String, imgPath: Int, imgDescription: String, modifier: Modifier = Modifier
 ) {
 
-    Button(
-        modifier = Modifier
-            .fillMaxWidth(0.3f)
-            .height(60.dp)
-            .then(modifier),
-        onClick = {
-            //Logic for adding Image
-        }
-    ) {
+    Button(modifier = Modifier
+        .fillMaxWidth(0.3f)
+        .height(60.dp)
+        .then(modifier), onClick = {
+        //Logic for adding Image
+    }) {
         Column {
             Image(painter = painterResource(id = imgPath), imgDescription)
             Text(text = headline)
@@ -169,16 +189,36 @@ fun AddPlantSpeciesContainer() {
         //HEADLINE
         Text(text = "Species")
 
-        DefaultTextField("Which type of plant is it?", "Select species")
+        // TODO: Connect to Viewmodel
+        DefaultTextField("Which type of plant is it?",
+            "Select species",
+            text = TextFieldValue(""),
+            onValueChange = { })
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            APIIconItem("Location", "api value", R.drawable.placeholder, "location icon", modifier = Modifier.weight(1f))
-            APIIconItem("Watering", "api value", R.drawable.placeholder, "watering icon", modifier = Modifier.weight(1f))
-            APIIconItem("Poisinousness", "api value", R.drawable.placeholder, "poisonousness icon", modifier = Modifier.weight(1f))
+            APIIconItem(
+                "Location",
+                "api value",
+                R.drawable.placeholder,
+                "location icon",
+                modifier = Modifier.weight(1f)
+            )
+            APIIconItem(
+                "Watering",
+                "api value",
+                R.drawable.placeholder,
+                "watering icon",
+                modifier = Modifier.weight(1f)
+            )
+            APIIconItem(
+                "Poisinousness",
+                "api value",
+                R.drawable.placeholder,
+                "poisonousness icon",
+                modifier = Modifier.weight(1f)
+            )
         }
     }
     Spacer(modifier = Modifier.height(20.dp))
@@ -206,7 +246,8 @@ fun APIIconItem(
             painter = painterResource(id = imgPath),
             imgDescription,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop)
+            contentScale = ContentScale.Crop
+        )
         Text(text = headline)
         Text(text = apiValue)
     }
@@ -225,7 +266,12 @@ fun AddPlantWateringContainer() {
         //HEADLINE
         Text(text = "Watering")
 
-        DefaultTextField("Select the date of last watering", "Select date")
+        // TODO: Connect to Viewmodel
+        DefaultTextField(
+            "Select the date of last watering",
+            "Select date",
+            text = TextFieldValue(""),
+            onValueChange = { })
 
         WateringFrequencySelector("How frequent do you want to water your plant?")
     }
@@ -238,8 +284,7 @@ fun WateringFrequencySelector(
     headline: String,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -266,12 +311,9 @@ fun WateringFrequencySelector(
 
 @Composable
 fun PlusMinusButton(
-    imgPath: Int,
-    onClickLogic: () -> Unit
+    imgPath: Int, onClickLogic: () -> Unit
 ) {
-    Button(
-        onClick = { onClickLogic() }
-    ) {
+    Button(onClick = { onClickLogic() }) {
         Icon(
             painter = painterResource(id = imgPath),
             contentDescription = "Back",
@@ -281,22 +323,20 @@ fun PlusMinusButton(
 
 @Composable
 fun PlantImage(
-    imgPath: Int,
-    onClickLogic: () -> Unit
+    imgPath: Int, onClickLogic: () -> Unit
 ) {
-    Button(
-        modifier = Modifier
-            .padding(bottom = 20.dp)
-            .border(2.dp, colorScheme.outline, RoundedCornerShape(10.dp))
-            .height(100.dp)
-            .width(100.dp),
-        onClick = { onClickLogic() }
-    ) {
+    Button(modifier = Modifier
+        .padding(bottom = 20.dp)
+        .border(2.dp, colorScheme.outline, RoundedCornerShape(10.dp))
+        .height(100.dp)
+        .width(100.dp),
+        onClick = { onClickLogic() }) {
         Image(
             painter = painterResource(id = imgPath),
             "Profile Picture",
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop)
+            contentScale = ContentScale.Crop
+        )
     }
 }
 

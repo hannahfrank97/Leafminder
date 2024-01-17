@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -19,7 +20,7 @@ import com.cc221009.ccl3_leafminder.ui.view_model.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditView(mainViewModel: MainViewModel, navController: NavController){
+fun EditView(mainViewModel: MainViewModel, navController: NavController) {
 
     Column(
         modifier = Modifier
@@ -40,7 +41,10 @@ fun EditView(mainViewModel: MainViewModel, navController: NavController){
         })
 
         // Textfield Name
-        DefaultTextField("Name", "Name")
+        DefaultTextField("Name", "Name",
+            text = TextFieldValue(""),
+            onValueChange = {}
+        )
 
         AddPlantInfoContainer()
 
