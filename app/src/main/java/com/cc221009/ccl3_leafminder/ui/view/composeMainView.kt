@@ -86,7 +86,7 @@ fun MainView(
 
 @Composable
 fun BottomNavigationBar(navController: NavHostController){
-    BottomNavigation(backgroundColor = MaterialTheme.colorScheme.primary) {
+    BottomNavigation(backgroundColor = MaterialTheme.colorScheme.background) {
         NavigationBarItem(
             selected = true,
             onClick = { navController.navigate(Screen.HomeView.route) },

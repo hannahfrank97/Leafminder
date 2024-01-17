@@ -34,7 +34,7 @@ fun DetailView(mainViewModel: MainViewModel, navController: NavController){
         // Header
         Header("Add a new plant", R.drawable.icon_edit)
 
-        PlantDetailImage(R.drawable.placeholder, "Name", "Species")
+        PlantDetailImage(R.drawable.placeholder, "Linda", "Species")
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -92,7 +92,7 @@ fun PlantDetailImage(
             .width(200.dp),
         contentScale = ContentScale.Crop)
 
-    Text(text = plantName)
+    H1Text(text = plantName)
 
     Text(text = plantSpecies)
 }
