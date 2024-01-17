@@ -80,10 +80,7 @@ fun DefaultTextField(headline: String, placeholderText: String) {
             onValueChange = { newTextValue -> textSaver = newTextValue },
             label = { Text(text = placeholderText) },
             placeholder = { Text(text = placeholderText) },
-            modifier = Modifier
-                .height(50.dp)
-                .padding(bottom = 20.dp)
-                .fillMaxSize()
+            modifier = Modifier.padding(bottom = 20.dp)
         )
         
         Spacer(modifier = Modifier.height(20.dp))
