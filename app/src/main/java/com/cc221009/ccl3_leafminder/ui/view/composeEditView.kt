@@ -48,7 +48,7 @@ fun EditView(mainViewModel: MainViewModel, navController: NavController) {
 
         AddPlantInfoContainer()
 
-        AddPlantSpeciesContainer()
+        AddPlantSpeciesContainer(speciesNames = emptyList())
 
         AddPlantWateringContainer()
 

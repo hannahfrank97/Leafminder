@@ -47,7 +47,9 @@ import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
 data class AddUIState(
     val name: TextFieldValue,
     val setName: (TextFieldValue) -> Unit,
-)
+
+
+    )
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -81,7 +83,7 @@ fun AddView(
 
         AddPlantInfoContainer()
 
-        AddPlantSpeciesContainer()
+        AddPlantSpeciesContainer(speciesNames = listOf("Cactus", "Fern", "Orchid"))
 
         AddPlantWateringContainer()
 
@@ -188,7 +190,9 @@ fun IconButtonsItem(
 // API COMPONENTS
 
 @Composable
-fun AddPlantSpeciesContainer() {
+fun AddPlantSpeciesContainer(
+    speciesNames: List<String>
+) {
 
     Column(
         modifier = Modifier
@@ -210,23 +214,13 @@ fun AddPlantSpeciesContainer() {
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
-                DropdownMenuItem(onClick = {
-                    selectedSpecies = "Cactus"
-                    expanded = false
-                }) {
-                    Text("Cactus")
-                }
-                DropdownMenuItem(onClick = {
-                    selectedSpecies = "Fern"
-                    expanded = false
-                }) {
-                    Text("Fern")
-                }
-                DropdownMenuItem(onClick = {
-                    selectedSpecies = "Orchid"
-                    expanded = false
-                }) {
-                    Text("Orchid")
+                speciesNames.forEach { speciesName ->
+                    DropdownMenuItem(onClick = {
+                        selectedSpecies = speciesName
+                        expanded = false
+                    }) {
+                        Text(speciesName)
+                    }
                 }
             }
 
@@ -236,34 +230,34 @@ fun AddPlantSpeciesContainer() {
             }
         }
 
-        }
-
-        Row(
-            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            APIIconItem(
-                "Location",
-                "api value",
-                R.drawable.placeholder,
-                "location icon",
-                modifier = Modifier.weight(1f)
-            )
-            APIIconItem(
-                "Watering",
-                "api value",
-                R.drawable.placeholder,
-                "watering icon",
-                modifier = Modifier.weight(1f)
-            )
-            APIIconItem(
-                "Poisinousness",
-                "api value",
-                R.drawable.placeholder,
-                "poisonousness icon",
-                modifier = Modifier.weight(1f)
-            )
-        }
     }
+
+    Row(
+        modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        APIIconItem(
+            "Location",
+            "api value",
+            R.drawable.placeholder,
+            "location icon",
+            modifier = Modifier.weight(1f)
+        )
+        APIIconItem(
+            "Watering",
+            "api value",
+            R.drawable.placeholder,
+            "watering icon",
+            modifier = Modifier.weight(1f)
+        )
+        APIIconItem(
+            "Poisinousness",
+            "api value",
+            R.drawable.placeholder,
+            "poisonousness icon",
+            modifier = Modifier.weight(1f)
+        )
+    }
+}
 
 
 @Composable
