@@ -20,24 +20,24 @@ class MainViewModel(private val dao:PlantsDao): ViewModel() {
        _mainViewState.update { it.copy(selectedScreen = screen) }
     }
 
-    suspend fun getPlants() {
+    /*suspend fun getPlants() {
         viewModelScope.launch {
             dao.getPlants().collect { plants ->
                 _mainViewState.update { it.copy(plants =  plants) }
             }
         }
-    }
+    }*/
 
 
-    fun editPlant(plant: Plants) {
+    /*fun editPlant(plant: Plants) {
         _mainViewState.update { it.copy(editPlant = plant) }
-    }
+    }*/
 
     fun saveEditedPlant(plant: Plants) {
         viewModelScope.launch {
             try {
                 dao.updatePlant(plant)
-                getPlants()
+
             } catch (e: Exception) {
                 Log.e("MainViewModel", "Error saving plant", e)
             }
@@ -47,7 +47,7 @@ class MainViewModel(private val dao:PlantsDao): ViewModel() {
     fun clickdeletePlant(plant: Plants) {
         viewModelScope.launch {
             dao.deletePlant(plant)
-            getPlants()
+
         }
     }
 
