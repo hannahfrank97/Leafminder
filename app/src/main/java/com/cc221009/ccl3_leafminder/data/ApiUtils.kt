@@ -10,7 +10,7 @@ object ApiUtils {
        val properties = Properties()
         try {
             val assetManager = context.assets
-            val inputStream = assetManager.open("api.properties")
+            val inputStream = assetManager.open("secrets.properties")
             properties.load(inputStream)
         } catch (e: IOException) {
             Log.e("AssetsPropertyReader", e.toString())
