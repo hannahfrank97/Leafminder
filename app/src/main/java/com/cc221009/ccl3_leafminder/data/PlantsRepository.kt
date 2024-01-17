@@ -23,7 +23,13 @@ class PlantsRepository(private val apiPlantsService: APIPlantsService) {
                     )
                 }
                 }.awaitAll()
+class PlantsRepository() {
 
+    suspend fun getTestAPIDATA(): List<String> {
+        return listOf("A", "B", "C")
+
+    }
+}
             }
         }
 

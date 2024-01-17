@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.cc221009.ccl3_leafminder.R
+import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
 
 data class AddUIState(
@@ -49,6 +50,7 @@ data class AddUIState(
     val setName: (TextFieldValue) -> Unit,
 
     val speciesNames: List<String>,
+    val setSpeciesNames: (List<String>) -> Unit,
 
     )
 
@@ -84,7 +86,7 @@ fun AddView(
 
         AddPlantInfoContainer()
 
-        AddPlantSpeciesContainer(state.speciesNames)
+        AddPlantSpeciesContainer(state.speciesNames, state.setSpeciesNames)
 
         AddPlantWateringContainer()
 
@@ -192,7 +194,9 @@ fun IconButtonsItem(
 
 @Composable
 fun AddPlantSpeciesContainer(
-    speciesNames: List<String>
+    speciesNames: List<String>,
+    setSpeciesNames: (List<String>) -> Unit,
+    vm: AddPlantViewModel = viewModel()
 ) {
 
     Column(
@@ -219,6 +223,7 @@ fun AddPlantSpeciesContainer(
                     DropdownMenuItem(onClick = {
                         selectedSpecies = speciesName
                         expanded = false
+
                     }) {
                         Text(speciesName)
                     }
@@ -226,7 +231,11 @@ fun AddPlantSpeciesContainer(
             }
 
             Spacer(modifier = Modifier.matchParentSize())
-            IconButton(onClick = { expanded = true }) {
+            IconButton(onClick = {
+                expanded = true
+                vm.fetchSpeciesNames()
+
+            }) {
                 Icon(Icons.Filled.ArrowDropDown, contentDescription = "Dropdown Arrow")
             }
         }
