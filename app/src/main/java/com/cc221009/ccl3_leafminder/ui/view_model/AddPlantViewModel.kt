@@ -11,7 +11,9 @@ class AddPlantViewModel : ViewModel() {
     private val _mainViewState = MutableStateFlow(
         AddUIState(
             name = TextFieldValue(""),
-            setName = ::onNameChange
+            setName = ::onNameChange,
+
+            speciesNames = listOf ("Cactus", "Fern", "Hallo"),
         )
     )
     val uiState: StateFlow<AddUIState> = _mainViewState.asStateFlow()

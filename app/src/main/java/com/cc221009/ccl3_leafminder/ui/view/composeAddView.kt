@@ -48,6 +48,7 @@ data class AddUIState(
     val name: TextFieldValue,
     val setName: (TextFieldValue) -> Unit,
 
+    val speciesNames: List<String>,
 
     )
 
@@ -83,7 +84,7 @@ fun AddView(
 
         AddPlantInfoContainer()
 
-        AddPlantSpeciesContainer(speciesNames = listOf("Cactus", "Fern", "Orchid"))
+        AddPlantSpeciesContainer(state.speciesNames)
 
         AddPlantWateringContainer()
 
