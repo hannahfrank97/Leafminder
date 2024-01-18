@@ -56,7 +56,7 @@ data class AddUIState(
     val setName: (TextFieldValue) -> Unit,
 
     val speciesNames: List<String>,
-    val setSpeciesNames: (List<String>) -> Unit,
+    val onSpeciesListTapped: () -> Unit,
 
     val date: String,
     val size: String,
@@ -104,7 +104,7 @@ fun AddView(
 
         AddPlantInfoContainer()
 
-        AddPlantSpeciesContainer(state.speciesNames, state.setSpeciesNames)
+        AddPlantSpeciesContainer(state.speciesNames, onDropdownTapped = state.onSpeciesListTapped)
 
         AddPlantWateringContainer()
 
@@ -222,8 +222,7 @@ fun IconButtonsItem(
 @Composable
 fun AddPlantSpeciesContainer(
     speciesNames: List<String>,
-    setSpeciesNames: (List<String>) -> Unit,
-    vm: AddPlantViewModel = viewModel()
+    onDropdownTapped: () -> Unit,
 ) {
 
     Column(
@@ -260,7 +259,7 @@ fun AddPlantSpeciesContainer(
             Spacer(modifier = Modifier.matchParentSize())
             IconButton(onClick = {
                 expanded = true
-                vm.fetchSpeciesNames()
+                onDropdownTapped()
 
             }) {
                 Icon(Icons.Filled.ArrowDropDown, contentDescription = "Dropdown Arrow")

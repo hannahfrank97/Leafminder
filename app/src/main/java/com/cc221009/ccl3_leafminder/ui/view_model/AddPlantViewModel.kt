@@ -23,7 +23,7 @@ class AddPlantViewModel(private val dao:PlantsDao) : ViewModel() {
             setName = ::onNameChange,
 
             speciesNames = emptyList(),
-            setSpeciesNames = ::onSpeciesNameChange,
+            onSpeciesListTapped = ::fetchSpeciesNames,
             //allplants = emptyList(),
 
             date = "",
@@ -47,15 +47,11 @@ class AddPlantViewModel(private val dao:PlantsDao) : ViewModel() {
         _mainViewState.value = _mainViewState.value.copy(name = name)
     }
 
-    fun onSpeciesNameChange(speciesNames: List<String>) {
-        _mainViewState.value = _mainViewState.value.copy(speciesNames = speciesNames)
-    }
-
     fun fetchSpeciesNames() {
         viewModelScope.launch {
             try {
                 val speciesNames = repository.getTestAPIDATA()
-                onSpeciesNameChange(speciesNames)
+                _mainViewState.value = _mainViewState.value.copy(speciesNames = speciesNames)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
