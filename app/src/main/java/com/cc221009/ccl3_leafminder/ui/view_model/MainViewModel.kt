@@ -16,5 +16,4 @@ class MainViewModel(private val dao:PlantsDao): ViewModel() {
     fun selectScreen(screen: Screen){
        _mainViewState.update { it.copy(selectedScreen = screen) }
     }
-
 }

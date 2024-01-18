@@ -91,20 +91,27 @@ fun AddPlantInfoContainer(
 
         AddParameterContainer("size") {
             IconButtonsItem("small", R.drawable.placeholder, "small", modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem("medium", R.drawable.placeholder, "medium", modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem("large", R.drawable.placeholder, "large", modifier = Modifier.weight(1f))
         }
 
         AddParameterContainer("location") {
             IconButtonsItem("light", R.drawable.placeholder, "light", modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem("half-light", R.drawable.placeholder, "half-light", modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem("half-shadow", R.drawable.placeholder, "half-shadow", modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem("shadow", R.drawable.placeholder, "shadow", modifier = Modifier.weight(1f))
         }
 
         AddParameterContainer("wellbeing") {
             IconButtonsItem("great", R.drawable.placeholder, "great", modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem("okay", R.drawable.placeholder, "okay", modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem("miserable", R.drawable.placeholder, "miserable", modifier = Modifier.weight(1f))
         }
     }

@@ -34,10 +34,9 @@ fun HomeView(mainViewModel: MainViewModel, navController: NavController){
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .verticalScroll(rememberScrollState())
             .padding(20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
 
@@ -68,7 +67,7 @@ fun HomeHeaderContainer() {
             MaterialTheme.colorScheme.secondary,
             modifier = Modifier.weight(1f))
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.width(20.dp))
 
         HomeHeaderContainerItem(
             "Species",
@@ -77,7 +76,7 @@ fun HomeHeaderContainer() {
             MaterialTheme.colorScheme.secondary,
             modifier = Modifier.weight(1f))
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.width(20.dp))
 
         HomeHeaderContainerItem(
             "Needing Water",
@@ -86,6 +85,9 @@ fun HomeHeaderContainer() {
             MaterialTheme.colorScheme.secondary,
             modifier = Modifier.weight(1f))
     }
+
+    Spacer(modifier = Modifier.height(40.dp))
+
 
 }
 
@@ -126,13 +128,55 @@ fun HomeHeaderContainerItem(
 
 }
 
-
+// PLAST LIST COMPOSABLE
 @Composable
 fun PlantListOverview() {
 
+    Column() {
+        Text(text = "Your Plants")
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+        ) {
+            PlantItem("Linda", null, R.drawable.placeholder)
+            PlantItem("Linda", null, R.drawable.placeholder)
+            PlantItem("Linda", null, R.drawable.placeholder)
+            PlantItem("Linda", null, R.drawable.placeholder)
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+    }
+
 }
+
+
+
+// PLANT DASHBOARD COMPOSABLE
 
 @Composable
 fun PlantDashboard() {
+
+    Column() {
+        Text(text = "Plants in need")
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+        ) {
+            PlantItem("Linda", null, R.drawable.placeholder)
+            PlantItem("Linda", null, R.drawable.placeholder)
+            PlantItem("Linda", null, R.drawable.placeholder)
+            PlantItem("Linda", null, R.drawable.placeholder)
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+    }
 
 }

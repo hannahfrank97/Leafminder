@@ -1,5 +1,6 @@
 package com.cc221009.ccl3_leafminder.ui.view
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ColorScheme
@@ -24,8 +26,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -39,7 +43,7 @@ import com.cc221009.ccl3_leafminder.R
 @Composable
 fun Header(
     viewName: String,
-    rightIconPath: Int,
+    rightIconPath: Int?,
 ) {
     Box(
         modifier = Modifier
@@ -60,10 +64,21 @@ fun Header(
                 text = viewName,
             )
 
-            Icon(
-                painter = painterResource(id = rightIconPath),
-                contentDescription = "Back"
-            )
+            Box(
+                modifier = Modifier
+                .width(20.dp)
+            ) {
+                // Conditionally display textDetail if it's not null
+                rightIconPath?.let {
+                    Icon(
+                        painter = painterResource(id = it),
+                        contentDescription = "Back"
+                    )
+                }
+            }
+
+
+
 
         }
     }
@@ -152,6 +167,36 @@ fun PrimaryButton(
 }
 
 @Composable
+fun PlantItem(
+    plantName: String,
+    species: String?,
+    imgPath: Int
+) {
+    Column(
+        modifier = Modifier.padding(end = 20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Image(
+            painter = painterResource(id = imgPath),
+            contentDescription = "Profile Picture",
+            modifier = Modifier
+                .height(70.dp)
+                .width(70.dp),
+            contentScale = ContentScale.Crop)
+
+        Text(text = plantName)
+
+        // Conditionally display textDetail if it's not null
+        species?.let {
+            Text(text = it)
+        }
+    }
+}
+
+// ––––––––––––––––––––– TYPO –––––––––––––––––––––––
+
+@Composable
 fun H1Text(
     text: String,
 ) {
@@ -224,6 +269,8 @@ fun CopyBoldText(
             color = MaterialTheme.colorScheme.primary)
     )
 }
+
+
 
 
 
