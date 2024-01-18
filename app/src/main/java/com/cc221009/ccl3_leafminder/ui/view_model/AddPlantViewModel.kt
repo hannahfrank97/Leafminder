@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 
 class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {
 
+    //for the api: val plantsDetails = MutableLiveData<List<APIPlantsWithDetails>>()
     private val _mainViewState = MutableStateFlow(
         AddUIState(
             name = TextFieldValue(""),
@@ -23,7 +24,6 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
 
             speciesNames = emptyList(),
             onSpeciesListTapped = ::fetchSpeciesNames,
-            //allplants = emptyList(),
 
             date = "",
             size = "",
@@ -31,12 +31,6 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
             wateringDate = "",
             wateringFrequency = "",
             imagePath = "",
-
-            /*
-                var diaryEntries: List<DiaryEntries> = emptyList(),
-    var editDiaryEntry: DiaryEntries = DiaryEntries("", "", "", ""),
-            * */
-
 
         )
     )
@@ -56,15 +50,6 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
             }
         }
 
-
-//api stuff
-        /*
-    val plantsDetails = MutableLiveData<List<APIPlantsWithDetails>>()
-
-
-
-
-*/
 
     }
 
@@ -88,6 +73,27 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
 
 
     }*/
+
+    //API functions (unsure id this is needed):
+    /*class APIViewModel (private val repository: PlantsRepository,apiKey: String): ViewModel() {
+    val plantsDetails = MutableLiveData<List<APIPlantsWithDetails>>()
+
+
+
+    init {
+        viewModelScope.launch {
+            try {
+                val APIdata = repository.getPlantsWithDetails(apiKey)
+                plantsDetails.postValue(APIdata)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+}*/
+
+    //CREATING A FACTORY FOR THE ADDPLANTSVIEWMODEL
     companion object {
         fun provideFactory(plantsRepository: PlantsRepository): ViewModelProvider.Factory {
             return object : ViewModelProvider.Factory {
