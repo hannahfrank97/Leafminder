@@ -20,7 +20,7 @@ import com.cc221009.ccl3_leafminder.ui.view_model.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditView(mainViewModel: MainViewModel, navController: NavController) {
+fun EditView(navController: NavController) {
 
     Column(
         modifier = Modifier

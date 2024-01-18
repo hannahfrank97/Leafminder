@@ -22,7 +22,7 @@ import com.cc221009.ccl3_leafminder.ui.view_model.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailView(mainViewModel: MainViewModel, navController: NavController){
+fun DetailView(navController: NavController){
     Column(
         modifier = Modifier
             .fillMaxWidth()

@@ -30,7 +30,7 @@ import com.cc221009.ccl3_leafminder.ui.view_model.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeView(mainViewModel: MainViewModel, navController: NavController){
+fun HomeView(navController: NavController){
 
     Column(
         modifier = Modifier

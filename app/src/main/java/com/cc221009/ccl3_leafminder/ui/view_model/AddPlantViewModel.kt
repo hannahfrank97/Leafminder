@@ -9,9 +9,11 @@ import com.cc221009.ccl3_leafminder.data.PlantsDao
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.model.Plants
 import com.cc221009.ccl3_leafminder.ui.view.AddUIState
+import com.cc221009.ccl3_leafminder.ui.view.Screen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {

@@ -47,9 +47,7 @@ sealed class Screen(val route: String) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainView(
-    mainViewModel: MainViewModel,
-) {
+fun MainView() {
     val navController = rememberNavController()
 
     Scaffold(
@@ -61,28 +59,23 @@ fun MainView(
             startDestination = Screen.HomeView.route
         ) {
             composable(Screen.HomeView.route) {
-                mainViewModel.selectScreen(Screen.HomeView)
-                HomeView(mainViewModel, navController)
+                HomeView(navController)
             }
 
             composable(Screen.AddView.route) {
-                mainViewModel.selectScreen(Screen.HomeView)
-                AddView( navController = navController)
+                AddView(navController = navController)
             }
 
             composable(Screen.DetailView.route) {
-                mainViewModel.selectScreen(Screen.HomeView)
-                DetailView(mainViewModel, navController)
+                DetailView(navController)
             }
 
             composable(Screen.EditView.route) {
-                mainViewModel.selectScreen(Screen.HomeView)
-                EditView(mainViewModel, navController)
+                EditView(navController)
             }
 
             composable(Screen.PlantListView.route) {
-                mainViewModel.selectScreen(Screen.HomeView)
-                PlantListView(mainViewModel, navController)
+                PlantListView(navController)
             }
 
 

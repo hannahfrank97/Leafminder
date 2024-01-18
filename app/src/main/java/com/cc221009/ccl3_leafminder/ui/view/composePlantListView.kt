@@ -9,6 +9,6 @@ import com.cc221009.ccl3_leafminder.ui.view_model.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PlantListView(mainViewModel: MainViewModel, navController: NavController){
+fun PlantListView(navController: NavController){
     Text(text = "Plant List", fontSize = 50.sp)
 }
