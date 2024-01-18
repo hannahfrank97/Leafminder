@@ -50,12 +50,12 @@ fun DetailView(mainViewModel: MainViewModel, navController: NavController){
             SpecificInfoContainer("Water", "specific info", R.drawable.placeholder, colorScheme.secondary,
                 modifier = Modifier.weight(1f))
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.width(20.dp))
 
             SpecificInfoContainer("location", "specific info", R.drawable.placeholder, colorScheme.secondary,
                 modifier = Modifier.weight(1f))
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.width(20.dp))
 
             SpecificInfoContainer("poisonous", "specific info", R.drawable.placeholder, colorScheme.secondary,
                 modifier = Modifier.weight(1f))
@@ -106,9 +106,9 @@ fun PlantDetailGeneralContainer() {
         horizontalArrangement = Arrangement.SpaceAround
     ) {
         PlantDetailItem(R.drawable.placeholder, "big", null)
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.width(20.dp))
         PlantDetailItem(R.drawable.placeholder,"great", null)
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.width(20.dp))
         PlantDetailItem(R.drawable.placeholder,"light", null)
     }
 }
