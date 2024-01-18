@@ -49,7 +49,6 @@ sealed class Screen(val route: String) {
 @Composable
 fun MainView(
     mainViewModel: MainViewModel,
-    addPlantViewModel: AddPlantViewModel
 ) {
     val navController = rememberNavController()
 
@@ -68,7 +67,7 @@ fun MainView(
 
             composable(Screen.AddView.route) {
                 mainViewModel.selectScreen(Screen.HomeView)
-                AddView(addPlantViewModel, navController = navController)
+                AddView( navController = navController)
             }
 
             composable(Screen.DetailView.route) {

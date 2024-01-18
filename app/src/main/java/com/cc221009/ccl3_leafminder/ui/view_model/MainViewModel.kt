@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val dao:PlantsDao): ViewModel() {
+class MainViewModel(): ViewModel() {
     private val _mainViewState = MutableStateFlow(MainViewState())
     val  mainViewState: StateFlow<MainViewState> = _mainViewState.asStateFlow()
 
@@ -36,7 +36,7 @@ class MainViewModel(private val dao:PlantsDao): ViewModel() {
     fun saveEditedPlant(plant: Plants) {
         viewModelScope.launch {
             try {
-                dao.updatePlant(plant)
+              //  dao.updatePlant(plant)
 
             } catch (e: Exception) {
                 Log.e("MainViewModel", "Error saving plant", e)
@@ -46,7 +46,7 @@ class MainViewModel(private val dao:PlantsDao): ViewModel() {
 
     fun clickdeletePlant(plant: Plants) {
         viewModelScope.launch {
-            dao.deletePlant(plant)
+          //  dao.deletePlant(plant)
 
         }
     }

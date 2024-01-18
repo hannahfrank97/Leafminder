@@ -1,12 +1,13 @@
 package com.cc221009.ccl3_leafminder.data
 
 import com.cc221009.ccl3_leafminder.data.model.PlantImage
+import com.cc221009.ccl3_leafminder.data.model.Plants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 
-class PlantsRepository(private val apiPlantsService: APIPlantsService) {
+/*class PlantsRepository(private val apiPlantsService: APIPlantsService) {
     suspend fun getPlantsWithDetails(apiKey:String): List<APIPlantsWithDetails> {
         val plantsAPI = apiPlantsService.getlistAPIPlants(apiKey).execute().body() ?: emptyList()
         return withContext(Dispatchers.IO) {
@@ -23,18 +24,7 @@ class PlantsRepository(private val apiPlantsService: APIPlantsService) {
                     )
                 }
                 }.awaitAll()
-class PlantsRepository() {
-
-    suspend fun getTestAPIDATA(): List<String> {
-        return listOf("A", "B", "C")
-
-    }
-}
             }
-        }
-
-    }
-
 
 
         data class APIPlantsWithDetails(
@@ -44,6 +34,16 @@ class PlantsRepository() {
             val sunlight: List<String>,
             val default_image: PlantImage,
             val poisonous_to_humans: Boolean,
-        )
+        ) */
 
+class PlantsRepository(val dao: PlantsDao) {
 
+    suspend fun getTestAPIDATA(): List<String> {
+        return listOf("A", "B", "C")
+
+    }
+
+    suspend fun addPlant(plant: Plants) {
+        dao.insertPlant(plant)
+    }
+}

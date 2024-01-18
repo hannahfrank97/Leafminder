@@ -3,20 +3,19 @@ package com.cc221009.ccl3_leafminder.ui.view_model
 import android.util.Log
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.cc221009.ccl3_leafminder.data.PlantsDao
-import com.cc221009.ccl3_leafminder.data.PlantsDatabase
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.model.Plants
 import com.cc221009.ccl3_leafminder.ui.view.AddUIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class AddPlantViewModel(private val dao:PlantsDao) : ViewModel() {
-    private val repository = PlantsRepository()
+class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {
+
     private val _mainViewState = MutableStateFlow(
         AddUIState(
             name = TextFieldValue(""),
@@ -39,7 +38,7 @@ class AddPlantViewModel(private val dao:PlantsDao) : ViewModel() {
             * */
 
 
-            )
+        )
     )
     val uiState: StateFlow<AddUIState> = _mainViewState.asStateFlow()
 
@@ -50,15 +49,12 @@ class AddPlantViewModel(private val dao:PlantsDao) : ViewModel() {
     fun fetchSpeciesNames() {
         viewModelScope.launch {
             try {
-                val speciesNames = repository.getTestAPIDATA()
+                val speciesNames = plantsRepository.getTestAPIDATA()
                 _mainViewState.value = _mainViewState.value.copy(speciesNames = speciesNames)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
-
-
-
 
 
 //api stuff
@@ -75,7 +71,7 @@ class AddPlantViewModel(private val dao:PlantsDao) : ViewModel() {
     fun saveButtonPlant(plant: Plants) {
         viewModelScope.launch {
             try {
-                dao.insertPlant(plant)
+                plantsRepository.addPlant(plant)
                 //getPlants()
             } catch (e: Exception) {
                 Log.e("MainViewModel", "Error saving plant", e)
@@ -92,5 +88,15 @@ class AddPlantViewModel(private val dao:PlantsDao) : ViewModel() {
 
 
     }*/
+    companion object {
+        fun provideFactory(plantsRepository: PlantsRepository): ViewModelProvider.Factory {
+            return object : ViewModelProvider.Factory {
+                @Suppress("UNCHECKED_CAST")
+                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                    return AddPlantViewModel(plantsRepository) as T
+                }
+            }
+        }
+    }
 
 }
