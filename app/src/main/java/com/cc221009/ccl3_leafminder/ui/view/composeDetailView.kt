@@ -2,8 +2,11 @@ package com.cc221009.ccl3_leafminder.ui.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -12,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -32,7 +36,7 @@ fun DetailView(mainViewModel: MainViewModel, navController: NavController){
         verticalArrangement = Arrangement.Center
     ) {
         // Header
-        Header("Add a new plant", R.drawable.icon_edit)
+        Header(null, R.drawable.icon_edit)
 
         PlantDetailImage(R.drawable.placeholder, "Linda", "Species")
 
@@ -47,23 +51,23 @@ fun DetailView(mainViewModel: MainViewModel, navController: NavController){
             .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            SpecificInfoContainer("Water", "specific info", R.drawable.placeholder, colorScheme.secondary,
+            SpecificInfoContainer("14", "Water Interval", R.drawable.graphics_blur_calendar, colorScheme.secondaryContainer,
                 modifier = Modifier.weight(1f))
 
-                Spacer(modifier = Modifier.width(20.dp))
+                Spacer(modifier = Modifier.width(10.dp))
 
-            SpecificInfoContainer("location", "specific info", R.drawable.placeholder, colorScheme.secondary,
+            SpecificInfoContainer("3", "Next watering in", R.drawable.graphics_blur_waterdrop, colorScheme.secondaryContainer,
                 modifier = Modifier.weight(1f))
 
-                Spacer(modifier = Modifier.width(20.dp))
+                Spacer(modifier = Modifier.width(10.dp))
 
-            SpecificInfoContainer("poisonous", "specific info", R.drawable.placeholder, colorScheme.secondary,
+            SpecificInfoContainer("234", "your plant survived", R.drawable.placeholder, colorScheme.tertiaryContainer,
                 modifier = Modifier.weight(1f))
         }
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        Text("Plant specific information")
+        H2Text("Plant specific information")
         Spacer(modifier = Modifier.height(20.dp))
 
         Row(
@@ -71,9 +75,11 @@ fun DetailView(mainViewModel: MainViewModel, navController: NavController){
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            ApiInfoItem("watering", "specific info", R.drawable.placeholder, colorScheme.secondary)
-            ApiInfoItem("location", "specific info", R.drawable.placeholder, colorScheme.secondary)
-            ApiInfoItem("poisonous", "specific info", R.drawable.placeholder, colorScheme.secondary)
+            ApiInfoItem("watering", "specific info", R.drawable.watering_normal, colorScheme.surface, modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.width(10.dp))
+            ApiInfoItem("location", "specific info", R.drawable.location_light, colorScheme.surface, modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.width(10.dp))
+            ApiInfoItem("poisonous", "specific info", R.drawable.poisonous_true, colorScheme.surface, modifier = Modifier.weight(1f))
         }
     }
 }
@@ -84,17 +90,31 @@ fun PlantDetailImage(
     plantName: String,
     plantSpecies: String
 ) {
-    Image(
-        painter = painterResource(id = imgPath),
-        contentDescription = "Profile Picture",
+    Box(
         modifier = Modifier
-            .height(200.dp)
-            .width(200.dp),
-        contentScale = ContentScale.Crop)
+            .size(180.dp) // Set the size including the border
+            .background(color = colorScheme.primary, shape = CircleShape)
+    ) {
+
+        Image(
+            painter = painterResource(id = imgPath),
+            contentDescription = "Profile Picture",
+            modifier = Modifier
+                .clip(CircleShape)
+                .align(Alignment.Center) // Center the image inside the Box
+                .size(175.dp), // Clip the image to a circle shape
+            contentScale = ContentScale.Crop
+        )
+
+
+
+    }
 
     H1Text(text = plantName)
 
-    Text(text = plantSpecies)
+    CopyItalicText(text = plantSpecies, colorScheme.primary)
+    Spacer(modifier = Modifier.height(20.dp))
+
 }
 
 @Composable
@@ -102,14 +122,16 @@ fun PlantDetailGeneralContainer() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.secondary),
+            .clip(RoundedCornerShape(15.dp))
+            .background(colorScheme.tertiaryContainer)
+            .padding(20.dp),
         horizontalArrangement = Arrangement.SpaceAround
     ) {
-        PlantDetailItem(R.drawable.placeholder, "big", null)
+        PlantDetailItem(R.drawable.plant_base_small, "small")
         Spacer(modifier = Modifier.width(20.dp))
-        PlantDetailItem(R.drawable.placeholder,"great", null)
+        PlantDetailItem(R.drawable.wellbeing_okay,"okay")
         Spacer(modifier = Modifier.width(20.dp))
-        PlantDetailItem(R.drawable.placeholder,"light", null)
+        PlantDetailItem(R.drawable.location_half_shadow,"half-shadow")
     }
 }
 
@@ -117,11 +139,10 @@ fun PlantDetailGeneralContainer() {
 fun PlantDetailItem(
     imgPath: Int,
     text: String,
-    textDetail: String?
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
         Image(
             painter = painterResource(id = imgPath),
@@ -131,14 +152,7 @@ fun PlantDetailItem(
                 .width(50.dp),
             contentScale = ContentScale.Crop)
 
-        Text(text = text)
-
-        // Conditionally display textDetail if it's not null
-        textDetail?.let {
-            Text(text = it)
-        }
-
-
+        CopyText(text = text)
     }
 }
 
@@ -155,24 +169,30 @@ modifier: Modifier = Modifier
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
+                .clip(RoundedCornerShape(15.dp))
+                .fillMaxHeight()
                 .background(backgroundColor)
+                .padding(20.dp)
                 .then(modifier)
         ) {
 
-            Text(text = headline)
+            H4Text(text = headline)
 
             Box(
                 contentAlignment = Alignment.Center,
             ){
-                Text(text = text)
-
                 Image(
                     painter = painterResource(id = imgPath),
                     contentDescription = "Profile Picture",
-                    modifier = Modifier
-                        .height(50.dp)
-                        .width(50.dp),
-                    contentScale = ContentScale.Crop)
+                    contentScale = ContentScale.Fit)
+
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    H1Text(text = text)
+                    Text(text = "days")
+                }
             }
     }
 
@@ -183,27 +203,36 @@ fun ApiInfoItem(
     text: String,
     textDetail: String?,
     imgPath: Int,
-    backgroundColor: Color
+    backgroundColor: Color,
+    modifier: Modifier = Modifier
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(15.dp))
             .background(backgroundColor)
-    ) {
+            .padding(top = 20.dp, bottom = 20.dp)
+            .then(modifier),
+
+        ) {
         Image(
             painter = painterResource(id = imgPath),
             contentDescription = "Profile Picture",
             modifier = Modifier
                 .height(50.dp)
                 .width(50.dp),
-            contentScale = ContentScale.Crop)
+            contentScale = ContentScale.Fit)
 
-        Text(text = text)
+        Spacer(modifier = Modifier.height(10.dp))
+
+
+        H4Text(text = text)
 
         // Conditionally display textDetail if it's not null
         textDetail?.let {
-            Text(text = it)
+            CopyText(text = it)
         }
     }
 }
