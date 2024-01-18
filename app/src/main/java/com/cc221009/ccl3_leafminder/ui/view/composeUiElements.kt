@@ -47,11 +47,11 @@ fun Header(
 ) {
     Box(
         modifier = Modifier
-        .fillMaxSize()
+            .fillMaxSize()
     ) {
         Row(
             modifier = Modifier
-            .fillMaxSize(),
+                .fillMaxSize(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
@@ -87,24 +87,25 @@ fun Header(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DefaultTextField(headline: String, placeholderText: String) {
-    var textSaver by rememberSaveable(stateSaver = TextFieldValue.Saver) { mutableStateOf(TextFieldValue("")) }
+fun DefaultTextField(
+    headline: String,
+    placeholderText: String,
+    text: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit
+) {
 
     Column() {
 
         Text(text = headline)
         Spacer(modifier = Modifier.height(10.dp))
         TextField(
-            value = textSaver,
-            onValueChange = { newTextValue -> textSaver = newTextValue },
+            value = text,
+            onValueChange = onValueChange,
             label = { Text(text = placeholderText) },
             placeholder = { Text(text = placeholderText) },
-            modifier = Modifier
-                .height(50.dp)
-                .padding(bottom = 20.dp)
-                .fillMaxSize()
+            modifier = Modifier.padding(bottom = 20.dp)
         )
-        
+
         Spacer(modifier = Modifier.height(20.dp))
     }
 
@@ -113,8 +114,17 @@ fun DefaultTextField(headline: String, placeholderText: String) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CalendarTextField(headline: String, placeholderText: String, imgPath: Int, selectedDate: String) {
-    var textSaver by rememberSaveable(stateSaver = TextFieldValue.Saver) { mutableStateOf(TextFieldValue("")) }
+fun CalendarTextField(
+    headline: String,
+    placeholderText: String,
+    imgPath: Int,
+    selectedDate: String
+) {
+    var textSaver by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(
+            TextFieldValue("")
+        )
+    }
 
     Text(text = headline)
 
@@ -152,16 +162,15 @@ fun PrimaryButton(
     text: String,
     onClickLogic: () -> Unit
 ) {
-    Button (
+    Button(
         modifier = Modifier
             .fillMaxWidth(0.8f) // 70% of the screen width
             .height(80.dp)
-            .padding(bottom = 20.dp)
-        ,
+            .padding(bottom = 20.dp),
         shape = RoundedCornerShape(15.dp),
         onClick = { onClickLogic() }
 
-        ) {
+    ) {
         Text(text = text)
     }
 }
