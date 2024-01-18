@@ -26,6 +26,7 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
 
             speciesNames = emptyList(),
             onSpeciesListTapped = ::fetchSpeciesNames,
+            tappingtoSavePlant = ::saveButtonPlant,
 
             date = "",
             size = "",

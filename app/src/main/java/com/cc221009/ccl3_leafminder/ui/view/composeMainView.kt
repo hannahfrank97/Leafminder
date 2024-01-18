@@ -55,7 +55,7 @@ fun MainView() {
             }
 
             composable(Screen.EditView.route) {
-                EditView(navController)
+                EditView(navController=navController)
             }
 
             composable(Screen.PlantListView.route) {

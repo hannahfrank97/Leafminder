@@ -55,6 +55,9 @@ data class AddUIState(
     val speciesNames: List<String>,
     val onSpeciesListTapped: () -> Unit,
 
+    val tappingtoSavePlant: (Plants) -> Unit,
+
+
     val date: String,
     val size: String,
     val wellbeing: String,
@@ -112,8 +115,7 @@ fun AddView(
 
         PrimaryButton("Add Plant",
             onClickLogic = {
-                vm.saveButtonPlant(
-                    plant = Plants(
+                    val plant = Plants(
                         name = state.name.text,
                         date = state.date,
                         size = state.size,
@@ -121,8 +123,9 @@ fun AddView(
                         wateringDate = state.wateringDate,
                         wateringFrequency = state.wateringFrequency,
                         imagePath = state.imagePath
-                    )
+
                 )
+                state.tappingtoSavePlant(plant)
                 println("Button was clicked")
             })
     }

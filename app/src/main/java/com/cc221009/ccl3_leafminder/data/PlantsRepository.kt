@@ -46,4 +46,8 @@ class PlantsRepository(val dao: PlantsDao) {
     suspend fun addPlant(plant: Plants) {
         dao.insertPlant(plant)
     }
+
+    suspend fun updatePlant(plant: Plants) {
+        dao.updatePlant(plant)
+    }
 }
