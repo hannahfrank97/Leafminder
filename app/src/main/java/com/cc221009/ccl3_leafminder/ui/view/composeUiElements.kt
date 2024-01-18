@@ -1,7 +1,9 @@
 package com.cc221009.ccl3_leafminder.ui.view
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,30 +13,46 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cc221009.ccl3_leafminder.R
@@ -42,27 +60,29 @@ import com.cc221009.ccl3_leafminder.R
 
 @Composable
 fun Header(
-    viewName: String,
+    viewName: String?,
     rightIconPath: Int?,
 ) {
     Box(
         modifier = Modifier
-            .fillMaxSize()
+        .fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
-                .fillMaxSize(),
+            .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
             Icon(
-                painter = painterResource(id = R.drawable.icon_plus),
-                contentDescription = "Back"
+                imageVector = Icons.Default.ArrowBack, contentDescription = "",
+                tint = colorScheme.primary
             )
 
-            Text(
+            viewName?.let {
+            H2Text(
                 text = viewName,
             )
+            }
 
             Box(
                 modifier = Modifier
@@ -87,29 +107,51 @@ fun Header(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DefaultTextField(
-    headline: String,
-    placeholderText: String,
-    text: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit
-) {
 
-    Column() {
+fun DefaultTextField(headline: String, placeholderText: String) {
+    var textSaver by rememberSaveable(stateSaver = TextFieldValue.Saver) { mutableStateOf(TextFieldValue("")) }
+    val textState = remember { mutableStateOf("") }
+    val borderBottomWidth = 2.dp
+    val borderBottomColor = colorScheme.outline // Change as needed
 
-        Text(text = headline)
-        Spacer(modifier = Modifier.height(10.dp))
-        TextField(
-            value = text,
-            onValueChange = onValueChange,
-            label = { Text(text = placeholderText) },
-            placeholder = { Text(text = placeholderText) },
-            modifier = Modifier.padding(bottom = 20.dp)
-        )
+    Column {
+
+
+        // Your CopyText Composable
+        CopyText(text = headline)
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .drawBehind {
+                    val strokeWidth = borderBottomWidth.value * density
+                    val y = size.height - strokeWidth
+                    drawLine(
+                        color = borderBottomColor,
+                        start = Offset(0f, y),
+                        end = Offset(size.width, y),
+                        strokeWidth = strokeWidth
+                    )
+                }
+        ) {
+            TextField(
+                value = textState.value,
+                onValueChange = { textState.value = it },
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = MaterialTheme.colorScheme.primary,
+                    cursorColor = MaterialTheme.colorScheme.primary,
+                    containerColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent, // Hide the indicator
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+        }
 
         Spacer(modifier = Modifier.height(20.dp))
     }
-
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -126,15 +168,15 @@ fun CalendarTextField(
         )
     }
 
-    Text(text = headline)
+    CopyText(text = headline)
 
     Button(
         onClick = { },
     ) {
-        Text(
+        CopyText(
             text = if (selectedDate.isNotEmpty()) selectedDate else "stringResource(R.string.select_a_date)",
-            modifier = Modifier.weight(1f),
-            style = TextStyle()
+            //modifier = Modifier.weight(1f),
+            // style = TextStyle(),
         )
 
         Icon(
@@ -164,14 +206,18 @@ fun PrimaryButton(
 ) {
     Button(
         modifier = Modifier
-            .fillMaxWidth(0.8f) // 70% of the screen width
+            .fillMaxWidth(0.7f) // 70% of the screen width
             .height(80.dp)
             .padding(bottom = 20.dp),
         shape = RoundedCornerShape(15.dp),
-        onClick = { onClickLogic() }
 
-    ) {
-        Text(text = text)
+        onClick = { onClickLogic() },
+        colors = ButtonDefaults.buttonColors(
+                containerColor = colorScheme.primary,
+                contentColor = colorScheme.background
+                ),
+        ) {
+        CopyBoldText(text = text, colorScheme.background)
     }
 }
 
@@ -179,29 +225,64 @@ fun PrimaryButton(
 fun PlantItem(
     plantName: String,
     species: String?,
-    imgPath: Int
+    imgPath: Int,
+    needsWater: Boolean
 ) {
     Column(
-        modifier = Modifier.padding(end = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Image(
-            painter = painterResource(id = imgPath),
-            contentDescription = "Profile Picture",
-            modifier = Modifier
-                .height(70.dp)
-                .width(70.dp),
-            contentScale = ContentScale.Crop)
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .padding(end = 20.dp)
+            .clickable {
 
-        Text(text = plantName)
+        }
+    ) {
+        val borderColor = if (needsWater) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
+
+        Box(
+            modifier = Modifier
+                .size(80.dp) // Set the size including the border
+                .background(color = borderColor, shape = CircleShape),
+        ) {
+            Image(
+                painter = painterResource(id = imgPath),
+                contentDescription = "Profile Picture",
+                modifier = Modifier
+                    .size(75.dp) // Image size, smaller than the Box to create a border effect
+                    .align(Alignment.Center) // Center the image inside the Box
+                    .clip(CircleShape), // Clip the image to a circle shape
+                contentScale = ContentScale.Crop,
+            )
+
+            if (needsWater) {
+                Box(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .size(35.dp)
+                        .align(Alignment.TopEnd) // Center the image inside the Box
+                        .background(MaterialTheme.colorScheme.secondary),
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.icon_waterdrop_small),
+                        contentDescription = "Waterdrop",
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(5.dp))
+        CopyText(text = plantName)
 
         // Conditionally display textDetail if it's not null
         species?.let {
-            Text(text = it)
+            CopyItalicText(text = it, MaterialTheme.colorScheme.outline)
+
         }
     }
 }
+
 
 // ––––––––––––––––––––– TYPO –––––––––––––––––––––––
 
@@ -213,7 +294,7 @@ fun H1Text(
         text = text,
         style = TextStyle(
             fontFamily = FontFamily(Font(R.font.grandhotel_regular)),
-            fontSize = 30.sp)
+            fontSize = 50.sp)
     )
 }
 
@@ -225,7 +306,7 @@ fun H2Text(
         text = text,
         style = TextStyle(
             fontFamily = FontFamily(Font(R.font.opensans_bold)),
-            fontSize = 22.sp)
+            fontSize = 20.sp)
     )
 }
 
@@ -239,6 +320,8 @@ fun H3Text(
             fontFamily = FontFamily(Font(R.font.opensans_bold)),
             fontSize = 16.sp)
     )
+    Spacer(modifier = Modifier.height(10.dp))
+
 }
 
 @Composable
@@ -249,7 +332,8 @@ fun H4Text(
         text = text,
         style = TextStyle(
             fontFamily = FontFamily(Font(R.font.opensans_bold)),
-            fontSize = 14.sp)
+            fontSize = 14.sp,
+            textAlign = TextAlign.Center)
     )
 }
 
@@ -261,7 +345,7 @@ fun CopyText(
         text = text,
         style = TextStyle(
             fontFamily = FontFamily(Font(R.font.opensans_semibold)),
-            fontSize = 14.sp)
+            fontSize = 15.sp)
     )
 }
 
@@ -274,8 +358,22 @@ fun CopyBoldText(
         text = text,
         style = TextStyle(
             fontFamily = FontFamily(Font(R.font.opensans_bold)),
-            fontSize = 18.sp,
+            fontSize = 15.sp,
             color = MaterialTheme.colorScheme.primary)
+    )
+}
+
+@Composable
+fun CopyItalicText(
+    text: String,
+    color: Color
+) {
+    Text(
+        text = text,
+        style = TextStyle(
+            fontFamily = FontFamily(Font(R.font.opensans_semibold_italic)),
+            fontSize = 15.sp,
+            color = color)
     )
 }
 

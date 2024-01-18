@@ -1,19 +1,22 @@
 package com.cc221009.ccl3_leafminder.ui.view
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.DropdownMenuItem
@@ -22,6 +25,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material.IconButton
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -35,10 +41,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -68,7 +79,6 @@ data class AddUIState(
 )
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddView(
     vm: AddPlantViewModel = viewModel(
@@ -94,7 +104,7 @@ fun AddView(
     ) {
 
         // Header
-        Header("Add a new plant", R.drawable.icon_minus)
+        Header("Add a new plant", null)
 
         // Profile Image
         PlantImage(R.drawable.placeholder, onClickLogic = {
@@ -139,7 +149,8 @@ fun AddPlantInfoContainer(
 ) {
     Column(
         modifier = Modifier
-            .background(colorScheme.secondary)
+            .clip(RoundedCornerShape(15.dp))
+            .background(colorScheme.tertiaryContainer)
             .padding(20.dp)
     ) {
         // TODO: Connect to Viewmodel
@@ -149,30 +160,30 @@ fun AddPlantInfoContainer(
             onValueChange = { })
 
         AddParameterContainer("size") {
-            IconButtonsItem("small", R.drawable.placeholder, "small", modifier = Modifier.weight(1f))
+            IconButtonsItem("small", R.drawable.plant_base_small, "small", 1, modifier = Modifier.weight(1f))
             Spacer(modifier = Modifier.width(10.dp))
-            IconButtonsItem("medium", R.drawable.placeholder, "medium", modifier = Modifier.weight(1f))
+            IconButtonsItem("medium", R.drawable.plant_base_medium, "medium", 2,  modifier = Modifier.weight(1f))
             Spacer(modifier = Modifier.width(10.dp))
-            IconButtonsItem("large", R.drawable.placeholder, "large", modifier = Modifier.weight(1f))
+            IconButtonsItem("large", R.drawable.plant_base_large, "large", 3, modifier = Modifier.weight(1f))
         }
 
         AddParameterContainer("location") {
-            IconButtonsItem("light", R.drawable.placeholder, "light", modifier = Modifier.weight(1f))
+            IconButtonsItem("light", R.drawable.location_light, "light", 1, modifier = Modifier.weight(1f))
             Spacer(modifier = Modifier.width(10.dp))
-            IconButtonsItem("half-light", R.drawable.placeholder, "half-light", modifier = Modifier.weight(1f))
+            IconButtonsItem("half-light", R.drawable.location_half_light, "half-light", 2,  modifier = Modifier.weight(1f))
             Spacer(modifier = Modifier.width(10.dp))
-            IconButtonsItem("half-shadow", R.drawable.placeholder, "half-shadow", modifier = Modifier.weight(1f))
+            IconButtonsItem("half-shadow", R.drawable.location_half_shadow, "half-shadow", 3, modifier = Modifier.weight(1f))
             Spacer(modifier = Modifier.width(10.dp))
-            IconButtonsItem("shadow", R.drawable.placeholder, "shadow", modifier = Modifier.weight(1f))
+            IconButtonsItem("shadow", R.drawable.location_shadow, "shadow", 4, modifier = Modifier.weight(1f))
         }
 
         AddParameterContainer("wellbeing") {
-            IconButtonsItem("great", R.drawable.placeholder, "great", modifier = Modifier.weight(1f))
+            IconButtonsItem("great", R.drawable.wellbeing_good, "great", 1, modifier = Modifier.weight(1f))
             Spacer(modifier = Modifier.width(10.dp))
-            IconButtonsItem("okay", R.drawable.placeholder, "okay", modifier = Modifier.weight(1f))
+            IconButtonsItem("okay", R.drawable.wellbeing_okay, "okay", 2, modifier = Modifier.weight(1f))
             Spacer(modifier = Modifier.width(10.dp))
-            IconButtonsItem("miserable", R.drawable.placeholder, "miserable", modifier = Modifier.weight(1f))
 
+            IconButtonsItem("miserable", R.drawable.wellbeing_bad, "miserable", 3, modifier = Modifier.weight(1f))
         }
     }
     Spacer(modifier = Modifier.height(20.dp))
@@ -187,7 +198,7 @@ fun AddParameterContainer(
     Column(
         modifier = Modifier.fillMaxWidth(),
     ) {
-        Text(text = headline)
+        H3Text(text = headline)
         Row(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -198,18 +209,33 @@ fun AddParameterContainer(
 
 @Composable
 fun IconButtonsItem(
-    headline: String, imgPath: Int, imgDescription: String, modifier: Modifier = Modifier
+
+    headline: String,
+    imgPath: Int,
+    imgDescription: String,
+    passValue: Int,
+    modifier: Modifier = Modifier
 ) {
 
-    Button(modifier = Modifier
-        .fillMaxWidth(0.3f)
-        .height(60.dp)
-        .then(modifier), onClick = {
-        //Logic for adding Image
-    }) {
-        Column {
+    Box(
+        modifier = Modifier
+            .fillMaxHeight()
+            .clip(RoundedCornerShape(15.dp))
+            .background(colorScheme.onError)
+            .padding(top = 20.dp, bottom = 20.dp)
+            .clickable {
+                // Enter logic here
+            }
+            .then(modifier)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             Image(painter = painterResource(id = imgPath), imgDescription)
-            Text(text = headline)
+            Spacer(modifier = Modifier.height(10.dp))
+            CopyText(text = headline)
         }
     }
 }
@@ -224,12 +250,13 @@ fun AddPlantSpeciesContainer(
 
     Column(
         modifier = Modifier
-            .background(colorScheme.tertiary)
+            .clip(RoundedCornerShape(15.dp))
+            .background(colorScheme.surface)
             .padding(20.dp)
             .fillMaxWidth()
     ) {
         //HEADLINE
-        Text(text = "Species")
+        H3Text(text = "Species")
 
         // TODO: Connect to Viewmodel
 
@@ -315,10 +342,10 @@ fun APIIconItem(
             painter = painterResource(id = imgPath),
             imgDescription,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
-        Text(text = headline)
-        Text(text = apiValue)
+
+            contentScale = ContentScale.Crop)
+        H4Text(text = headline)
+        CopyText(text = apiValue)
     }
 }
 
@@ -329,11 +356,13 @@ fun AddPlantWateringContainer() {
 
     Column(
         modifier = Modifier
-            .background(colorScheme.secondary)
+            .clip(RoundedCornerShape(15.dp))
+            .background(colorScheme.secondaryContainer)
             .padding(20.dp)
+
     ) {
         //HEADLINE
-        Text(text = "Watering")
+        H3Text(text = "Watering")
 
         // TODO: Connect to Viewmodel
         DefaultTextField(
@@ -352,26 +381,36 @@ fun AddPlantWateringContainer() {
 fun WateringFrequencySelector(
     headline: String,
 ) {
+    var waterInterval by remember { mutableStateOf(20) } // Initial value
+
+
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = headline)
-        Row() {
+        CopyText(text = headline)
+        Spacer(modifier = Modifier.height(10.dp))
+        Row(
+            modifier = Modifier
+            .fillMaxWidth(0.7f),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             PlusMinusButton(R.drawable.icon_minus, onClickLogic = {
-                // Define what should happen when the button is clicked
-                println("Minus one")
+                waterInterval = (waterInterval - 1).coerceAtLeast(0) // Decrease and ensure not below 0
             })
 
-            Column {
-                Text(text = "20") //Increase variable
-                Text(text = "days") //Increase variable
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                H1Text(text = waterInterval.toString()) //Increase variable
+                CopyBoldText(text = "days", colorScheme.primary) //Increase variable
             }
 
             PlusMinusButton(R.drawable.icon_plus, onClickLogic = {
-                // Define what should happen when the button is clicked
-                println("Plus one")
+                waterInterval++ // Increase the frequency
             })
         }
     }
@@ -382,10 +421,17 @@ fun WateringFrequencySelector(
 fun PlusMinusButton(
     imgPath: Int, onClickLogic: () -> Unit
 ) {
-    Button(onClick = { onClickLogic() }) {
+
+    IconButton(
+        onClick = { onClickLogic() },
+        modifier = Modifier
+            .clip(RoundedCornerShape(25.dp))
+            .size(45.dp)
+            .background(colorScheme.background),
+        ) {
         Icon(
             painter = painterResource(id = imgPath),
-            contentDescription = "Back",
+            contentDescription = "Delete"
         )
     }
 }
@@ -394,19 +440,42 @@ fun PlusMinusButton(
 fun PlantImage(
     imgPath: Int, onClickLogic: () -> Unit
 ) {
-    Button(modifier = Modifier
-        .padding(bottom = 20.dp)
-        .border(2.dp, colorScheme.outline, RoundedCornerShape(10.dp))
-        .height(100.dp)
-        .width(100.dp),
-        onClick = { onClickLogic() }) {
-        Image(
-            painter = painterResource(id = imgPath),
-            "Profile Picture",
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
+
+    Spacer(modifier = Modifier.height(20.dp))
+
+    Box(
+        modifier = Modifier
+            .size(120.dp) // Set the size including the border
+            .background(color = colorScheme.primary, shape = CircleShape)
+            .clickable {  onClickLogic() },
+    ) {
+        if (imgPath == null) {
+            Image(
+                painter = painterResource(id = R.drawable.icon_add),
+                contentDescription = "Profile Picture",
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .align(Alignment.Center) // Center the image inside the Box
+                    .size(70.dp), // Clip the image to a circle shape
+                contentScale = ContentScale.Crop
+            )
+        }
+        else {
+            Image(
+                painter = painterResource(id = imgPath),
+                contentDescription = "Profile Picture",
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .align(Alignment.Center) // Center the image inside the Box
+                    .size(115.dp), // Clip the image to a circle shape
+                contentScale = ContentScale.Crop
+            )
+        }
+
+
     }
+
+    Spacer(modifier = Modifier.height(20.dp))
 }
 
 
