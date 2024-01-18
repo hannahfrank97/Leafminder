@@ -1,5 +1,6 @@
 package com.cc221009.ccl3_leafminder.ui.view
 
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -39,11 +40,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
+import com.cc221009.ccl3_leafminder.data.model.Plants
 import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
+import com.cc221009.ccl3_leafminder.ui.view_model.MainViewModel
+import androidx.activity.viewModels
 
 data class AddUIState(
     val name: TextFieldValue,
@@ -52,14 +58,26 @@ data class AddUIState(
     val speciesNames: List<String>,
     val setSpeciesNames: (List<String>) -> Unit,
 
+    val date: String,
+    val size: String,
+    val wellbeing: String,
+    val wateringDate: String,
+    val wateringFrequency: String,
+    val imagePath: String
+
     )
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddView(
-    vm: AddPlantViewModel = viewModel(), navController: NavController
+    vm: AddPlantViewModel = viewModel(),
+    navController: NavController
 ) {
+
     val state by vm.uiState.collectAsState()
+
 
     Column(
         modifier = Modifier
@@ -90,8 +108,17 @@ fun AddView(
 
         AddPlantWateringContainer()
 
-        PrimaryButton("Add Plant", onClickLogic = {
-            // Define what should happen when the button is clicked
+        PrimaryButton("Add Plant",
+            onClickLogic = {
+            vm.saveButtonPlant(plant = Plants(
+                name = state.name.text,
+                date = state.date,
+                size = state.size,
+                wellbeing = state.wellbeing,
+                wateringDate = state.wateringDate,
+                wateringFrequency = state.wateringFrequency,
+                imagePath = state.imagePath
+            ))
             println("Button was clicked")
         })
     }

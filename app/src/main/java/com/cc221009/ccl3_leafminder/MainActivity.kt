@@ -17,6 +17,7 @@ import androidx.room.Room
 import com.cc221009.ccl3_leafminder.data.PlantsDatabase
 import com.cc221009.ccl3_leafminder.ui.theme.CCL3_LeafminderTheme
 import com.cc221009.ccl3_leafminder.ui.view.MainView
+import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
 import com.cc221009.ccl3_leafminder.ui.view_model.MainViewModel
 
 class MainActivity : ComponentActivity() {
@@ -35,6 +36,17 @@ class MainActivity : ComponentActivity() {
             }
         })
 
+    private val addPlantViewModel by viewModels<AddPlantViewModel>(
+        factoryProducer = {
+            object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                    return AddPlantViewModel (plantdb.dao) as T
+                }
+            }
+        })
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -44,7 +56,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainView(mainViewModel)
+                    MainView(mainViewModel, addPlantViewModel)
                 }
             }
         }
