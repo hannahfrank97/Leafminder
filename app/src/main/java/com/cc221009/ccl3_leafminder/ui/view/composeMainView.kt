@@ -19,8 +19,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.List
-import androidx.compose.ui.res.painterResource
-import com.cc221009.ccl3_leafminder.R
 
 // https://kotlinlang.org/docs/sealed-classes.html
 sealed class Screen(val route: String) {
@@ -75,14 +73,12 @@ fun BottomNavigationBar(navController: NavHostController){
         NavigationBarItem(
             selected = true,
             onClick = { navController.navigate(Screen.HomeView.route) },
-            icon = { Icon(painter = painterResource(id = R.drawable.icon_home),
-                contentDescription = "Delete") })
+            icon = { Icon(imageVector = Icons.Default.Home, contentDescription = "") })
 
         NavigationBarItem(
             selected = false,
             onClick = { navController.navigate(Screen.AddView.route) },
-            icon = { Icon(painter = painterResource(id = R.drawable.icon_add),
-                contentDescription = "Delete") })
+            icon = { Icon(imageVector = Icons.Default.Add, contentDescription = "") })
 
         NavigationBarItem(
             selected = false,
