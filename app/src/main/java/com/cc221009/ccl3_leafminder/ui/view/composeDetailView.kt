@@ -30,11 +30,6 @@ import com.cc221009.ccl3_leafminder.data.getDatabase
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.DetailViewModel
 
-data class DetailUIState(
-    val loadPlant: (Int) -> Unit,
-    val plant: Plant? = null,
-)
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailView(

@@ -4,11 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
-import com.cc221009.ccl3_leafminder.ui.view.DetailUIState
+import com.cc221009.ccl3_leafminder.data.model.Plant
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+
+data class DetailUIState(
+    val loadPlant: (Int) -> Unit,
+    val plant: Plant? = null,
+)
 
 class DetailViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {
 
