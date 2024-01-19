@@ -36,7 +36,6 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
             clickShowDialog = ::showDialog,
             clickingToDeletePlant = ::clickDeletePlant,
 
-
         )
     )
 
