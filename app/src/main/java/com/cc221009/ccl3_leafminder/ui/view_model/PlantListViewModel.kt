@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class PlantListViewModel (private val plantsRepository: PlantsRepository) : ViewModel() {
+class PlantListViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {
     private val _mainViewState = MutableStateFlow(
         PlantListUIState(
             plants = emptyList(),
@@ -31,9 +31,9 @@ class PlantListViewModel (private val plantsRepository: PlantsRepository) : View
     fun getPlants() {
         viewModelScope.launch {
             try {
-                plantsRepository.getPlants().collect { plants ->
-                    _mainViewState.value = _mainViewState.value.copy(plants = plants)
-                }
+                val plants = plantsRepository.getPlants()
+                _mainViewState.value = _mainViewState.value.copy(plants = plants)
+
             } catch (e: Exception) {
                 Log.e("PlantListViewModel", "Error saving plant", e)
             }

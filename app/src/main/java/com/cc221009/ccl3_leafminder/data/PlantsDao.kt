@@ -11,14 +11,18 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PlantsDao {
 
-        @Insert
-        suspend fun insertPlant(plant: Plants)
+    @Insert
+    suspend fun insertPlant(plant: Plants)
 
-        @Update
-        suspend fun updatePlant(plant: Plants)
-        @Delete
-        suspend fun deletePlant(plant: Plants)
+    @Update
+    suspend fun updatePlant(plant: Plants)
 
-        @Query("SELECT * FROM plants")
-        fun getPlants(): Flow<List<Plants>>
+    @Delete
+    suspend fun deletePlant(plant: Plants)
+
+    @Query("SELECT * FROM plants")
+    suspend fun getPlants(): List<Plants>
+
+    @Query("SELECT * FROM plants WHERE id = :plantId")
+    suspend fun getPlantById(plantId: Int): Plants
 }
