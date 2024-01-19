@@ -24,7 +24,9 @@ import androidx.compose.material.icons.filled.List
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavType
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navArgument
 import com.cc221009.ccl3_leafminder.R
 
 // https://kotlinlang.org/docs/sealed-classes.html
@@ -57,9 +59,14 @@ fun MainView() {
                 AddView(navController = navController)
             }
 
-            composable(Screen.DetailView.route) {
-                DetailView(navController)
+            composable(
+                "DetailView/{plantId}",
+                arguments = listOf(navArgument("plantId") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val plantId = backStackEntry.arguments?.getInt("plantId")!!
+                DetailView(plantId, navController = navController)
             }
+
 
             composable(Screen.EditView.route) {
                 EditView(navController = navController)

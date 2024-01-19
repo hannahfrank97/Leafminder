@@ -1,5 +1,6 @@
 package com.cc221009.ccl3_leafminder.ui.view
 
+import android.service.autofill.OnClickAction
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -69,18 +70,15 @@ fun PlantListView(
         state.seeAllPlants()
     }
 
-
-    val composableList = listOf<@Composable () -> Unit>(
-
-        { PlantListItem(navController, "Linda", "Species",  R.drawable.placeholder, true)},
-        { PlantListItem(navController,"Linda","Species",  R.drawable.placeholder, true)},
-        { PlantListItem(navController,"Linda","Species",   R.drawable.placeholder, false)},
-        { PlantListItem(navController,"Linda","Species",  R.drawable.placeholder, true)},
-        { PlantListItem(navController,"Linda","Species",  R.drawable.placeholder, true)},
-        { PlantListItem(navController,"Linda","Species",   R.drawable.placeholder, false)},
-        { PlantListItem(navController,"Linda","Species",  R.drawable.placeholder, true)},
-        { PlantListItem(navController,"Linda","Species",  R.drawable.placeholder, true)},
-    )
+    state.plants.forEach { plant ->
+        PlantListItem(
+            navController,
+            plant = plant,
+            species = "Species",//API call to get species name
+            imgPath = R.drawable.placeholder,
+            needsWater = false,
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -102,7 +100,7 @@ fun PlantListView(
                 items(state.plants) { plant ->
                     PlantListItem(
                         navController,
-                        plantName = plant.name,
+                        plant = plant,
                         species = "Species",//API call to get species name
                         imgPath = R.drawable.placeholder,
                         needsWater = false,
@@ -119,22 +117,24 @@ fun PlantListView(
 
 fun PlantListItem(
     navController: NavController,
-    plantName: String,
     species: String?,
     imgPath: Int,
-    needsWater: Boolean
-) {
+    needsWater: Boolean,
+    plant: Plants,
+
+    ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .clip(RoundedCornerShape(15.dp))
             .clickable {
-                navController.navigate(Screen.DetailView.route)
+                navController.navigate("DetailView/${plant.id}")
             }
     ) {
 
-        val borderColor = if (needsWater) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
+        val borderColor =
+            if (needsWater) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
 
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -142,48 +142,48 @@ fun PlantListItem(
             modifier = Modifier
                 .size(80.dp) // Set the size including the border
                 .background(color = borderColor, shape = CircleShape),
+        ) {
+            Image(
+                painter = painterResource(id = imgPath),
+                contentDescription = "Profile Picture",
+                modifier = Modifier
+                    .size(75.dp) // Image size, smaller than the Box to create a border effect
+                    .align(Alignment.Center) // Center the image inside the Box
+                    .clip(CircleShape), // Clip the image to a circle shape
+                contentScale = ContentScale.Crop,
+            )
+
+            if (needsWater) {
+                Box(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .size(35.dp)
+                        .align(Alignment.TopEnd) // Center the image inside the Box
+                        .background(MaterialTheme.colorScheme.secondary),
                 ) {
                     Image(
-                        painter = painterResource(id = imgPath),
-                        contentDescription = "Profile Picture",
+                        painter = painterResource(id = R.drawable.icon_waterdrop_small),
+                        contentDescription = "Waterdrop",
                         modifier = Modifier
-                            .size(75.dp) // Image size, smaller than the Box to create a border effect
-                            .align(Alignment.Center) // Center the image inside the Box
-                            .clip(CircleShape), // Clip the image to a circle shape
-                        contentScale = ContentScale.Crop,
+                            .align(Alignment.Center)
                     )
-
-                    if (needsWater) {
-                        Box(
-                            modifier = Modifier
-                                .clip(CircleShape)
-                                .size(35.dp)
-                                .align(Alignment.TopEnd) // Center the image inside the Box
-                                .background(MaterialTheme.colorScheme.secondary),
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.icon_waterdrop_small),
-                                contentDescription = "Waterdrop",
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                            )
-                        }
-                    }
                 }
-
-
-                Spacer(modifier = Modifier.height(5.dp))
-                CopyText(text = plantName)
-
-                // Conditionally display textDetail if it's not null
-                species?.let {
-                    CopyItalicText(text = it, MaterialTheme.colorScheme.outline)
-
-                }
-
-                Spacer(modifier = Modifier.height(10.dp))
-
             }
         }
+
+
+        Spacer(modifier = Modifier.height(5.dp))
+        CopyText(text = plant.name)
+
+        // Conditionally display textDetail if it's not null
+        species?.let {
+            CopyItalicText(text = it, MaterialTheme.colorScheme.outline)
+
+        }
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+    }
+}
 
 

@@ -137,7 +137,7 @@ fun EditView(
 
         PrimaryButton("Save Changes",
             onClickLogic = {
-            val updatePlant = Plants(
+            val plant = Plants(
                 name = state.name,
                 date = state.date,
                 size = state.size,
@@ -146,7 +146,7 @@ fun EditView(
                 wateringFrequency = state.wateringFrequency,
                 imagePath = state.imagePath
             )
-                state.onSaveEditedPlant(updatePlant)
+                state.onSaveEditedPlant(plant)
                 println("Button was clicked")
         })
     }
