@@ -57,4 +57,8 @@ class PlantsRepository(val dao: PlantsDao) {
     suspend fun deletePlant(plant: Plants) {
         dao.deletePlant(plant)
     }
+
+    suspend fun getPlantById(plantId: Int): Plants {
+        return dao.getPlantById(plantId)
+    }
 }
