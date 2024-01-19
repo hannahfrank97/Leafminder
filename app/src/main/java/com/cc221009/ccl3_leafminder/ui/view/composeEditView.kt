@@ -22,7 +22,7 @@ import androidx.navigation.NavController
 import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.getDatabase
-import com.cc221009.ccl3_leafminder.data.model.Plants
+import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.EditPlantViewModel
 
 data class EditUIState(
@@ -41,7 +41,7 @@ data class EditUIState(
     val onWateringFrequencyChange: (String) -> Unit,
     val onImagePathChange: (String) -> Unit,
 
-    val onSaveEditedPlant: (Plants) -> Unit,
+    val onSaveEditedPlant: (Plant) -> Unit,
 
     val openDialog: Boolean,
 
@@ -49,7 +49,7 @@ data class EditUIState(
 
     val clickShowDialog: () -> Unit,
 
-    val clickingToDeletePlant: (Plants) -> Unit,
+    val clickingToDeletePlant: (Plant) -> Unit,
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -84,7 +84,7 @@ fun EditView(
                 confirmButton = {
                     PrimaryButton("Delete",
                         onClickLogic = {
-                            val plant = Plants(
+                            val plant = Plant(
                                 name = state.name,
                                 date = state.date,
                                 size = state.size,
@@ -136,7 +136,7 @@ fun EditView(
 
         PrimaryButton("Save Changes",
             onClickLogic = {
-                val plant = Plants(
+                val plant = Plant(
                     name = state.name,
                     date = state.date,
                     size = state.size,

@@ -34,11 +34,11 @@ import androidx.navigation.NavController
 import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.getDatabase
-import com.cc221009.ccl3_leafminder.data.model.Plants
+import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.PlantListViewModel
 
 data class PlantListUIState(
-    val plants: List<Plants>,
+    val plants: List<Plant>,
     val seeAllPlants: () -> Unit,
 
     )
@@ -112,7 +112,7 @@ fun PlantListItem(
     species: String?,
     imgPath: Int,
     needsWater: Boolean,
-    plant: Plants,
+    plant: Plant,
 
     ) {
     Column(

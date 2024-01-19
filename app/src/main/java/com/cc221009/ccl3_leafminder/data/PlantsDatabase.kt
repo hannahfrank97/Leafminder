@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.cc221009.ccl3_leafminder.data.model.Plants
+import com.cc221009.ccl3_leafminder.data.model.Plant
 
-@Database(entities = [Plants::class], version = 1)
+@Database(entities = [Plant::class], version = 1)
 abstract class PlantsDatabase : RoomDatabase() {
     abstract val dao: PlantsDao
 }

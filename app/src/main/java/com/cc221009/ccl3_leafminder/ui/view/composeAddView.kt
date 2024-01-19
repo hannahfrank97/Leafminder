@@ -46,7 +46,7 @@ import androidx.navigation.NavController
 import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.getDatabase
-import com.cc221009.ccl3_leafminder.data.model.Plants
+import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
 
 data class AddUIState(
@@ -56,7 +56,7 @@ data class AddUIState(
     val speciesNames: List<String>,
     val onSpeciesListTapped: () -> Unit,
 
-    val tappingtoSavePlant: (Plants) -> Unit,
+    val tappingtoSavePlant: (Plant) -> Unit,
 
     val date: String,
     val size: String,
@@ -122,7 +122,7 @@ fun AddView(
 
         PrimaryButton("Add Plant",
             onClickLogic = {
-                val plant = Plants(
+                val plant = Plant(
                     name = state.name.text,
                     date = state.date,
                     size = state.size,

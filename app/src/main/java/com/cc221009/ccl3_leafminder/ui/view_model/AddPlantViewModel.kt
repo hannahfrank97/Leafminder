@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
-import com.cc221009.ccl3_leafminder.data.model.Plants
+import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view.AddUIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -53,7 +53,7 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
 
     }
 
-    fun saveButtonPlant(plant: Plants) {
+    fun saveButtonPlant(plant: Plant) {
         viewModelScope.launch {
             try {
                 plantsRepository.addPlant(plant)

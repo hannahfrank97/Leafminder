@@ -27,12 +27,12 @@ import androidx.navigation.NavController
 import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.getDatabase
-import com.cc221009.ccl3_leafminder.data.model.Plants
+import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.DetailViewModel
 
 data class DetailUIState(
     val loadPlant: (Int) -> Unit,
-    val plant: Plants? = null,
+    val plant: Plant? = null,
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -156,7 +156,7 @@ fun DetailView(
 
 @Composable
 fun PlantDetailImage(
-    plant: Plants,
+    plant: Plant,
     imgPath: Int,
     plantSpecies: String
 ) {

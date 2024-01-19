@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
-import com.cc221009.ccl3_leafminder.data.model.Plants
+import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view.EditUIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -45,7 +45,7 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
 
     val uiState: StateFlow<EditUIState> = _mainViewState.asStateFlow()
 
-    fun clickDeletePlant(plant: Plants) {
+    fun clickDeletePlant(plant: Plant) {
         viewModelScope.launch {
             plantsRepository.deletePlant(plant)
         }
@@ -59,7 +59,7 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
         _mainViewState.update { it.copy(openDialog = false) }
     }
 
-    fun saveEditedPlant(plant: Plants) {
+    fun saveEditedPlant(plant: Plant) {
         viewModelScope.launch {
             plantsRepository.updatePlant(plant)
         }
