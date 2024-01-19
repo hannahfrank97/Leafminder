@@ -5,12 +5,38 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
-import com.cc221009.ccl3_leafminder.ui.view.EditUIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+
+data class EditUIState(
+    val name: String,
+    val date: String,
+    val size: String,
+    val wellbeing: String,
+    val wateringDate: String,
+    val wateringFrequency: String,
+    val imagePath: String,
+    val onNameChange: (String) -> Unit,
+    val onDateChane: (String) -> Unit,
+    val onSizeChange: (String) -> Unit,
+    val onWellbeingChange: (String) -> Unit,
+    val onWateringDateChange: (String) -> Unit,
+    val onWateringFrequencyChange: (String) -> Unit,
+    val onImagePathChange: (String) -> Unit,
+
+    val onSaveEditedPlant: (Plant) -> Unit,
+
+    val openDialog: Boolean,
+
+    val clickDismissDialog: () -> Unit,
+
+    val clickShowDialog: () -> Unit,
+
+    val clickingToDeletePlant: (Plant) -> Unit,
+)
 
 class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {
 
@@ -105,3 +131,4 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
 
 
 }
+

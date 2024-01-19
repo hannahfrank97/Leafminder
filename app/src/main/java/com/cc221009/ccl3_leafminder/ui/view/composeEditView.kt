@@ -25,33 +25,6 @@ import com.cc221009.ccl3_leafminder.data.getDatabase
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.EditPlantViewModel
 
-data class EditUIState(
-    val name: String,
-    val date: String,
-    val size: String,
-    val wellbeing: String,
-    val wateringDate: String,
-    val wateringFrequency: String,
-    val imagePath: String,
-    val onNameChange: (String) -> Unit,
-    val onDateChane: (String) -> Unit,
-    val onSizeChange: (String) -> Unit,
-    val onWellbeingChange: (String) -> Unit,
-    val onWateringDateChange: (String) -> Unit,
-    val onWateringFrequencyChange: (String) -> Unit,
-    val onImagePathChange: (String) -> Unit,
-
-    val onSaveEditedPlant: (Plant) -> Unit,
-
-    val openDialog: Boolean,
-
-    val clickDismissDialog: () -> Unit,
-
-    val clickShowDialog: () -> Unit,
-
-    val clickingToDeletePlant: (Plant) -> Unit,
-)
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditView(
