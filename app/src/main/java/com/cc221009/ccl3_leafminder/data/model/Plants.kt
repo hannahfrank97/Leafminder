@@ -12,5 +12,5 @@ data class Plants(
     val wateringDate: String,
     val wateringFrequency: String,
     val imagePath: String,
-    @PrimaryKey (autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
 )

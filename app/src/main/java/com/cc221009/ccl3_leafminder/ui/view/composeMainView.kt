@@ -13,19 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.compose.rememberNavController
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.List
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavType
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.cc221009.ccl3_leafminder.R
 
@@ -83,7 +75,7 @@ fun MainView() {
             }
 
             composable(Screen.SplashScreen.route) {
-                SplashScreen(navController=navController)
+                SplashScreen(navController = navController)
             }
         }
     }
@@ -111,19 +103,25 @@ fun BottomNavigationBar(navController: NavHostController) {
         NavigationBarItem(
             selected = currentRoute == Screen.AddView.route,
             onClick = { navController.navigate(Screen.AddView.route) },
-            icon = { Icon(
-                modifier = Modifier.size(25.dp),
-                painter = painterResource(id = R.drawable.icon_add),
-                contentDescription = "Add icon") },
-            )
+            icon = {
+                Icon(
+                    modifier = Modifier.size(25.dp),
+                    painter = painterResource(id = R.drawable.icon_add),
+                    contentDescription = "Add icon"
+                )
+            },
+        )
 
         NavigationBarItem(
             selected = currentRoute == Screen.PlantListView.route,
             onClick = { navController.navigate(Screen.PlantListView.route) },
-            icon = { Icon(
-                modifier = Modifier.size(25.dp),
-                painter = painterResource(id = R.drawable.icon_list),
-                contentDescription = "plant list") })
+            icon = {
+                Icon(
+                    modifier = Modifier.size(25.dp),
+                    painter = painterResource(id = R.drawable.icon_list),
+                    contentDescription = "plant list"
+                )
+            })
 
     }
 }

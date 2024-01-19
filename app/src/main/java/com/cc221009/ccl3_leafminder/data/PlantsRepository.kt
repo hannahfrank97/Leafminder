@@ -1,12 +1,6 @@
 package com.cc221009.ccl3_leafminder.data
 
-import com.cc221009.ccl3_leafminder.data.model.PlantImage
 import com.cc221009.ccl3_leafminder.data.model.Plants
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.withContext
 
 /*class PlantsRepository(private val apiPlantsService: APIPlantsService) {
     suspend fun getPlantsWithDetails(apiKey:String): List<APIPlantsWithDetails> {
@@ -50,6 +44,7 @@ class PlantsRepository(val dao: PlantsDao) {
     suspend fun updatePlant(plant: Plants) {
         dao.updatePlant(plant)
     }
+
     suspend fun getPlants(): List<Plants> {
         return dao.getPlants()
     }

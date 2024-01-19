@@ -108,14 +108,13 @@ fun EditView(
         }
 
 
-
         // Header
         Header("Edit this plant", R.drawable.icon_delete,
             leftIconLogic = {
-            navController.navigate(Screen.DetailView.route)
-        }, rightIconLogic = {
-            state.clickShowDialog()
-        })
+                navController.navigate(Screen.DetailView.route)
+            }, rightIconLogic = {
+                state.clickShowDialog()
+            })
 
         // Profile Image
         PlantImage(R.drawable.placeholder, onClickLogic = {
@@ -137,18 +136,18 @@ fun EditView(
 
         PrimaryButton("Save Changes",
             onClickLogic = {
-            val plant = Plants(
-                name = state.name,
-                date = state.date,
-                size = state.size,
-                wellbeing = state.wellbeing,
-                wateringDate = state.wateringDate,
-                wateringFrequency = state.wateringFrequency,
-                imagePath = state.imagePath
-            )
+                val plant = Plants(
+                    name = state.name,
+                    date = state.date,
+                    size = state.size,
+                    wellbeing = state.wellbeing,
+                    wateringDate = state.wateringDate,
+                    wateringFrequency = state.wateringFrequency,
+                    imagePath = state.imagePath
+                )
                 state.onSaveEditedPlant(plant)
                 println("Button was clicked")
-        })
+            })
     }
 
 }

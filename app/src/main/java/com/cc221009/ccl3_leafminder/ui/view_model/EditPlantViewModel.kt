@@ -23,20 +23,24 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
             wateringDate = "",
             wateringFrequency = "",
             imagePath = "",
-            onNameChange = {newName: String -> updateName(newName)},
-            onDateChane = {newDate: String -> updateDate(newDate)},
-            onSizeChange = {newSize: String -> updateSize(newSize)},
-            onWellbeingChange = {newWellbeing: String -> updateWellbeing(newWellbeing)},
-            onWateringDateChange = {newWateringDate: String -> updateWateringDate(newWateringDate)},
-            onWateringFrequencyChange = {newWateringFrequency: String -> updateWateringFrequency(newWateringFrequency)},
-            onImagePathChange = {newImagePath: String -> updateImagePath(newImagePath)},
+            onNameChange = { newName: String -> updateName(newName) },
+            onDateChane = { newDate: String -> updateDate(newDate) },
+            onSizeChange = { newSize: String -> updateSize(newSize) },
+            onWellbeingChange = { newWellbeing: String -> updateWellbeing(newWellbeing) },
+            onWateringDateChange = { newWateringDate: String -> updateWateringDate(newWateringDate) },
+            onWateringFrequencyChange = { newWateringFrequency: String ->
+                updateWateringFrequency(
+                    newWateringFrequency
+                )
+            },
+            onImagePathChange = { newImagePath: String -> updateImagePath(newImagePath) },
             onSaveEditedPlant = ::saveEditedPlant,
             openDialog = false,
             clickDismissDialog = ::dismissDialog,
             clickShowDialog = ::showDialog,
             clickingToDeletePlant = ::clickDeletePlant,
 
-        )
+            )
     )
 
     val uiState: StateFlow<EditUIState> = _mainViewState.asStateFlow()
@@ -47,19 +51,20 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
         }
     }
 
- fun showDialog() {
-    _mainViewState.update { it.copy(openDialog = true) }
+    fun showDialog() {
+        _mainViewState.update { it.copy(openDialog = true) }
     }
 
     fun dismissDialog() {
         _mainViewState.update { it.copy(openDialog = false) }
     }
 
- fun saveEditedPlant(plant: Plants) {
-       viewModelScope.launch {
-           plantsRepository.updatePlant(plant)
-       }
+    fun saveEditedPlant(plant: Plants) {
+        viewModelScope.launch {
+            plantsRepository.updatePlant(plant)
+        }
     }
+
     fun updateName(name: String) {
         _mainViewState.value = _mainViewState.value.copy(name = name)
     }

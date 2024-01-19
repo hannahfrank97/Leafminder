@@ -1,7 +1,5 @@
 package com.cc221009.ccl3_leafminder.ui.view
 
-import android.app.DatePickerDialog
-import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -42,7 +40,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -53,9 +50,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.cc221009.ccl3_leafminder.R
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter.ofPattern
-import java.util.Calendar
 
 @Composable
 fun Header(
@@ -67,11 +61,11 @@ fun Header(
 ) {
     Box(
         modifier = Modifier
-        .fillMaxWidth()
+            .fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
-            .fillMaxWidth(),
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
@@ -84,14 +78,14 @@ fun Header(
             )
 
             viewName?.let {
-            H2Text(
-                text = viewName,
-            )
+                H2Text(
+                    text = viewName,
+                )
             }
 
             Box(
                 modifier = Modifier
-                .width(20.dp)
+                    .width(20.dp)
             ) {
                 // Conditionally display textDetail if it's not null
                 rightIconPath?.let {
@@ -102,8 +96,6 @@ fun Header(
                     )
                 }
             }
-
-
 
 
         }
@@ -120,7 +112,11 @@ fun DefaultTextField(
     onValueChange: (TextFieldValue) -> Unit
 ) {
 
-    var textSaver by rememberSaveable(stateSaver = TextFieldValue.Saver) { mutableStateOf(TextFieldValue("")) }
+    var textSaver by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(
+            TextFieldValue("")
+        )
+    }
     val textState = remember { mutableStateOf("") }
     val borderBottomWidth = 2.dp
     val borderBottomColor = colorScheme.outline // Change as needed
@@ -174,15 +170,15 @@ fun CalendarTextField(
     placeholderText: String,
     selectedDate: String,
     onValueChange: (String) -> Unit
-    ) {
+) {
 
     val borderBottomWidth = 2.dp
     val borderBottomColor = colorScheme.outline // Change as needed
     val context = LocalContext.current
 
-    Column (
+    Column(
         modifier = Modifier.clickable {
-           // showDatePicker(context, onValueChange)
+            // showDatePicker(context, onValueChange)
         }
     ) {
 
@@ -215,7 +211,7 @@ fun CalendarTextField(
             TextField(
                 value = if (selectedDate.isNotEmpty()) selectedDate else "Select date",
                 onValueChange = { //TODO
-                                },
+                },
                 label = { CopyText(text = placeholderText) },
                 placeholder = { CopyText(text = placeholderText) },
                 colors = TextFieldDefaults.textFieldColors(
@@ -236,7 +232,6 @@ fun CalendarTextField(
 }
 
 
-
 @Composable
 fun PrimaryButton(
     text: String,
@@ -250,9 +245,9 @@ fun PrimaryButton(
         shape = RoundedCornerShape(15.dp),
         onClick = { onClickLogic() },
         colors = ButtonDefaults.buttonColors(
-                containerColor = colorScheme.primary,
-                ),
-        ) {
+            containerColor = colorScheme.primary,
+        ),
+    ) {
         CopyBoldText(text = text, colorScheme.background)
     }
 }
@@ -274,7 +269,8 @@ fun PlantItem(
                 navController.navigate(Screen.DetailView.route)
             }
     ) {
-        val borderColor = if (needsWater) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
+        val borderColor =
+            if (needsWater) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
 
         Box(
             modifier = Modifier
@@ -331,7 +327,8 @@ fun H1Text(
         text = text,
         style = TextStyle(
             fontFamily = FontFamily(Font(R.font.grandhotel_regular)),
-            fontSize = 44.sp)
+            fontSize = 44.sp
+        )
     )
 }
 
@@ -343,7 +340,8 @@ fun H2Text(
         text = text,
         style = TextStyle(
             fontFamily = FontFamily(Font(R.font.opensans_bold)),
-            fontSize = 18.sp)
+            fontSize = 18.sp
+        )
     )
 }
 
@@ -355,7 +353,8 @@ fun H3Text(
         text = text,
         style = TextStyle(
             fontFamily = FontFamily(Font(R.font.opensans_bold)),
-            fontSize = 14.sp)
+            fontSize = 14.sp
+        )
     )
     Spacer(modifier = Modifier.height(10.dp))
 
@@ -370,7 +369,8 @@ fun H4Text(
         style = TextStyle(
             fontFamily = FontFamily(Font(R.font.opensans_bold)),
             fontSize = 13.sp,
-            textAlign = TextAlign.Center)
+            textAlign = TextAlign.Center
+        )
     )
 }
 
@@ -382,7 +382,8 @@ fun CopyText(
         text = text,
         style = TextStyle(
             fontFamily = FontFamily(Font(R.font.opensans_semibold)),
-            fontSize = 13.sp)
+            fontSize = 13.sp
+        )
     )
 }
 
@@ -396,7 +397,8 @@ fun CopyBoldText(
         style = TextStyle(
             fontFamily = FontFamily(Font(R.font.opensans_bold)),
             fontSize = 13.sp,
-            color = color)
+            color = color
+        )
     )
 }
 
@@ -410,7 +412,8 @@ fun CopyItalicText(
         style = TextStyle(
             fontFamily = FontFamily(Font(R.font.opensans_semibold_italic)),
             fontSize = 13.sp,
-            color = color)
+            color = color
+        )
     )
 }
 

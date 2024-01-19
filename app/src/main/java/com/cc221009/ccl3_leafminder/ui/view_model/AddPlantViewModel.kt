@@ -1,25 +1,17 @@
 package com.cc221009.ccl3_leafminder.ui.view_model
 
-import android.app.DatePickerDialog
-import android.content.Context
 import android.util.Log
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.cc221009.ccl3_leafminder.data.PlantsDao
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.model.Plants
 import com.cc221009.ccl3_leafminder.ui.view.AddUIState
-import com.cc221009.ccl3_leafminder.ui.view.Screen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.Calendar
 
 class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {
 
@@ -40,7 +32,7 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
             wateringFrequency = "",
             imagePath = "",
 
-        )
+            )
     )
     val uiState: StateFlow<AddUIState> = _mainViewState.asStateFlow()
 
@@ -71,7 +63,6 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
             }
         }
     }
-
 
 
     /*suspend fun getPlants() {

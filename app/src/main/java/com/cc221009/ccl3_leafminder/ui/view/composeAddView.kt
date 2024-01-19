@@ -93,10 +93,10 @@ fun AddView(
     ) {
 
         // Header
-        Header( "Add a new plant", null,
+        Header("Add a new plant", null,
             leftIconLogic = {
-                    navController.navigate(Screen.HomeView.route)
-        }, rightIconLogic = {})
+                navController.navigate(Screen.HomeView.route)
+            }, rightIconLogic = {})
 
         // Profile Image
         PlantImage(R.drawable.placeholder, onClickLogic = {
@@ -122,14 +122,14 @@ fun AddView(
 
         PrimaryButton("Add Plant",
             onClickLogic = {
-                    val plant = Plants(
-                        name = state.name.text,
-                        date = state.date,
-                        size = state.size,
-                        wellbeing = state.wellbeing,
-                        wateringDate = state.wateringDate,
-                        wateringFrequency = state.wateringFrequency,
-                        imagePath = state.imagePath
+                val plant = Plants(
+                    name = state.name.text,
+                    date = state.date,
+                    size = state.size,
+                    wellbeing = state.wellbeing,
+                    wateringDate = state.wateringDate,
+                    wateringFrequency = state.wateringFrequency,
+                    imagePath = state.imagePath
 
                 )
                 state.tappingtoSavePlant(plant)
@@ -158,33 +158,93 @@ fun AddPlantInfoContainer() {
             onValueChange = { })
 
         AddParameterContainer("size") {
-            IconButtonsItem("small", R.drawable.plant_base_small, "small", 1, modifier = Modifier.weight(1f))
+            IconButtonsItem(
+                "small",
+                R.drawable.plant_base_small,
+                "small",
+                1,
+                modifier = Modifier.weight(1f)
+            )
             Spacer(modifier = Modifier.width(10.dp))
-            IconButtonsItem("medium", R.drawable.plant_base_medium, "medium", 2,  modifier = Modifier.weight(1f))
+            IconButtonsItem(
+                "medium",
+                R.drawable.plant_base_medium,
+                "medium",
+                2,
+                modifier = Modifier.weight(1f)
+            )
             Spacer(modifier = Modifier.width(10.dp))
-            IconButtonsItem("large", R.drawable.plant_base_large, "large", 3, modifier = Modifier.weight(1f))
+            IconButtonsItem(
+                "large",
+                R.drawable.plant_base_large,
+                "large",
+                3,
+                modifier = Modifier.weight(1f)
+            )
         }
 
         Spacer(modifier = Modifier.height(20.dp))
 
         AddParameterContainer("location") {
-            IconButtonsItem("light", R.drawable.location_light, "light", 1, modifier = Modifier.weight(1f))
+            IconButtonsItem(
+                "light",
+                R.drawable.location_light,
+                "light",
+                1,
+                modifier = Modifier.weight(1f)
+            )
             Spacer(modifier = Modifier.width(10.dp))
-            IconButtonsItem("half-light", R.drawable.location_half_light, "half-light", 2,  modifier = Modifier.weight(1f))
+            IconButtonsItem(
+                "half-light",
+                R.drawable.location_half_light,
+                "half-light",
+                2,
+                modifier = Modifier.weight(1f)
+            )
             Spacer(modifier = Modifier.width(10.dp))
-            IconButtonsItem("half-shadow", R.drawable.location_half_shadow, "half-shadow", 3, modifier = Modifier.weight(1f))
+            IconButtonsItem(
+                "half-shadow",
+                R.drawable.location_half_shadow,
+                "half-shadow",
+                3,
+                modifier = Modifier.weight(1f)
+            )
             Spacer(modifier = Modifier.width(10.dp))
-            IconButtonsItem("shadow", R.drawable.location_shadow, "shadow", 4, modifier = Modifier.weight(1f))
+            IconButtonsItem(
+                "shadow",
+                R.drawable.location_shadow,
+                "shadow",
+                4,
+                modifier = Modifier.weight(1f)
+            )
         }
 
         Spacer(modifier = Modifier.height(20.dp))
 
         AddParameterContainer("wellbeing") {
-            IconButtonsItem("great", R.drawable.wellbeing_good, "great", 1, modifier = Modifier.weight(1f))
+            IconButtonsItem(
+                "great",
+                R.drawable.wellbeing_good,
+                "great",
+                1,
+                modifier = Modifier.weight(1f)
+            )
             Spacer(modifier = Modifier.width(10.dp))
-            IconButtonsItem("okay", R.drawable.wellbeing_okay, "okay", 2, modifier = Modifier.weight(1f))
+            IconButtonsItem(
+                "okay",
+                R.drawable.wellbeing_okay,
+                "okay",
+                2,
+                modifier = Modifier.weight(1f)
+            )
             Spacer(modifier = Modifier.width(10.dp))
-            IconButtonsItem("miserable", R.drawable.wellbeing_bad, "miserable", 3, modifier = Modifier.weight(1f))
+            IconButtonsItem(
+                "miserable",
+                R.drawable.wellbeing_bad,
+                "miserable",
+                3,
+                modifier = Modifier.weight(1f)
+            )
         }
     }
     Spacer(modifier = Modifier.height(20.dp))
@@ -229,7 +289,7 @@ fun IconButtonsItem(
                 }
 
 
-        }
+            }
             .fillMaxHeight()
             .background(colorScheme.onError)
             .padding(top = 20.dp, bottom = 20.dp)
@@ -270,15 +330,20 @@ fun AddPlantSpeciesContainer(
         var expanded by remember { mutableStateOf(false) }
         var selectedSpecies by remember { mutableStateOf("Selected Species") }
 
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .border(width = 2.dp, color = colorScheme.outline, shape = RoundedCornerShape(12.dp)) // Apply border
-            .clip(RoundedCornerShape(12.dp)), // Then clip to the same shape
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(
+                    width = 2.dp,
+                    color = colorScheme.outline,
+                    shape = RoundedCornerShape(12.dp)
+                ) // Apply border
+                .clip(RoundedCornerShape(12.dp)), // Then clip to the same shape
             contentAlignment = Alignment.CenterStart,
-            ) {
+        ) {
             Box(
                 modifier = Modifier.padding(start = 40.dp)
-            ){
+            ) {
                 CopyText(selectedSpecies)
             }
             DropdownMenu(
@@ -310,31 +375,31 @@ fun AddPlantSpeciesContainer(
 
 
 
-    Row(
-        modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        APIIconItem(
-            "Location",
-            "api value",
-            R.drawable.placeholder,
-            "location icon",
-            modifier = Modifier.weight(1f)
-        )
-        APIIconItem(
-            "Watering",
-            "api value",
-            R.drawable.placeholder,
-            "watering icon",
-            modifier = Modifier.weight(1f)
-        )
-        APIIconItem(
-            "Poisinousness",
-            "api value",
-            R.drawable.placeholder,
-            "poisonousness icon",
-            modifier = Modifier.weight(1f)
-        )
-    }
+        Row(
+            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            APIIconItem(
+                "Location",
+                "api value",
+                R.drawable.placeholder,
+                "location icon",
+                modifier = Modifier.weight(1f)
+            )
+            APIIconItem(
+                "Watering",
+                "api value",
+                R.drawable.placeholder,
+                "watering icon",
+                modifier = Modifier.weight(1f)
+            )
+            APIIconItem(
+                "Poisinousness",
+                "api value",
+                R.drawable.placeholder,
+                "poisonousness icon",
+                modifier = Modifier.weight(1f)
+            )
+        }
     }
     Spacer(modifier = Modifier.height(20.dp))
 
@@ -363,7 +428,8 @@ fun APIIconItem(
             painter = painterResource(id = imgPath),
             imgDescription,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop)
+            contentScale = ContentScale.Crop
+        )
         H4Text(text = headline)
         CopyText(text = apiValue)
     }
@@ -413,12 +479,13 @@ fun WateringFrequencySelector(
         Spacer(modifier = Modifier.height(10.dp))
         Row(
             modifier = Modifier
-            .fillMaxWidth(0.7f),
+                .fillMaxWidth(0.7f),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             PlusMinusButton(R.drawable.icon_minus, onClickLogic = {
-                waterInterval = (waterInterval - 1).coerceAtLeast(0) // Decrease and ensure not below 0
+                waterInterval =
+                    (waterInterval - 1).coerceAtLeast(0) // Decrease and ensure not below 0
             })
 
             Column(
@@ -448,7 +515,7 @@ fun PlusMinusButton(
             .clip(RoundedCornerShape(25.dp))
             .size(45.dp)
             .background(colorScheme.background),
-        ) {
+    ) {
         Icon(
             painter = painterResource(id = imgPath),
             contentDescription = "Delete"
@@ -466,7 +533,7 @@ fun PlantImage(
         modifier = Modifier
             .size(120.dp) // Set the size including the border
             .background(color = colorScheme.primary, shape = CircleShape)
-            .clickable {  onClickLogic() },
+            .clickable { onClickLogic() },
     ) {
         if (imgPath == null) {
             Image(
@@ -478,8 +545,7 @@ fun PlantImage(
                     .size(70.dp), // Clip the image to a circle shape
                 contentScale = ContentScale.Crop
             )
-        }
-        else {
+        } else {
             Image(
                 painter = painterResource(id = imgPath),
                 contentDescription = "Profile Picture",

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,7 +21,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,7 +34,7 @@ import com.cc221009.ccl3_leafminder.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeView(navController: NavController){
+fun HomeView(navController: NavController) {
 
     Column(
         modifier = Modifier
@@ -52,8 +50,7 @@ fun HomeView(navController: NavController){
 
         PlantDashboard(navController)
 
-}
-
+    }
 
 
 }
@@ -71,7 +68,8 @@ fun HomeHeaderContainer() {
             "25",
             R.drawable.graphics_blur_pot,
             MaterialTheme.colorScheme.tertiaryContainer,
-            modifier = Modifier.weight(1f))
+            modifier = Modifier.weight(1f)
+        )
 
         Spacer(modifier = Modifier.width(10.dp))
 
@@ -80,7 +78,8 @@ fun HomeHeaderContainer() {
             "25",
             R.drawable.graphics_blur_leaf,
             MaterialTheme.colorScheme.surface,
-            modifier = Modifier.weight(1f))
+            modifier = Modifier.weight(1f)
+        )
 
         Spacer(modifier = Modifier.width(10.dp))
 
@@ -89,7 +88,8 @@ fun HomeHeaderContainer() {
             "25",
             R.drawable.graphics_blur_waterdrop,
             MaterialTheme.colorScheme.secondaryContainer,
-            modifier = Modifier.weight(1f))
+            modifier = Modifier.weight(1f)
+        )
     }
 
     Spacer(modifier = Modifier.height(20.dp))
@@ -116,21 +116,22 @@ fun HomeHeaderContainerItem(
             .height(120.dp)
             .then(modifier)
     ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                ){
-                Image(
-                    painter = painterResource(id = imgPath),
-                    contentDescription = "Profile Picture",
-                    modifier = Modifier
-                        .height(70.dp)
-                        .width(80.dp),
-                    contentScale = ContentScale.Crop)
-                H1Text(text = text)
-            }
+        Box(
+            contentAlignment = Alignment.Center,
+        ) {
+            Image(
+                painter = painterResource(id = imgPath),
+                contentDescription = "Profile Picture",
+                modifier = Modifier
+                    .height(70.dp)
+                    .width(80.dp),
+                contentScale = ContentScale.Crop
+            )
+            H1Text(text = text)
+        }
 
-                H4Text(text = headline)
-            }
+        H4Text(text = headline)
+    }
 }
 
 // PLAST LIST COMPOSABLE
@@ -148,14 +149,14 @@ fun PlantListOverview(navController: NavController) {
                 .fillMaxWidth()
                 .horizontalScroll(scrollState),
         ) {
-            PlantItem(navController,"Linda", null, R.drawable.placeholder, true)
-            PlantItem(navController,"Linda", null, R.drawable.placeholder,false)
-            PlantItem(navController,"Linda", null, R.drawable.placeholder,false)
-            PlantItem(navController,"Linda", null, R.drawable.placeholder,false)
-            PlantItem(navController,"Linda", null, R.drawable.placeholder,false)
-            PlantItem(navController,"Linda", null, R.drawable.placeholder,false)
-            PlantItem(navController,"Linda", null, R.drawable.placeholder,false)
-            PlantItem(navController,"Linda", null, R.drawable.placeholder,false)
+            PlantItem(navController, "Linda", null, R.drawable.placeholder, true)
+            PlantItem(navController, "Linda", null, R.drawable.placeholder, false)
+            PlantItem(navController, "Linda", null, R.drawable.placeholder, false)
+            PlantItem(navController, "Linda", null, R.drawable.placeholder, false)
+            PlantItem(navController, "Linda", null, R.drawable.placeholder, false)
+            PlantItem(navController, "Linda", null, R.drawable.placeholder, false)
+            PlantItem(navController, "Linda", null, R.drawable.placeholder, false)
+            PlantItem(navController, "Linda", null, R.drawable.placeholder, false)
         }
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -165,13 +166,12 @@ fun PlantListOverview(navController: NavController) {
 }
 
 
-
 // PLANT DASHBOARD COMPOSABLE
 
 @Composable
 fun PlantDashboard(
     navController: NavController,
-    ) {
+) {
 
     Column() {
         H2Text(text = "Plants in need")
@@ -182,9 +182,24 @@ fun PlantDashboard(
             modifier = Modifier
                 .fillMaxWidth(),
         ) {
-            HomeViewWateringNotification(navController,"Linda", "plant species", R.drawable.placeholder)
-            HomeViewWateringNotification(navController, "Linda", "plant species", R.drawable.placeholder)
-            HomeViewWateringNotification(navController, "Linda", "plant species", R.drawable.placeholder)
+            HomeViewWateringNotification(
+                navController,
+                "Linda",
+                "plant species",
+                R.drawable.placeholder
+            )
+            HomeViewWateringNotification(
+                navController,
+                "Linda",
+                "plant species",
+                R.drawable.placeholder
+            )
+            HomeViewWateringNotification(
+                navController,
+                "Linda",
+                "plant species",
+                R.drawable.placeholder
+            )
         }
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -270,8 +285,7 @@ fun HomeViewWateringNotification(
                 .padding(end = 5.dp)
                 .clip(CircleShape)
                 .size(45.dp)
-                .background(MaterialTheme.colorScheme.secondary)
-                ,
+                .background(MaterialTheme.colorScheme.secondary),
         ) {
             Image(
                 painter = painterResource(id = R.drawable.icon_tick),
@@ -283,6 +297,6 @@ fun HomeViewWateringNotification(
         }
 
     }
-    
+
     Spacer(modifier = Modifier.height(10.dp))
 }

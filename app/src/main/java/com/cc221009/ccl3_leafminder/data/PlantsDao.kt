@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.cc221009.ccl3_leafminder.data.model.Plants
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PlantsDao {
