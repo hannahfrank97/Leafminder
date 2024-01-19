@@ -48,6 +48,8 @@ data class EditUIState(
     val clickDismissDialog: () -> Unit,
 
     val clickShowDialog: () -> Unit,
+
+    val clickingToDeletePlant: () -> Unit,
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -82,7 +84,7 @@ fun EditView(
                 confirmButton = {
                     PrimaryButton("Delete",
                         onClickLogic = {
-                            TODO("CLICK DELETE BUTTON LOGIC HERE")
+                            state.clickingToDeletePlant()
                         })
                 },
 

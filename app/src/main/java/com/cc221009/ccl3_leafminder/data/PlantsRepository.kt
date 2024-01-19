@@ -53,4 +53,8 @@ class PlantsRepository(val dao: PlantsDao) {
     suspend fun getPlants(): Flow<List<Plants>> {
         return dao.getPlants()
     }
+
+    suspend fun deletePlant(plant: Plants) {
+        dao.deletePlant(plant)
+    }
 }

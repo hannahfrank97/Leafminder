@@ -34,6 +34,7 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
             openDialog = false,
             clickDismissDialog = ::dismissDialog,
             clickShowDialog = ::showDialog,
+            clickingToDeletePlant = ::clickDeletePlant,
 
 
         )
@@ -41,7 +42,13 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
 
     val uiState: StateFlow<EditUIState> = _mainViewState.asStateFlow()
 
-fun showDialog() {
+    fun clickDeletePlant(plant: Plants) {
+        viewModelScope.launch {
+            plantsRepository.deletePlant(plant)
+        }
+    }
+
+ fun showDialog() {
     _mainViewState.update { it.copy(openDialog = true) }
     }
 
