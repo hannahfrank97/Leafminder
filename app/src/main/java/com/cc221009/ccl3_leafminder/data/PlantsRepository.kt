@@ -50,7 +50,7 @@ class PlantsRepository(val dao: PlantsDao) {
     suspend fun updatePlant(plant: Plants) {
         dao.updatePlant(plant)
     }
-    suspend fun getPlants(): Flow<List<Plants>> {
+    suspend fun getPlants(): List<Plants> {
         return dao.getPlants()
     }
 

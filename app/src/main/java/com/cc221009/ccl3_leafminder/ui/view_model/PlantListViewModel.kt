@@ -31,9 +31,9 @@ class PlantListViewModel (private val plantsRepository: PlantsRepository) : View
     fun getPlants() {
         viewModelScope.launch {
             try {
-                plantsRepository.getPlants().collect { plants ->
-                    _mainViewState.value = _mainViewState.value.copy(plants = plants)
-                }
+                val plants = plantsRepository.getPlants()
+                _mainViewState.value = _mainViewState.value.copy(plants = plants)
+
             } catch (e: Exception) {
                 Log.e("PlantListViewModel", "Error saving plant", e)
             }
