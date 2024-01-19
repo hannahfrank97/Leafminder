@@ -7,11 +7,28 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
-import com.cc221009.ccl3_leafminder.ui.view.AddUIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+
+data class AddUIState(
+    val name: TextFieldValue,
+    val setName: (TextFieldValue) -> Unit,
+
+    val speciesNames: List<String>,
+    val onSpeciesListTapped: () -> Unit,
+
+    val tappingtoSavePlant: (Plant) -> Unit,
+
+    val date: String,
+    val size: String,
+    val wellbeing: String,
+    val wateringDate: String,
+    val wateringFrequency: String,
+    val imagePath: String
+
+)
 
 class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {
 
@@ -107,3 +124,4 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
     }
 
 }
+

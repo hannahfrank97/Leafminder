@@ -39,7 +39,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -48,24 +47,6 @@ import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.getDatabase
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
-
-data class AddUIState(
-    val name: TextFieldValue,
-    val setName: (TextFieldValue) -> Unit,
-
-    val speciesNames: List<String>,
-    val onSpeciesListTapped: () -> Unit,
-
-    val tappingtoSavePlant: (Plant) -> Unit,
-
-    val date: String,
-    val size: String,
-    val wellbeing: String,
-    val wateringDate: String,
-    val wateringFrequency: String,
-    val imagePath: String
-
-)
 
 
 @Composable
