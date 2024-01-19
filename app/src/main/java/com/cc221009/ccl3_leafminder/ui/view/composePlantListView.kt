@@ -101,6 +101,7 @@ fun PlantListView(
             content = {
                 items(state.plants) { plant ->
                     PlantListItem(
+                        navController,
                         plantName = plant.name,
                         species = "Species",//API call to get species name
                         imgPath = R.drawable.placeholder,
@@ -141,26 +142,6 @@ fun PlantListItem(
             modifier = Modifier
                 .size(80.dp) // Set the size including the border
                 .background(color = borderColor, shape = CircleShape),
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .clip(RoundedCornerShape(15.dp))
-                    .clickable {
-
-                    }
-            ) {
-
-                val borderColor =
-                    if (needsWater) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                Box(
-                    modifier = Modifier
-                        .size(80.dp) // Set the size including the border
-                        .background(color = borderColor, shape = CircleShape),
                 ) {
                     Image(
                         painter = painterResource(id = imgPath),
@@ -190,6 +171,7 @@ fun PlantListItem(
                     }
                 }
 
+
                 Spacer(modifier = Modifier.height(5.dp))
                 CopyText(text = plantName)
 
@@ -203,3 +185,5 @@ fun PlantListItem(
 
             }
         }
+
+
