@@ -9,6 +9,7 @@ import com.cc221009.ccl3_leafminder.ui.view.EditUIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {
@@ -30,6 +31,9 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
             onWateringFrequencyChange = {newWateringFrequency: String -> updateWateringFrequency(newWateringFrequency)},
             onImagePathChange = {newImagePath: String -> updateImagePath(newImagePath)},
             onSaveEditedPlant = ::saveEditedPlant,
+            openDialog = false,
+            clickDismissDialog = ::dismissDialog,
+            clickShowDialog = ::showDialog,
 
 
         )
@@ -37,12 +41,19 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
 
     val uiState: StateFlow<EditUIState> = _mainViewState.asStateFlow()
 
+fun showDialog() {
+    _mainViewState.update { it.copy(openDialog = true) }
+    }
+
+    fun dismissDialog() {
+        _mainViewState.update { it.copy(openDialog = false) }
+    }
+
  fun saveEditedPlant(plant: Plants) {
        viewModelScope.launch {
            plantsRepository.updatePlant(plant)
        }
     }
-
     fun updateName(name: String) {
         _mainViewState.value = _mainViewState.value.copy(name = name)
     }

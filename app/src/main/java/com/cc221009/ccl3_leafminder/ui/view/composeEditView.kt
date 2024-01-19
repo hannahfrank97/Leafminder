@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -40,6 +42,12 @@ data class EditUIState(
     val onImagePathChange: (String) -> Unit,
 
     val onSaveEditedPlant: (Plants) -> Unit,
+
+    val openDialog: Boolean,
+
+    val clickDismissDialog: () -> Unit,
+
+    val clickShowDialog: () -> Unit,
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,11 +75,35 @@ fun EditView(
         verticalArrangement = Arrangement.Center
     ) {
 
+        if (state.openDialog) {
+            AlertDialog(
+                onDismissRequest = { /* Dismiss logic here */ },
+                title = { Text("Are you sure you want to delete this plant?") },
+                confirmButton = {
+                    PrimaryButton("Delete",
+                        onClickLogic = {
+                            TODO("CLICK DELETE BUTTON LOGIC HERE")
+                        })
+                },
+
+                dismissButton = {
+                    PrimaryButton("Cancel",
+                        onClickLogic = {
+                            state.clickDismissDialog()
+                        })
+                }
+            )
+
+        }
+
+
+
         // Header
-        Header("Edit this plant", R.drawable.icon_delete, leftIconLogic = {
+        Header("Edit this plant", R.drawable.icon_delete,
+            leftIconLogic = {
             navController.navigate(Screen.DetailView.route)
         }, rightIconLogic = {
-            //TODO CALL DELETE FUNCTION
+            state.clickShowDialog()
         })
 
         // Profile Image

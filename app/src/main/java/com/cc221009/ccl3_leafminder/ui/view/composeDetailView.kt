@@ -36,7 +36,9 @@ fun DetailView(navController: NavController){
         verticalArrangement = Arrangement.Center
     ) {
         // Header
-        Header(null, R.drawable.icon_edit, leftIconLogic = {
+        Header(
+            null, R.drawable.icon_edit,
+            leftIconLogic = {
             navController.navigate(Screen.HomeView.route)
         },
             rightIconLogic = {

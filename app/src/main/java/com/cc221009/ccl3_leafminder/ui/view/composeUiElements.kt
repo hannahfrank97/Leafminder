@@ -63,7 +63,8 @@ fun Header(
     viewName: String?,
     rightIconPath: Int?,
     leftIconLogic: () -> Unit?,
-    rightIconLogic: () -> Unit
+    rightIconLogic: () -> Unit,
+    onClickLogic: (() -> Unit)? = null
 ) {
     Box(
         modifier = Modifier
