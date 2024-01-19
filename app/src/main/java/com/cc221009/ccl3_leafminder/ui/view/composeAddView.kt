@@ -52,6 +52,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.getDatabase
@@ -103,7 +104,10 @@ fun AddView(
     ) {
 
         // Header
-        Header("Add a new plant", null)
+        Header( "Add a new plant", null,
+            leftIconLogic = {
+                    navController.navigate(Screen.HomeView.route)
+        }, rightIconLogic = {})
 
         // Profile Image
         PlantImage(R.drawable.placeholder, onClickLogic = {

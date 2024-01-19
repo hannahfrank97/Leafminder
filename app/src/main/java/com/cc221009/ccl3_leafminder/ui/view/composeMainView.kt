@@ -1,6 +1,8 @@
 package com.cc221009.ccl3_leafminder.ui.view
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
@@ -19,7 +21,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.List
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.cc221009.ccl3_leafminder.R
 
 // https://kotlinlang.org/docs/sealed-classes.html
@@ -71,33 +76,55 @@ fun MainView() {
 
 @Composable
 fun BottomNavigationBar(navController: NavHostController){
-    BottomNavigation(backgroundColor = MaterialTheme.colorScheme.background) {
+    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+
+
+    BottomNavigation(
+        backgroundColor = MaterialTheme.colorScheme.background
+    ) {
         NavigationBarItem(
-            selected = true,
+            selected = currentRoute == Screen.HomeView.route,
             onClick = { navController.navigate(Screen.HomeView.route) },
-            icon = { Icon(painter = painterResource(id = R.drawable.icon_home),
-                contentDescription = "Delete") })
+            icon = { Icon(
+                modifier = Modifier.size(25.dp),
+                painter = painterResource(id = R.drawable.icon_home),
+                contentDescription = "Delete")
+                }
+        )
 
         NavigationBarItem(
-            selected = false,
+            selected = currentRoute == Screen.AddView.route,
             onClick = { navController.navigate(Screen.AddView.route) },
-            icon = { Icon(painter = painterResource(id = R.drawable.icon_add),
-                contentDescription = "Delete") })
+            icon = { Icon(
+                modifier = Modifier.size(25.dp),
+                painter = painterResource(id = R.drawable.icon_add),
+                contentDescription = "Delete") },
+            )
+
 
         NavigationBarItem(
-            selected = false,
+            selected = currentRoute == Screen.DetailView.route,
             onClick = { navController.navigate(Screen.DetailView.route) },
-            icon = { Icon(imageVector = Icons.Default.Info, contentDescription = "") })
+            icon = { Icon(
+                modifier = Modifier.size(25.dp),
+                imageVector = Icons.Default.Info,
+                contentDescription = "") })
 
         NavigationBarItem(
-            selected = false,
+            selected = currentRoute == Screen.EditView.route,
             onClick = { navController.navigate(Screen.EditView.route) },
-            icon = { Icon(imageVector = Icons.Default.Edit, contentDescription = "") })
+            icon = { Icon(
+                modifier = Modifier.size(25.dp),
+                imageVector = Icons.Default.Edit,
+                contentDescription = "") })
 
         NavigationBarItem(
-            selected = false,
+            selected = currentRoute == Screen.PlantListView.route,
             onClick = { navController.navigate(Screen.PlantListView.route) },
-            icon = { Icon(imageVector = Icons.Default.List, contentDescription = "") })
+            icon = { Icon(
+                modifier = Modifier.size(25.dp),
+                imageVector = Icons.Default.List,
+                contentDescription = "") })
 
     }
 }

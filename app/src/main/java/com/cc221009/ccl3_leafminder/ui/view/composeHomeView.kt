@@ -2,6 +2,7 @@ package com.cc221009.ccl3_leafminder.ui.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -47,9 +48,9 @@ fun HomeView(navController: NavController){
 
         HomeHeaderContainer()
 
-        PlantListOverview()
+        PlantListOverview(navController)
 
-        PlantDashboard()
+        PlantDashboard(navController)
 
 }
 
@@ -134,7 +135,7 @@ fun HomeHeaderContainerItem(
 
 // PLAST LIST COMPOSABLE
 @Composable
-fun PlantListOverview() {
+fun PlantListOverview(navController: NavController) {
     val scrollState = rememberScrollState()
 
     Column() {
@@ -147,14 +148,14 @@ fun PlantListOverview() {
                 .fillMaxWidth()
                 .horizontalScroll(scrollState),
         ) {
-            PlantItem("Linda", null, R.drawable.placeholder, true)
-            PlantItem("Linda", null, R.drawable.placeholder,false)
-            PlantItem("Linda", null, R.drawable.placeholder,false)
-            PlantItem("Linda", null, R.drawable.placeholder,false)
-            PlantItem("Linda", null, R.drawable.placeholder,false)
-            PlantItem("Linda", null, R.drawable.placeholder,false)
-            PlantItem("Linda", null, R.drawable.placeholder,false)
-            PlantItem("Linda", null, R.drawable.placeholder,false)
+            PlantItem(navController,"Linda", null, R.drawable.placeholder, true)
+            PlantItem(navController,"Linda", null, R.drawable.placeholder,false)
+            PlantItem(navController,"Linda", null, R.drawable.placeholder,false)
+            PlantItem(navController,"Linda", null, R.drawable.placeholder,false)
+            PlantItem(navController,"Linda", null, R.drawable.placeholder,false)
+            PlantItem(navController,"Linda", null, R.drawable.placeholder,false)
+            PlantItem(navController,"Linda", null, R.drawable.placeholder,false)
+            PlantItem(navController,"Linda", null, R.drawable.placeholder,false)
         }
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -168,7 +169,9 @@ fun PlantListOverview() {
 // PLANT DASHBOARD COMPOSABLE
 
 @Composable
-fun PlantDashboard() {
+fun PlantDashboard(
+    navController: NavController,
+    ) {
 
     Column() {
         H2Text(text = "Plants in need")
@@ -179,9 +182,9 @@ fun PlantDashboard() {
             modifier = Modifier
                 .fillMaxWidth(),
         ) {
-            HomeViewWateringNotification("Linda", "plant species", R.drawable.placeholder)
-            HomeViewWateringNotification("Linda", "plant species", R.drawable.placeholder)
-            HomeViewWateringNotification("Linda", "plant species", R.drawable.placeholder)
+            HomeViewWateringNotification(navController,"Linda", "plant species", R.drawable.placeholder)
+            HomeViewWateringNotification(navController, "Linda", "plant species", R.drawable.placeholder)
+            HomeViewWateringNotification(navController, "Linda", "plant species", R.drawable.placeholder)
         }
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -192,12 +195,14 @@ fun PlantDashboard() {
 
 @Composable
 fun HomeViewWateringNotification(
+    navController: NavController,
     name: String,
     plantSpecies: String,
     imgPath: Int,
 ) {
     Row(
         modifier = Modifier
+            .clickable { navController.navigate(Screen.DetailView.route) }
             .fillMaxWidth()
             .clip(RoundedCornerShape(15.dp))
             .background(MaterialTheme.colorScheme.secondaryContainer)
@@ -224,6 +229,9 @@ fun HomeViewWateringNotification(
                 )
                 Box(
                     modifier = Modifier
+                        .clickable {
+                            //TODO create clicking button here
+                        }
                         .clip(CircleShape)
                         .size(30.dp)
                         .align(Alignment.TopEnd) // Center the image inside the Box

@@ -55,12 +55,15 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.cc221009.ccl3_leafminder.R
 
 @Composable
 fun Header(
     viewName: String?,
     rightIconPath: Int?,
+    leftIconLogic: () -> Unit?,
+    rightIconLogic: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -74,7 +77,8 @@ fun Header(
 
             Icon(
                 imageVector = Icons.Default.ArrowBack, contentDescription = "",
-                tint = colorScheme.primary
+                tint = colorScheme.primary,
+                modifier = Modifier.clickable { leftIconLogic() }
             )
 
             viewName?.let {
@@ -91,7 +95,8 @@ fun Header(
                 rightIconPath?.let {
                     Icon(
                         painter = painterResource(id = it),
-                        contentDescription = "Back"
+                        contentDescription = "Back",
+                        modifier = Modifier.clickable { rightIconLogic() }
                     )
                 }
             }
@@ -244,6 +249,7 @@ fun PrimaryButton(
 
 @Composable
 fun PlantItem(
+    navController: NavController,
     plantName: String,
     species: String?,
     imgPath: Int,
@@ -255,6 +261,7 @@ fun PlantItem(
         modifier = Modifier
             .padding(end = 20.dp)
             .clickable {
+                navController.navigate(Screen.DetailView.route)
         }
     ) {
         val borderColor = if (needsWater) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
