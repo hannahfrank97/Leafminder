@@ -112,9 +112,14 @@ fun AddView(
         })
 
         // Textfield Name
-        DefaultTextField(
-            "Name", "Name", text = state.name, onValueChange = state.setName
-        )
+        Box(
+            modifier = Modifier.padding(start = 20.dp, end = 20.dp)
+        ) {
+            DefaultTextField(
+                "Name", "Name", text = state.name, onValueChange = state.setName
+            )
+        }
+
 
         AddPlantInfoContainer()
 
@@ -153,7 +158,7 @@ fun AddPlantInfoContainer(
             .padding(20.dp)
     ) {
         // TODO: Connect to Viewmodel
-        DefaultTextField("Since when do you have your plant?",
+        CalendarTextField("Since when do you have your plant?",
             "Select date",
             text = TextFieldValue(""),
             onValueChange = { })
@@ -215,6 +220,7 @@ fun IconButtonsItem(
 ) {
 
     Box(
+        contentAlignment = Alignment.CenterStart,
         modifier = Modifier
             .fillMaxHeight()
             .clip(RoundedCornerShape(15.dp))
@@ -260,9 +266,21 @@ fun AddPlantSpeciesContainer(
         var expanded by remember { mutableStateOf(false) }
         var selectedSpecies by remember { mutableStateOf("Selected Species") }
 
-        Box(Modifier.fillMaxWidth()) {
-            Text(selectedSpecies, modifier = Modifier.padding(16.dp))
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .border(width = 2.dp, color = colorScheme.outline, shape = RoundedCornerShape(12.dp)) // Apply border
+            .clip(RoundedCornerShape(12.dp)), // Then clip to the same shape
+            contentAlignment = Alignment.CenterStart,
+            ) {
+            Box(
+                modifier = Modifier.padding(start = 40.dp)
+            ){
+                CopyText(selectedSpecies)
+            }
             DropdownMenu(
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .background(colorScheme.background),
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
@@ -270,9 +288,8 @@ fun AddPlantSpeciesContainer(
                     DropdownMenuItem(onClick = {
                         selectedSpecies = speciesName
                         expanded = false
-
                     }) {
-                        Text(speciesName)
+                        CopyText(speciesName)
                     }
                 }
             }
@@ -287,7 +304,7 @@ fun AddPlantSpeciesContainer(
             }
         }
 
-    }
+
 
     Row(
         modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
@@ -314,6 +331,9 @@ fun AddPlantSpeciesContainer(
             modifier = Modifier.weight(1f)
         )
     }
+    }
+    Spacer(modifier = Modifier.height(20.dp))
+
 }
 
 
@@ -361,7 +381,7 @@ fun AddPlantWateringContainer() {
         H3Text(text = "Watering")
 
         // TODO: Connect to Viewmodel
-        DefaultTextField(
+        CalendarTextField(
             "Select the date of last watering",
             "Select date",
             text = TextFieldValue(""),

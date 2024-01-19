@@ -128,7 +128,7 @@ fun DefaultTextField(
                 .fillMaxWidth()
                 .drawBehind {
                     val strokeWidth = borderBottomWidth.value * density
-                    val y = size.height - strokeWidth
+                    val y = size.height - 10 - strokeWidth
                     drawLine(
                         color = borderBottomColor,
                         start = Offset(0f, y),
@@ -138,12 +138,10 @@ fun DefaultTextField(
                 }
         ) {
             TextField(
-                
                 value = text,
                 onValueChange = onValueChange,
                 label = { Text(text = placeholderText) },
                 placeholder = { Text(text = placeholderText) },
-
                 colors = TextFieldDefaults.textFieldColors(
                     textColor = MaterialTheme.colorScheme.primary,
                     cursorColor = MaterialTheme.colorScheme.primary,
@@ -166,44 +164,62 @@ fun DefaultTextField(
 fun CalendarTextField(
     headline: String,
     placeholderText: String,
-    imgPath: Int,
-    selectedDate: String
-) {
-    var textSaver by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-        mutableStateOf(
-            TextFieldValue("")
-        )
-    }
-
-    CopyText(text = headline)
-
-    Button(
-        onClick = { },
+    text: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit
     ) {
-        CopyText(
-            text = if (selectedDate.isNotEmpty()) selectedDate else "stringResource(R.string.select_a_date)",
-            //modifier = Modifier.weight(1f),
-            // style = TextStyle(),
-        )
+    var textSaver by rememberSaveable(stateSaver = TextFieldValue.Saver) { mutableStateOf(TextFieldValue("")) }
+    val textState = remember { mutableStateOf("") }
+    val borderBottomWidth = 2.dp
+    val borderBottomColor = colorScheme.outline // Change as needed
 
-        Icon(
-            painter = painterResource(id = R.drawable.icon_calendar),
-            contentDescription = "Select Date",
-            tint = colorScheme.secondary
-        )
+    Column {
+
+        // Your CopyText Composable
+        CopyText(text = headline)
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .drawBehind {
+                    val strokeWidth = borderBottomWidth.value * density
+                    val y = size.height - 10 - strokeWidth
+                    drawLine(
+                        color = borderBottomColor,
+                        start = Offset(0f, y),
+                        end = Offset(size.width, y),
+                        strokeWidth = strokeWidth
+                    )
+                },
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.icon_calendar),
+                contentDescription = "Calender_icon",
+                modifier = Modifier
+                    .size(25.dp)
+                    .padding(bottom = 5.dp)
+            )
+
+            TextField(
+                value = text,
+                onValueChange = onValueChange,
+                label = { Text(text = placeholderText) },
+                placeholder = { Text(text = placeholderText) },
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = MaterialTheme.colorScheme.primary,
+                    cursorColor = MaterialTheme.colorScheme.primary,
+                    containerColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent, // Hide the indicator
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
     }
-
-    TextField(
-        value = textSaver,
-        onValueChange = { newTextValue -> textSaver = newTextValue },
-        label = { Text(text = placeholderText) },
-        placeholder = { Text(text = placeholderText) },
-        modifier = Modifier
-            .padding(bottom = 20.dp)
-            .border(2.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(10.dp))
-            .fillMaxSize(0.8f)
-            .height(50.dp)
-    )
 }
 
 @Composable
@@ -220,7 +236,6 @@ fun PrimaryButton(
         onClick = { onClickLogic() },
         colors = ButtonDefaults.buttonColors(
                 containerColor = colorScheme.primary,
-                contentColor = colorScheme.background
                 ),
         ) {
         CopyBoldText(text = text, colorScheme.background)
@@ -240,7 +255,6 @@ fun PlantItem(
         modifier = Modifier
             .padding(end = 20.dp)
             .clickable {
-
         }
     ) {
         val borderColor = if (needsWater) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
@@ -365,7 +379,7 @@ fun CopyBoldText(
         style = TextStyle(
             fontFamily = FontFamily(Font(R.font.opensans_bold)),
             fontSize = 15.sp,
-            color = MaterialTheme.colorScheme.primary)
+            color = color)
     )
 }
 
