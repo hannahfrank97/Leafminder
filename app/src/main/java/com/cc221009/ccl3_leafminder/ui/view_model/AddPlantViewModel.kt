@@ -62,7 +62,7 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
                 plantsRepository.addPlant(plant)
                 //getPlants()
             } catch (e: Exception) {
-                Log.e("MainViewModel", "Error saving plant", e)
+                Log.e("AddPlantViewModel", "Error saving plant", e)
             }
         }
     }

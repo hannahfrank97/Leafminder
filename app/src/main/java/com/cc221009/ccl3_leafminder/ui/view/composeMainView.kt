@@ -61,7 +61,7 @@ fun MainView() {
             }
 
             composable(Screen.PlantListView.route) {
-                PlantListView(navController)
+                PlantListView(navController=navController)
             }
 
 

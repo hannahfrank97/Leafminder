@@ -5,6 +5,7 @@ import com.cc221009.ccl3_leafminder.data.model.Plants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 /*class PlantsRepository(private val apiPlantsService: APIPlantsService) {
@@ -40,7 +41,6 @@ class PlantsRepository(val dao: PlantsDao) {
 
     suspend fun getTestAPIDATA(): List<String> {
         return listOf("A", "B", "C")
-
     }
 
     suspend fun addPlant(plant: Plants) {
@@ -49,5 +49,8 @@ class PlantsRepository(val dao: PlantsDao) {
 
     suspend fun updatePlant(plant: Plants) {
         dao.updatePlant(plant)
+    }
+    suspend fun getPlants(): Flow<List<Plants>> {
+        return dao.getPlants()
     }
 }

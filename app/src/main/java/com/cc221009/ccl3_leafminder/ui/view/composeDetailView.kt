@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.cc221009.ccl3_leafminder.R
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailView(navController: NavController){
