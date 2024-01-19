@@ -37,12 +37,6 @@ import com.cc221009.ccl3_leafminder.data.getDatabase
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.PlantListViewModel
 
-data class PlantListUIState(
-    val plants: List<Plant>,
-    val seeAllPlants: () -> Unit,
-
-    )
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlantListView(
