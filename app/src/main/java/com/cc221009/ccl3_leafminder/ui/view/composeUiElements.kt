@@ -1,15 +1,15 @@
 package com.cc221009.ccl3_leafminder.ui.view
 
+import android.app.DatePickerDialog
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,17 +17,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
@@ -46,7 +40,9 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -57,6 +53,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.cc221009.ccl3_leafminder.R
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter.ofPattern
+import java.util.Calendar
 
 @Composable
 fun Header(
@@ -77,9 +76,11 @@ fun Header(
         ) {
 
             Icon(
-                imageVector = Icons.Default.ArrowBack, contentDescription = "",
+                painter = painterResource(id = R.drawable.icon_backarrow), contentDescription = "",
                 tint = colorScheme.primary,
-                modifier = Modifier.clickable { leftIconLogic() }
+                modifier = Modifier
+                    .clickable { leftIconLogic() }
+                    .size(30.dp)
             )
 
             viewName?.let {
@@ -146,8 +147,8 @@ fun DefaultTextField(
             TextField(
                 value = text,
                 onValueChange = onValueChange,
-                label = { Text(text = placeholderText) },
-                placeholder = { Text(text = placeholderText) },
+                label = { CopyText(text = placeholderText) },
+                placeholder = { CopyText(text = placeholderText) },
                 colors = TextFieldDefaults.textFieldColors(
                     textColor = MaterialTheme.colorScheme.primary,
                     cursorColor = MaterialTheme.colorScheme.primary,
@@ -165,20 +166,25 @@ fun DefaultTextField(
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalendarTextField(
     headline: String,
     placeholderText: String,
-    text: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit
+    selectedDate: String,
+    onValueChange: (String) -> Unit
     ) {
-    var textSaver by rememberSaveable(stateSaver = TextFieldValue.Saver) { mutableStateOf(TextFieldValue("")) }
-    val textState = remember { mutableStateOf("") }
+
     val borderBottomWidth = 2.dp
     val borderBottomColor = colorScheme.outline // Change as needed
+    val context = LocalContext.current
 
-    Column {
+    Column (
+        modifier = Modifier.clickable {
+           // showDatePicker(context, onValueChange)
+        }
+    ) {
 
         // Your CopyText Composable
         CopyText(text = headline)
@@ -207,10 +213,11 @@ fun CalendarTextField(
             )
 
             TextField(
-                value = text,
-                onValueChange = onValueChange,
-                label = { Text(text = placeholderText) },
-                placeholder = { Text(text = placeholderText) },
+                value = if (selectedDate.isNotEmpty()) selectedDate else "Select date",
+                onValueChange = { //TODO
+                                },
+                label = { CopyText(text = placeholderText) },
+                placeholder = { CopyText(text = placeholderText) },
                 colors = TextFieldDefaults.textFieldColors(
                     textColor = MaterialTheme.colorScheme.primary,
                     cursorColor = MaterialTheme.colorScheme.primary,
@@ -227,6 +234,8 @@ fun CalendarTextField(
         Spacer(modifier = Modifier.height(20.dp))
     }
 }
+
+
 
 @Composable
 fun PrimaryButton(
@@ -263,7 +272,7 @@ fun PlantItem(
             .padding(end = 20.dp)
             .clickable {
                 navController.navigate(Screen.DetailView.route)
-        }
+            }
     ) {
         val borderColor = if (needsWater) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
 
@@ -322,7 +331,7 @@ fun H1Text(
         text = text,
         style = TextStyle(
             fontFamily = FontFamily(Font(R.font.grandhotel_regular)),
-            fontSize = 50.sp)
+            fontSize = 44.sp)
     )
 }
 
@@ -334,7 +343,7 @@ fun H2Text(
         text = text,
         style = TextStyle(
             fontFamily = FontFamily(Font(R.font.opensans_bold)),
-            fontSize = 20.sp)
+            fontSize = 18.sp)
     )
 }
 
@@ -346,7 +355,7 @@ fun H3Text(
         text = text,
         style = TextStyle(
             fontFamily = FontFamily(Font(R.font.opensans_bold)),
-            fontSize = 16.sp)
+            fontSize = 14.sp)
     )
     Spacer(modifier = Modifier.height(10.dp))
 
@@ -360,7 +369,7 @@ fun H4Text(
         text = text,
         style = TextStyle(
             fontFamily = FontFamily(Font(R.font.opensans_bold)),
-            fontSize = 14.sp,
+            fontSize = 13.sp,
             textAlign = TextAlign.Center)
     )
 }
@@ -373,7 +382,7 @@ fun CopyText(
         text = text,
         style = TextStyle(
             fontFamily = FontFamily(Font(R.font.opensans_semibold)),
-            fontSize = 15.sp)
+            fontSize = 13.sp)
     )
 }
 
@@ -386,7 +395,7 @@ fun CopyBoldText(
         text = text,
         style = TextStyle(
             fontFamily = FontFamily(Font(R.font.opensans_bold)),
-            fontSize = 15.sp,
+            fontSize = 13.sp,
             color = color)
     )
 }
@@ -400,11 +409,26 @@ fun CopyItalicText(
         text = text,
         style = TextStyle(
             fontFamily = FontFamily(Font(R.font.opensans_semibold_italic)),
-            fontSize = 15.sp,
+            fontSize = 13.sp,
             color = color)
     )
 }
 
+/*
+fun showDatePicker(context: Context, onDateSelected: (String) -> Unit) {
+    val calendar = Calendar.getInstance()
+    DatePickerDialog(
+        context,
+        { _, year, month, dayOfMonth ->
+            val selectedDate = LocalDate.of(year, month + 1, dayOfMonth)
+            onDateSelected(selectedDate.format(ofPattern("dd. MM. yyyy"))) // Update format as needed
+        },
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH)
+    ).show()
+}
+*/
 
 
 

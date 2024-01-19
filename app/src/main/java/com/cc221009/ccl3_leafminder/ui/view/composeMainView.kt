@@ -2,29 +2,21 @@ package com.cc221009.ccl3_leafminder.ui.view
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.List
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.cc221009.ccl3_leafminder.R
 
 // https://kotlinlang.org/docs/sealed-classes.html
@@ -34,6 +26,8 @@ sealed class Screen(val route: String) {
     object DetailView : Screen("detailView")
     object EditView : Screen("editView")
     object PlantListView : Screen("plantListView")
+
+    object SplashScreen : Screen("splashScreen")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,12 +36,16 @@ fun MainView() {
     val navController = rememberNavController()
 
     Scaffold(
-        bottomBar = { BottomNavigationBar(navController) }
+        bottomBar = {
+            if (navController.currentBackStackEntryAsState().value?.destination?.route !== Screen.SplashScreen.route) {
+                BottomNavigationBar(navController)
+            }
+        }
     ) {
         NavHost(
             navController = navController,
             modifier = Modifier.padding(it),
-            startDestination = Screen.HomeView.route
+            startDestination = Screen.SplashScreen.route
         ) {
             composable(Screen.HomeView.route) {
                 HomeView(navController)
@@ -69,7 +67,9 @@ fun MainView() {
                 PlantListView(navController=navController)
             }
 
-
+            composable(Screen.SplashScreen.route) {
+                SplashScreen(navController=navController)
+            }
         }
     }
 }
@@ -77,7 +77,6 @@ fun MainView() {
 @Composable
 fun BottomNavigationBar(navController: NavHostController){
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-
 
     BottomNavigation(
         backgroundColor = MaterialTheme.colorScheme.background
@@ -88,7 +87,7 @@ fun BottomNavigationBar(navController: NavHostController){
             icon = { Icon(
                 modifier = Modifier.size(25.dp),
                 painter = painterResource(id = R.drawable.icon_home),
-                contentDescription = "Delete")
+                contentDescription = "home icon")
                 }
         )
 
@@ -98,33 +97,16 @@ fun BottomNavigationBar(navController: NavHostController){
             icon = { Icon(
                 modifier = Modifier.size(25.dp),
                 painter = painterResource(id = R.drawable.icon_add),
-                contentDescription = "Delete") },
+                contentDescription = "Add icon") },
             )
-
-
-        NavigationBarItem(
-            selected = currentRoute == Screen.DetailView.route,
-            onClick = { navController.navigate(Screen.DetailView.route) },
-            icon = { Icon(
-                modifier = Modifier.size(25.dp),
-                imageVector = Icons.Default.Info,
-                contentDescription = "") })
-
-        NavigationBarItem(
-            selected = currentRoute == Screen.EditView.route,
-            onClick = { navController.navigate(Screen.EditView.route) },
-            icon = { Icon(
-                modifier = Modifier.size(25.dp),
-                imageVector = Icons.Default.Edit,
-                contentDescription = "") })
 
         NavigationBarItem(
             selected = currentRoute == Screen.PlantListView.route,
             onClick = { navController.navigate(Screen.PlantListView.route) },
             icon = { Icon(
                 modifier = Modifier.size(25.dp),
-                imageVector = Icons.Default.List,
-                contentDescription = "") })
+                painter = painterResource(id = R.drawable.icon_list),
+                contentDescription = "plant list") })
 
     }
 }

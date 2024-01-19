@@ -1,5 +1,7 @@
 package com.cc221009.ccl3_leafminder.ui.view_model
 
+import android.app.DatePickerDialog
+import android.content.Context
 import android.util.Log
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
@@ -15,6 +17,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
 
 class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {
 
@@ -66,6 +71,8 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
             }
         }
     }
+
+
 
     /*suspend fun getPlants() {
         viewModelScope.launch {

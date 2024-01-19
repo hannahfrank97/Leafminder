@@ -24,16 +24,11 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.currentCompositionLocalContext
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,18 +36,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.getDatabase
@@ -67,7 +57,6 @@ data class AddUIState(
     val onSpeciesListTapped: () -> Unit,
 
     val tappingtoSavePlant: (Plants) -> Unit,
-
 
     val date: String,
     val size: String,
@@ -153,8 +142,8 @@ fun AddView(
 // INFO COMPONENTS
 
 @Composable
-fun AddPlantInfoContainer(
-) {
+fun AddPlantInfoContainer() {
+
     Column(
         modifier = Modifier
             .clip(RoundedCornerShape(15.dp))
@@ -162,9 +151,10 @@ fun AddPlantInfoContainer(
             .padding(20.dp)
     ) {
         // TODO: Connect to Viewmodel
+
         CalendarTextField("Since when do you have your plant?",
             "Select date",
-            text = TextFieldValue(""),
+            selectedDate = toString(),
             onValueChange = { })
 
         AddParameterContainer("size") {
@@ -174,6 +164,8 @@ fun AddPlantInfoContainer(
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem("large", R.drawable.plant_base_large, "large", 3, modifier = Modifier.weight(1f))
         }
+
+        Spacer(modifier = Modifier.height(20.dp))
 
         AddParameterContainer("location") {
             IconButtonsItem("light", R.drawable.location_light, "light", 1, modifier = Modifier.weight(1f))
@@ -185,6 +177,8 @@ fun AddPlantInfoContainer(
             IconButtonsItem("shadow", R.drawable.location_shadow, "shadow", 4, modifier = Modifier.weight(1f))
         }
 
+        Spacer(modifier = Modifier.height(20.dp))
+
         AddParameterContainer("wellbeing") {
             IconButtonsItem("great", R.drawable.wellbeing_good, "great", 1, modifier = Modifier.weight(1f))
             Spacer(modifier = Modifier.width(10.dp))
@@ -194,8 +188,6 @@ fun AddPlantInfoContainer(
         }
     }
     Spacer(modifier = Modifier.height(20.dp))
-
-
 }
 
 @Composable
@@ -205,6 +197,7 @@ fun AddParameterContainer(
     Column(
         modifier = Modifier.fillMaxWidth(),
     ) {
+
         H3Text(text = headline)
         Row(
             horizontalArrangement = Arrangement.SpaceBetween
@@ -222,17 +215,24 @@ fun IconButtonsItem(
     passValue: Int,
     modifier: Modifier = Modifier
 ) {
+    var isClicked: Boolean = false
 
     Box(
         contentAlignment = Alignment.CenterStart,
         modifier = Modifier
-            .fillMaxHeight()
             .clip(RoundedCornerShape(15.dp))
+            .clickable {
+                isClicked = true
+
+                if (isClicked) {
+                    // TODO ENTER BUTTON LOGIC HERE
+                }
+
+
+        }
+            .fillMaxHeight()
             .background(colorScheme.onError)
             .padding(top = 20.dp, bottom = 20.dp)
-            .clickable {
-                // Enter logic here
-            }
             .then(modifier)
     ) {
         Column(
@@ -388,7 +388,7 @@ fun AddPlantWateringContainer() {
         CalendarTextField(
             "Select the date of last watering",
             "Select date",
-            text = TextFieldValue(""),
+            selectedDate = "",
             onValueChange = { })
 
         WateringFrequencySelector("How frequent do you want to water your plant?")
