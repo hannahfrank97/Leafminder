@@ -68,7 +68,11 @@ fun EditView(
     ) {
 
         // Header
-        Header("Edit this plant", R.drawable.icon_delete)
+        Header("Edit this plant", R.drawable.icon_delete, leftIconLogic = {
+            navController.navigate(Screen.DetailView.route)
+        }, rightIconLogic = {
+            //TODO CALL DELETE FUNCTION
+        })
 
         // Profile Image
         PlantImage(R.drawable.placeholder, onClickLogic = {

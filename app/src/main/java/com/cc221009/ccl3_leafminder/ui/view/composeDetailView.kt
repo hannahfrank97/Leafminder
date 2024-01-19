@@ -36,7 +36,12 @@ fun DetailView(navController: NavController){
         verticalArrangement = Arrangement.Center
     ) {
         // Header
-        Header(null, R.drawable.icon_edit)
+        Header(null, R.drawable.icon_edit, leftIconLogic = {
+            navController.navigate(Screen.HomeView.route)
+        },
+            rightIconLogic = {
+            navController.navigate(Screen.EditView.route)
+        })
 
         PlantDetailImage(R.drawable.placeholder, "Linda", "Species")
 

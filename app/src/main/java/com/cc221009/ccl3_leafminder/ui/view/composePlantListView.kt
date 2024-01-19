@@ -49,6 +49,7 @@ data class PlantListUIState(
     val seeAllPlants: () -> Unit,
 )
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlantListView(
@@ -70,14 +71,15 @@ fun PlantListView(
 
 
     val composableList = listOf<@Composable () -> Unit>(
-        { PlantListItem("Linda", "Species", R.drawable.placeholder, true) },
-        { PlantListItem("Linda", "Species", R.drawable.placeholder, true) },
-        { PlantListItem("Linda", "Species", R.drawable.placeholder, false) },
-        { PlantListItem("Linda", "Species", R.drawable.placeholder, true) },
-        { PlantListItem("Linda", "Species", R.drawable.placeholder, true) },
-        { PlantListItem("Linda", "Species", R.drawable.placeholder, false) },
-        { PlantListItem("Linda", "Species", R.drawable.placeholder, true) },
-        { PlantListItem("Linda", "Species", R.drawable.placeholder, true) },
+
+        { PlantListItem(navController, "Linda", "Species",  R.drawable.placeholder, true)},
+        { PlantListItem(navController,"Linda","Species",  R.drawable.placeholder, true)},
+        { PlantListItem(navController,"Linda","Species",   R.drawable.placeholder, false)},
+        { PlantListItem(navController,"Linda","Species",  R.drawable.placeholder, true)},
+        { PlantListItem(navController,"Linda","Species",  R.drawable.placeholder, true)},
+        { PlantListItem(navController,"Linda","Species",   R.drawable.placeholder, false)},
+        { PlantListItem(navController,"Linda","Species",  R.drawable.placeholder, true)},
+        { PlantListItem(navController,"Linda","Species",  R.drawable.placeholder, true)},
     )
 
     Column(
@@ -85,7 +87,11 @@ fun PlantListView(
             .fillMaxSize()
             .padding(20.dp),
     ) {
-        Header("Your Plants", null)
+        Header("Your Plants", null, leftIconLogic = {
+            navController.navigate(Screen.HomeView.route)
+        }, rightIconLogic = {
+            navController.navigate(Screen.EditView.route)
+        })
 
         Spacer(modifier = Modifier.height(30.dp))
 
@@ -109,11 +115,32 @@ fun PlantListView(
 }
 
 @Composable
- fun PlantListItem(
-            plantName: String,
-            species: String?,
-            imgPath: Int,
-            needsWater: Boolean,
+
+fun PlantListItem(
+    navController: NavController,
+    plantName: String,
+    species: String?,
+    imgPath: Int,
+    needsWater: Boolean
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .clip(RoundedCornerShape(15.dp))
+            .clickable {
+                navController.navigate(Screen.DetailView.route)
+            }
+    ) {
+
+        val borderColor = if (needsWater) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Box(
+            modifier = Modifier
+                .size(80.dp) // Set the size including the border
+                .background(color = borderColor, shape = CircleShape),
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
