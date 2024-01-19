@@ -62,11 +62,11 @@ fun MainView() {
             }
 
             composable(Screen.EditView.route) {
-                EditView(navController=navController)
+                EditView(navController = navController)
             }
 
             composable(Screen.PlantListView.route) {
-                PlantListView(navController=navController)
+                PlantListView(navController = navController)
             }
 
 
@@ -75,7 +75,7 @@ fun MainView() {
 }
 
 @Composable
-fun BottomNavigationBar(navController: NavHostController){
+fun BottomNavigationBar(navController: NavHostController) {
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
 
@@ -85,46 +85,60 @@ fun BottomNavigationBar(navController: NavHostController){
         NavigationBarItem(
             selected = currentRoute == Screen.HomeView.route,
             onClick = { navController.navigate(Screen.HomeView.route) },
-            icon = { Icon(
-                modifier = Modifier.size(25.dp),
-                painter = painterResource(id = R.drawable.icon_home),
-                contentDescription = "Delete")
-                }
+            icon = {
+                Icon(
+                    modifier = Modifier.size(25.dp),
+                    painter = painterResource(id = R.drawable.icon_home),
+                    contentDescription = "Delete"
+                )
+            }
         )
 
         NavigationBarItem(
             selected = currentRoute == Screen.AddView.route,
             onClick = { navController.navigate(Screen.AddView.route) },
-            icon = { Icon(
-                modifier = Modifier.size(25.dp),
-                painter = painterResource(id = R.drawable.icon_add),
-                contentDescription = "Delete") },
-            )
+            icon = {
+                Icon(
+                    modifier = Modifier.size(25.dp),
+                    painter = painterResource(id = R.drawable.icon_add),
+                    contentDescription = "Delete"
+                )
+            },
+        )
 
 
         NavigationBarItem(
             selected = currentRoute == Screen.DetailView.route,
             onClick = { navController.navigate(Screen.DetailView.route) },
-            icon = { Icon(
-                modifier = Modifier.size(25.dp),
-                imageVector = Icons.Default.Info,
-                contentDescription = "") })
+            icon = {
+                Icon(
+                    modifier = Modifier.size(25.dp),
+                    imageVector = Icons.Default.Info,
+                    contentDescription = ""
+                )
+            })
 
         NavigationBarItem(
             selected = currentRoute == Screen.EditView.route,
             onClick = { navController.navigate(Screen.EditView.route) },
-            icon = { Icon(
-                modifier = Modifier.size(25.dp),
-                imageVector = Icons.Default.Edit,
-                contentDescription = "") })
+            icon = {
+                Icon(
+                    modifier = Modifier.size(25.dp),
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = ""
+                )
+            })
 
         NavigationBarItem(
             selected = currentRoute == Screen.PlantListView.route,
             onClick = { navController.navigate(Screen.PlantListView.route) },
-            icon = { Icon(
-                modifier = Modifier.size(25.dp),
-                imageVector = Icons.Default.List,
-                contentDescription = "") })
+            icon = {
+                Icon(
+                    modifier = Modifier.size(25.dp),
+                    imageVector = Icons.Default.List,
+                    contentDescription = ""
+                )
+            })
 
     }
 }

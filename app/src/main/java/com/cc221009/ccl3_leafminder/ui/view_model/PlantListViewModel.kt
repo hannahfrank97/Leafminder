@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class PlantListViewModel (private val plantsRepository: PlantsRepository) : ViewModel() {
+class PlantListViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {
     private val _mainViewState = MutableStateFlow(
         PlantListUIState(
             plants = emptyList(),

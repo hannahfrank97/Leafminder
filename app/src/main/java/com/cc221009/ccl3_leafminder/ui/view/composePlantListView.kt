@@ -47,17 +47,17 @@ import com.cc221009.ccl3_leafminder.ui.view_model.PlantListViewModel
 data class PlantListUIState(
     val plants: List<Plants>,
     val seeAllPlants: () -> Unit,
-)
 
+    )
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlantListView(
     vm: PlantListViewModel = viewModel(
-      factory = PlantListViewModel.provideFactory(
-        PlantsRepository(
-            getDatabase(LocalContext.current).dao
-        )
+        factory = PlantListViewModel.provideFactory(
+            PlantsRepository(
+                getDatabase(LocalContext.current).dao
+            )
         )
     ),
 
