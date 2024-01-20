@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -74,7 +72,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     //navigation
-    implementation ("androidx.compose.material:material:1.4.2")
+    implementation("androidx.compose.material:material:1.4.2")
     implementation("androidx.navigation:navigation-compose:2.7.4")
 
     // room
@@ -82,8 +80,8 @@ dependencies {
     implementation("androidx.media3:media3-common:1.2.0")
 
     //library for API
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     ksp("androidx.room:room-compiler:2.5.0")
 }

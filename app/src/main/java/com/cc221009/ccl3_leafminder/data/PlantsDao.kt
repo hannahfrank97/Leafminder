@@ -5,20 +5,23 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.cc221009.ccl3_leafminder.data.model.Plants
-import kotlinx.coroutines.flow.Flow
+import com.cc221009.ccl3_leafminder.data.model.Plant
 
 @Dao
 interface PlantsDao {
 
-        @Insert
-        suspend fun insertPlant(plant: Plants)
+    @Insert
+    suspend fun insertPlant(plant: Plant)
 
-        @Update
-        suspend fun updatePlant(plant: Plants)
-        @Delete
-        suspend fun deletePlant(plant: Plants)
+    @Update
+    suspend fun updatePlant(plant: Plant)
 
-        @Query("SELECT * FROM plants")
-        fun getPlants(): Flow<List<Plants>>
+    @Delete
+    suspend fun deletePlant(plant: Plant)
+
+    @Query("SELECT * FROM plants")
+    suspend fun getPlants(): List<Plant>
+
+    @Query("SELECT * FROM plants WHERE id = :plantId")
+    suspend fun getPlantById(plantId: Int): Plant
 }

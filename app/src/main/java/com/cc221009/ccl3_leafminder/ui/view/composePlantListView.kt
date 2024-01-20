@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -15,21 +14,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.IconButton
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.TopEnd
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -41,23 +34,17 @@ import androidx.navigation.NavController
 import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.getDatabase
-import com.cc221009.ccl3_leafminder.data.model.Plants
+import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.PlantListViewModel
-
-data class PlantListUIState(
-    val plants: List<Plants>,
-    val seeAllPlants: () -> Unit,
-)
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlantListView(
     vm: PlantListViewModel = viewModel(
-      factory = PlantListViewModel.provideFactory(
-        PlantsRepository(
-            getDatabase(LocalContext.current).dao
-        )
+        factory = PlantListViewModel.provideFactory(
+            PlantsRepository(
+                getDatabase(LocalContext.current).dao
+            )
         )
     ),
 
@@ -69,18 +56,15 @@ fun PlantListView(
         state.seeAllPlants()
     }
 
-
-    val composableList = listOf<@Composable () -> Unit>(
-
-        { PlantListItem(navController, "Linda", "Species",  R.drawable.placeholder, true)},
-        { PlantListItem(navController,"Linda","Species",  R.drawable.placeholder, true)},
-        { PlantListItem(navController,"Linda","Species",   R.drawable.placeholder, false)},
-        { PlantListItem(navController,"Linda","Species",  R.drawable.placeholder, true)},
-        { PlantListItem(navController,"Linda","Species",  R.drawable.placeholder, true)},
-        { PlantListItem(navController,"Linda","Species",   R.drawable.placeholder, false)},
-        { PlantListItem(navController,"Linda","Species",  R.drawable.placeholder, true)},
-        { PlantListItem(navController,"Linda","Species",  R.drawable.placeholder, true)},
-    )
+    state.plants.forEach { plant ->
+        PlantListItem(
+            navController,
+            plant = plant,
+            species = "Species",//API call to get species name
+            imgPath = R.drawable.placeholder,
+            needsWater = false,
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -102,7 +86,7 @@ fun PlantListView(
                 items(state.plants) { plant ->
                     PlantListItem(
                         navController,
-                        plantName = plant.name,
+                        plant = plant,
                         species = "Species",//API call to get species name
                         imgPath = R.drawable.placeholder,
                         needsWater = false,
@@ -119,22 +103,24 @@ fun PlantListView(
 
 fun PlantListItem(
     navController: NavController,
-    plantName: String,
     species: String?,
     imgPath: Int,
-    needsWater: Boolean
-) {
+    needsWater: Boolean,
+    plant: Plant,
+
+    ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .clip(RoundedCornerShape(15.dp))
             .clickable {
-                navController.navigate(Screen.DetailView.route)
+                navController.navigate("DetailView/${plant.id}")
             }
     ) {
 
-        val borderColor = if (needsWater) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
+        val borderColor =
+            if (needsWater) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
 
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -142,48 +128,48 @@ fun PlantListItem(
             modifier = Modifier
                 .size(80.dp) // Set the size including the border
                 .background(color = borderColor, shape = CircleShape),
+        ) {
+            Image(
+                painter = painterResource(id = imgPath),
+                contentDescription = "Profile Picture",
+                modifier = Modifier
+                    .size(75.dp) // Image size, smaller than the Box to create a border effect
+                    .align(Alignment.Center) // Center the image inside the Box
+                    .clip(CircleShape), // Clip the image to a circle shape
+                contentScale = ContentScale.Crop,
+            )
+
+            if (needsWater) {
+                Box(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .size(35.dp)
+                        .align(Alignment.TopEnd) // Center the image inside the Box
+                        .background(MaterialTheme.colorScheme.secondary),
                 ) {
                     Image(
-                        painter = painterResource(id = imgPath),
-                        contentDescription = "Profile Picture",
+                        painter = painterResource(id = R.drawable.icon_waterdrop_small),
+                        contentDescription = "Waterdrop",
                         modifier = Modifier
-                            .size(75.dp) // Image size, smaller than the Box to create a border effect
-                            .align(Alignment.Center) // Center the image inside the Box
-                            .clip(CircleShape), // Clip the image to a circle shape
-                        contentScale = ContentScale.Crop,
+                            .align(Alignment.Center)
                     )
-
-                    if (needsWater) {
-                        Box(
-                            modifier = Modifier
-                                .clip(CircleShape)
-                                .size(35.dp)
-                                .align(Alignment.TopEnd) // Center the image inside the Box
-                                .background(MaterialTheme.colorScheme.secondary),
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.icon_waterdrop_small),
-                                contentDescription = "Waterdrop",
-                                modifier = Modifier
-                                    .align(Alignment.Center)
-                            )
-                        }
-                    }
                 }
-
-
-                Spacer(modifier = Modifier.height(5.dp))
-                CopyText(text = plantName)
-
-                // Conditionally display textDetail if it's not null
-                species?.let {
-                    CopyItalicText(text = it, MaterialTheme.colorScheme.outline)
-
-                }
-
-                Spacer(modifier = Modifier.height(10.dp))
-
             }
         }
+
+
+        Spacer(modifier = Modifier.height(5.dp))
+        CopyText(text = plant.name)
+
+        // Conditionally display textDetail if it's not null
+        species?.let {
+            CopyItalicText(text = it, MaterialTheme.colorScheme.outline)
+
+        }
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+    }
+}
 
 

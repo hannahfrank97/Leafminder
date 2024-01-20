@@ -22,35 +22,8 @@ import androidx.navigation.NavController
 import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.getDatabase
-import com.cc221009.ccl3_leafminder.data.model.Plants
+import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.EditPlantViewModel
-
-data class EditUIState(
-    val name: String,
-    val date: String,
-    val size: String,
-    val wellbeing: String,
-    val wateringDate: String,
-    val wateringFrequency: String,
-    val imagePath: String,
-    val onNameChange: (String) -> Unit,
-    val onDateChange: (String) -> Unit,
-    val onSizeChange: (String) -> Unit,
-    val onWellbeingChange: (String) -> Unit,
-    val onWateringDateChange: (String) -> Unit,
-    val onWateringFrequencyChange: (String) -> Unit,
-    val onImagePathChange: (String) -> Unit,
-
-    val onSaveEditedPlant: (Plants) -> Unit,
-
-    val openDialog: Boolean,
-
-    val clickDismissDialog: () -> Unit,
-
-    val clickShowDialog: () -> Unit,
-
-    val clickingToDeletePlant: (Plants) -> Unit,
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,7 +57,7 @@ fun EditView(
                 confirmButton = {
                     PrimaryButton("Delete",
                         onClickLogic = {
-                            val plant = Plants(
+                            val plant = Plant(
                                 name = state.name,
                                 date = state.date,
                                 size = state.size,
@@ -108,14 +81,13 @@ fun EditView(
         }
 
 
-
         // Header
         Header("Edit this plant", R.drawable.icon_delete,
             leftIconLogic = {
-            navController.navigate(Screen.DetailView.route)
-        }, rightIconLogic = {
-            state.clickShowDialog()
-        })
+                navController.navigate(Screen.DetailView.route)
+            }, rightIconLogic = {
+                state.clickShowDialog()
+            })
 
         // Profile Image
         PlantImage(R.drawable.placeholder, onClickLogic = {
@@ -137,18 +109,18 @@ fun EditView(
 
         PrimaryButton("Save Changes",
             onClickLogic = {
-            val updatePlant = Plants(
-                name = state.name,
-                date = state.date,
-                size = state.size,
-                wellbeing = state.wellbeing,
-                wateringDate = state.wateringDate,
-                wateringFrequency = state.wateringFrequency,
-                imagePath = state.imagePath
-            )
-                state.onSaveEditedPlant(updatePlant)
+                val plant = Plant(
+                    name = state.name,
+                    date = state.date,
+                    size = state.size,
+                    wellbeing = state.wellbeing,
+                    wateringDate = state.wateringDate,
+                    wateringFrequency = state.wateringFrequency,
+                    imagePath = state.imagePath
+                )
+                state.onSaveEditedPlant(plant)
                 println("Button was clicked")
-        })
+            })
     }
 
 }

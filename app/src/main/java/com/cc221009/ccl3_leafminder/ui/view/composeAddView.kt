@@ -41,38 +41,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.getDatabase
-import com.cc221009.ccl3_leafminder.data.model.Plants
+import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
-
-data class AddUIState(
-    val name: TextFieldValue,
-    val setName: (TextFieldValue) -> Unit,
-
-    val speciesNames: List<String>,
-    val onSpeciesListTapped: () -> Unit,
-
-    val tappingtoSavePlant: (Plants) -> Unit,
-
-    val date: String,
-    val setDate: (String) -> Unit,
-
-    val size: String,
-    val wellbeing: String,
-
-    val wateringDate: String,
-    val setWateringDate: (String) -> Unit,
-
-    val wateringFrequency: String,
-    val imagePath: String
-
-)
 
 
 @Composable
@@ -100,10 +76,10 @@ fun AddView(
     ) {
 
         // Header
-        Header( "Add a new plant", null,
+        Header("Add a new plant", null,
             leftIconLogic = {
-                    navController.navigate(Screen.HomeView.route)
-        }, rightIconLogic = {})
+                navController.navigate(Screen.HomeView.route)
+            }, rightIconLogic = {})
 
         // Profile Image
         PlantImage(R.drawable.placeholder, onClickLogic = {
@@ -129,14 +105,14 @@ fun AddView(
 
         PrimaryButton("Add Plant",
             onClickLogic = {
-                    val plant = Plants(
-                        name = state.name.text,
-                        date = state.date,
-                        size = state.size,
-                        wellbeing = state.wellbeing,
-                        wateringDate = state.wateringDate,
-                        wateringFrequency = state.wateringFrequency,
-                        imagePath = state.imagePath
+                val plant = Plant(
+                    name = state.name.text,
+                    date = state.date,
+                    size = state.size,
+                    wellbeing = state.wellbeing,
+                    wateringDate = state.wateringDate,
+                    wateringFrequency = state.wateringFrequency,
+                    imagePath = state.imagePath
 
                 )
                 state.tappingtoSavePlant(plant)
@@ -178,6 +154,7 @@ fun AddPlantInfoContainer(
                 1,
                 selectedItem,
                 onSelectItem,
+
                 modifier = Modifier.weight(1f)
             )
             Spacer(modifier = Modifier.width(10.dp))
@@ -188,6 +165,7 @@ fun AddPlantInfoContainer(
                 2,
                 selectedItem,
                 onSelectItem,
+
                 modifier = Modifier.weight(1f)
             )
             Spacer(modifier = Modifier.width(10.dp))
@@ -198,6 +176,7 @@ fun AddPlantInfoContainer(
                 3,
                 selectedItem,
                 onSelectItem,
+
                 modifier = Modifier.weight(1f)
             )
         }
@@ -205,6 +184,7 @@ fun AddPlantInfoContainer(
         Spacer(modifier = Modifier.height(20.dp))
 
         AddParameterContainer("location") { selectedItem, onSelectItem ->
+
             IconButtonsItem(
                 "light",
                 R.drawable.location_light,
@@ -212,6 +192,7 @@ fun AddPlantInfoContainer(
                 1,
                 selectedItem,
                 onSelectItem,
+
                 modifier = Modifier.weight(1f)
             )
             Spacer(modifier = Modifier.width(10.dp))
@@ -222,6 +203,7 @@ fun AddPlantInfoContainer(
                 2,
                 selectedItem,
                 onSelectItem,
+
                 modifier = Modifier.weight(1f)
             )
             Spacer(modifier = Modifier.width(10.dp))
@@ -232,6 +214,7 @@ fun AddPlantInfoContainer(
                 3,
                 selectedItem,
                 onSelectItem,
+
                 modifier = Modifier.weight(1f)
             )
             Spacer(modifier = Modifier.width(10.dp))
@@ -248,6 +231,7 @@ fun AddPlantInfoContainer(
         Spacer(modifier = Modifier.height(20.dp))
 
         AddParameterContainer("wellbeing") { selectedItem, onSelectItem ->
+
             IconButtonsItem(
                 "great",
                 R.drawable.wellbeing_good,
@@ -255,6 +239,7 @@ fun AddPlantInfoContainer(
                 1,
                 selectedItem,
                 onSelectItem,
+
                 modifier = Modifier.weight(1f)
             )
             Spacer(modifier = Modifier.width(10.dp))
@@ -265,6 +250,7 @@ fun AddPlantInfoContainer(
                 2,
                 selectedItem,
                 onSelectItem,
+
                 modifier = Modifier.weight(1f)
             )
             Spacer(modifier = Modifier.width(10.dp))
@@ -275,6 +261,7 @@ fun AddPlantInfoContainer(
                 3,
                 selectedItem,
                 onSelectItem,
+
                 modifier = Modifier.weight(1f)
             )
         }
@@ -321,6 +308,7 @@ fun IconButtonsItem(
             .border(if (isClicked) 2.dp else 0.dp,
                 if (isClicked) colorScheme.outline else Color.Transparent,
                 shape = RoundedCornerShape(15.dp))
+
             .fillMaxHeight()
             .background(colorScheme.onError)
             .padding(top = 20.dp, bottom = 20.dp)
@@ -370,13 +358,15 @@ fun AddPlantSpeciesContainer(
             .height(45.dp)
             .border(width = 2.dp, color = colorScheme.outline, shape = RoundedCornerShape(12.dp)) // Apply border
             .clip(RoundedCornerShape(12.dp)), // Then clip to the same shape
+
             contentAlignment = Alignment.CenterStart,
-            ) {
+        ) {
             Box(
                 modifier = Modifier
                     .padding(start = 40.dp)
 
             ){
+
                 CopyText(selectedSpecies)
             }
             DropdownMenu(
@@ -404,31 +394,31 @@ fun AddPlantSpeciesContainer(
 
 
 
-    Row(
-        modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        APIIconItem(
-            "Location",
-            "api value",
-            R.drawable.placeholder,
-            "location icon",
-            modifier = Modifier.weight(1f)
-        )
-        APIIconItem(
-            "Watering",
-            "api value",
-            R.drawable.placeholder,
-            "watering icon",
-            modifier = Modifier.weight(1f)
-        )
-        APIIconItem(
-            "Poisinousness",
-            "api value",
-            R.drawable.placeholder,
-            "poisonousness icon",
-            modifier = Modifier.weight(1f)
-        )
-    }
+        Row(
+            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            APIIconItem(
+                "Location",
+                "api value",
+                R.drawable.placeholder,
+                "location icon",
+                modifier = Modifier.weight(1f)
+            )
+            APIIconItem(
+                "Watering",
+                "api value",
+                R.drawable.placeholder,
+                "watering icon",
+                modifier = Modifier.weight(1f)
+            )
+            APIIconItem(
+                "Poisinousness",
+                "api value",
+                R.drawable.placeholder,
+                "poisonousness icon",
+                modifier = Modifier.weight(1f)
+            )
+        }
     }
     Spacer(modifier = Modifier.height(20.dp))
 
@@ -457,7 +447,8 @@ fun APIIconItem(
             painter = painterResource(id = imgPath),
             imgDescription,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop)
+            contentScale = ContentScale.Crop
+        )
         H4Text(text = headline)
         CopyText(text = apiValue)
     }
@@ -511,12 +502,13 @@ fun WateringFrequencySelector(
         Spacer(modifier = Modifier.height(10.dp))
         Row(
             modifier = Modifier
-            .fillMaxWidth(0.7f),
+                .fillMaxWidth(0.7f),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             PlusMinusButton(R.drawable.icon_minus, onClickLogic = {
-                waterInterval = (waterInterval - 1).coerceAtLeast(0) // Decrease and ensure not below 0
+                waterInterval =
+                    (waterInterval - 1).coerceAtLeast(0) // Decrease and ensure not below 0
             })
 
             Column(
@@ -546,7 +538,7 @@ fun PlusMinusButton(
             .clip(RoundedCornerShape(25.dp))
             .size(45.dp)
             .background(colorScheme.background),
-        ) {
+    ) {
         Icon(
             painter = painterResource(id = imgPath),
             contentDescription = "Delete"
@@ -564,7 +556,7 @@ fun PlantImage(
         modifier = Modifier
             .size(120.dp) // Set the size including the border
             .background(color = colorScheme.primary, shape = CircleShape)
-            .clickable {  onClickLogic() },
+            .clickable { onClickLogic() },
     ) {
         if (imgPath == null) {
             Image(
@@ -576,8 +568,7 @@ fun PlantImage(
                     .size(70.dp), // Clip the image to a circle shape
                 contentScale = ContentScale.Crop
             )
-        }
-        else {
+        } else {
             Image(
                 painter = painterResource(id = imgPath),
                 contentDescription = "Profile Picture",

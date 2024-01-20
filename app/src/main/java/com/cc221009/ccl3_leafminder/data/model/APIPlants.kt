@@ -1,6 +1,6 @@
 package com.cc221009.ccl3_leafminder.data.model
 
- data class APIPlants (
+data class APIPlants(
     val id: Int,
     val scientific_name: String,
     val watering: String,
@@ -8,8 +8,9 @@ package com.cc221009.ccl3_leafminder.data.model
     val default_image: PlantImage,
 
 
-)
-data class APIDetails (
+    )
+
+data class APIDetails(
     val id: Int,
     val poisonous_to_humans: Boolean,
 )

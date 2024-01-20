@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "plants")
-data class Plants(
+data class Plant(
     val name: String,
     val date: String,
     val size: String,
@@ -12,5 +12,5 @@ data class Plants(
     val wateringDate: String,
     val wateringFrequency: String,
     val imagePath: String,
-    @PrimaryKey (autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
 )
