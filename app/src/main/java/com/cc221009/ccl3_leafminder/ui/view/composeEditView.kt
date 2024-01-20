@@ -90,10 +90,11 @@ fun EditView(
             })
 
         // Profile Image
-        PlantImage(R.drawable.placeholder, onClickLogic = {
-            // Define what should happen when the button is clicked
-            println("Button was clicked")
-        })
+        PlantImage(null,
+            null,
+            onClickLogic = {
+                navController.navigate(Screen.CameraView.route)
+            })
 
         // Textfield Name
         DefaultTextField("Name", "Name",

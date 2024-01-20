@@ -63,6 +63,7 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.room:room-common:2.6.1")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.6")
+    implementation("androidx.camera:camera-core:1.3.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -82,6 +83,15 @@ dependencies {
     //library for API
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // camera
+    val camerax_version = "1.4.0-alpha02"
+    implementation("androidx.camera:camera-camera2:${camerax_version}")
+    implementation("androidx.camera:camera-lifecycle:${camerax_version}")
+    implementation("androidx.camera:camera-view:${camerax_version}")
+
+    // Coil for async image rendering from local directories or the internet
+    implementation("io.coil-kt:coil-compose:1.4.0")
 
     ksp("androidx.room:room-compiler:2.5.0")
 }

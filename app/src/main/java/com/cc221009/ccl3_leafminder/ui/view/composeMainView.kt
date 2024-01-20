@@ -1,5 +1,8 @@
 package com.cc221009.ccl3_leafminder.ui.view
 
+import android.content.Context
+import androidx.camera.core.ImageCapture
+import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
@@ -10,8 +13,10 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -20,6 +25,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.cc221009.ccl3_leafminder.R
+import com.cc221009.ccl3_leafminder.data.PlantsRepository
+import com.cc221009.ccl3_leafminder.data.getDatabase
+import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
+import com.cc221009.ccl3_leafminder.ui.view_model.CameraViewModel
+import java.io.File
+import java.util.concurrent.ExecutorService
 
 // https://kotlinlang.org/docs/sealed-classes.html
 sealed class Screen(val route: String) {
@@ -28,13 +39,27 @@ sealed class Screen(val route: String) {
     object DetailView : Screen("detailView")
     object EditView : Screen("editView")
     object PlantListView : Screen("plantListView")
-
     object SplashScreen : Screen("splashScreen")
+    object CameraView : Screen("cameraView")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainView() {
+fun MainView(
+    cameraViewModel: CameraViewModel = viewModel(
+        factory = CameraViewModel.provideFactory(
+            PlantsRepository(
+                getDatabase(LocalContext.current).dao
+            )
+        )
+    ),
+    previewView: PreviewView,
+    imageCapture: ImageCapture,
+    cameraExecutor: ExecutorService,
+    directory: File,
+    context: Context
+
+) {
     val navController = rememberNavController()
 
     Scaffold(
@@ -65,7 +90,6 @@ fun MainView() {
                 DetailView(plantId, navController = navController)
             }
 
-
             composable(Screen.EditView.route) {
                 EditView(navController = navController)
             }
@@ -76,6 +100,18 @@ fun MainView() {
 
             composable(Screen.SplashScreen.route) {
                 SplashScreen(navController = navController)
+            }
+
+            composable(Screen.CameraView.route) {
+                CameraView(
+                    cameraViewModel,
+                    navController,
+                    previewView,
+                    imageCapture,
+                    cameraExecutor,
+                    directory,
+                    context
+                    )
             }
         }
     }

@@ -49,6 +49,8 @@ import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.getDatabase
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
+import coil.compose.rememberImagePainter
+
 
 
 @Composable
@@ -82,9 +84,11 @@ fun AddView(
             }, rightIconLogic = {})
 
         // Profile Image
-        PlantImage(R.drawable.placeholder, onClickLogic = {
-            // Define what should happen when the button is clicked
-            println("Button was clicked")
+        PlantImage(
+            null,
+            null,
+            onClickLogic = {
+            navController.navigate(Screen.CameraView.route)
         })
 
         // Textfield Name
@@ -548,7 +552,9 @@ fun PlusMinusButton(
 
 @Composable
 fun PlantImage(
-    imgPath: Int, onClickLogic: () -> Unit
+    imgPath: Int?,
+    capturedImgUri: Int?,
+    onClickLogic: () -> Unit
 ) {
     Spacer(modifier = Modifier.height(20.dp))
 
@@ -558,7 +564,27 @@ fun PlantImage(
             .background(color = colorScheme.primary, shape = CircleShape)
             .clickable { onClickLogic() },
     ) {
-        if (imgPath == null) {
+        if (capturedImgUri != null) {
+            Image(
+                painter = painterResource(id = capturedImgUri),
+                contentDescription = "Profile Picture",
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .align(Alignment.Center) // Center the image inside the Box
+                    .size(70.dp), // Clip the image to a circle shape
+                contentScale = ContentScale.Crop
+            )
+        } else if (imgPath != null) {
+            Image(
+                painter = rememberImagePainter(data = imgPath),
+                contentDescription = "Profile Picture",
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .align(Alignment.Center) // Center the image inside the Box
+                    .size(115.dp), // Clip the image to a circle shape
+                contentScale = ContentScale.Crop
+            )
+        } else {
             Image(
                 painter = painterResource(id = R.drawable.icon_add),
                 contentDescription = "Profile Picture",
@@ -568,18 +594,7 @@ fun PlantImage(
                     .size(70.dp), // Clip the image to a circle shape
                 contentScale = ContentScale.Crop
             )
-        } else {
-            Image(
-                painter = painterResource(id = imgPath),
-                contentDescription = "Profile Picture",
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .align(Alignment.Center) // Center the image inside the Box
-                    .size(115.dp), // Clip the image to a circle shape
-                contentScale = ContentScale.Crop
-            )
         }
-
     }
 
     Spacer(modifier = Modifier.height(20.dp))
