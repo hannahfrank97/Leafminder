@@ -22,9 +22,13 @@ data class AddUIState(
     val tappingtoSavePlant: (Plant) -> Unit,
 
     val date: String,
+    val setDate: (String) -> Unit,
     val size: String,
     val wellbeing: String,
+
     val wateringDate: String,
+    val setWateringDate: (String) -> Unit,
+
     val wateringFrequency: String,
     val imagePath: String
 
