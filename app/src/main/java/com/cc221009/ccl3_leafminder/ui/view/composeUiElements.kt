@@ -173,7 +173,7 @@ fun CalendarTextField(
     headline: String,
     placeholderText: String,
     selectedDate: String,
-    onValueChange: (String) -> Unit
+    onDateChange: (String) -> Unit
     ) {
 
     val borderBottomWidth = 2.dp
@@ -182,25 +182,28 @@ fun CalendarTextField(
 
     Column (
         modifier = Modifier.clickable {
-           // showDatePicker(context, onValueChange)
+           showDatePicker(context, onDateChange)
         }
     ) {
 
         // Your CopyText Composable
         CopyText(text = headline)
+        Spacer(modifier = Modifier.height(20.dp))
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .drawBehind {
                     val strokeWidth = borderBottomWidth.value * density
-                    val y = size.height - 10 - strokeWidth
+                    val y = size.height + 30 - strokeWidth
                     drawLine(
                         color = borderBottomColor,
                         start = Offset(0f, y),
                         end = Offset(size.width, y),
                         strokeWidth = strokeWidth
                     )
+
+
                 },
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -211,27 +214,18 @@ fun CalendarTextField(
                     .size(25.dp)
                     .padding(bottom = 5.dp)
             )
+            Spacer(modifier = Modifier.width(15.dp))
 
-            TextField(
-                value = if (selectedDate.isNotEmpty()) selectedDate else "Select date",
-                onValueChange = { //TODO
-                                },
-                label = { CopyText(text = placeholderText) },
-                placeholder = { CopyText(text = placeholderText) },
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = MaterialTheme.colorScheme.primary,
-                    cursorColor = MaterialTheme.colorScheme.primary,
-                    containerColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent, // Hide the indicator
-                    unfocusedIndicatorColor = Color.Transparent
-                ),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-                modifier = Modifier
-                    .fillMaxWidth()
+            Text(
+                text = if (selectedDate.isNotEmpty()) selectedDate else placeholderText,
+                modifier = Modifier.weight(1f),
+                style = TextStyle(
+                    fontFamily = FontFamily(Font(R.font.opensans_semibold)),
+                    fontSize = 13.sp)
             )
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(40.dp))
     }
 }
 
@@ -414,7 +408,6 @@ fun CopyItalicText(
     )
 }
 
-/*
 fun showDatePicker(context: Context, onDateSelected: (String) -> Unit) {
     val calendar = Calendar.getInstance()
     DatePickerDialog(
@@ -428,7 +421,8 @@ fun showDatePicker(context: Context, onDateSelected: (String) -> Unit) {
         calendar.get(Calendar.DAY_OF_MONTH)
     ).show()
 }
-*/
+
+
 
 
 

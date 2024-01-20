@@ -34,7 +34,7 @@ data class EditUIState(
     val wateringFrequency: String,
     val imagePath: String,
     val onNameChange: (String) -> Unit,
-    val onDateChane: (String) -> Unit,
+    val onDateChange: (String) -> Unit,
     val onSizeChange: (String) -> Unit,
     val onWellbeingChange: (String) -> Unit,
     val onWateringDateChange: (String) -> Unit,
@@ -129,11 +129,11 @@ fun EditView(
             onValueChange = {}
         )
 
-        AddPlantInfoContainer()
+        AddPlantInfoContainer(state.date, state.onDateChange)
 
         AddPlantSpeciesContainer(speciesNames = emptyList(), onDropdownTapped = {})
 
-        AddPlantWateringContainer()
+        AddPlantWateringContainer(state.date, state.onDateChange)
 
         PrimaryButton("Save Changes",
             onClickLogic = {

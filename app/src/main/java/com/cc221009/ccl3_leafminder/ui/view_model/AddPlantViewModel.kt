@@ -34,18 +34,29 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
             tappingtoSavePlant = ::saveButtonPlant,
 
             date = "",
+            setDate = ::onDateChange,
             size = "",
             wellbeing = "",
+
             wateringDate = "",
+            setWateringDate = ::onWateringDateChange,
+
             wateringFrequency = "",
             imagePath = "",
-
         )
     )
     val uiState: StateFlow<AddUIState> = _mainViewState.asStateFlow()
 
     fun onNameChange(name: TextFieldValue) {
         _mainViewState.value = _mainViewState.value.copy(name = name)
+    }
+
+    fun onDateChange(date: String) {
+        _mainViewState.value = _mainViewState.value.copy(date = date)
+    }
+
+    fun onWateringDateChange(wateringDate: String) {
+        _mainViewState.value = _mainViewState.value.copy(wateringDate = wateringDate)
     }
 
     fun fetchSpeciesNames() {

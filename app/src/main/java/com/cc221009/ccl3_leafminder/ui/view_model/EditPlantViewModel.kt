@@ -24,7 +24,7 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
             wateringFrequency = "",
             imagePath = "",
             onNameChange = {newName: String -> updateName(newName)},
-            onDateChane = {newDate: String -> updateDate(newDate)},
+            onDateChange = { newDate: String -> updateDate(newDate)},
             onSizeChange = {newSize: String -> updateSize(newSize)},
             onWellbeingChange = {newWellbeing: String -> updateWellbeing(newWellbeing)},
             onWateringDateChange = {newWateringDate: String -> updateWateringDate(newWateringDate)},

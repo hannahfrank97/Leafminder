@@ -36,7 +36,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
@@ -59,9 +61,14 @@ data class AddUIState(
     val tappingtoSavePlant: (Plants) -> Unit,
 
     val date: String,
+    val setDate: (String) -> Unit,
+
     val size: String,
     val wellbeing: String,
+
     val wateringDate: String,
+    val setWateringDate: (String) -> Unit,
+
     val wateringFrequency: String,
     val imagePath: String
 
@@ -114,11 +121,11 @@ fun AddView(
         }
 
 
-        AddPlantInfoContainer()
+        AddPlantInfoContainer(state.date, state.setDate)
 
         AddPlantSpeciesContainer(state.speciesNames, onDropdownTapped = state.onSpeciesListTapped)
 
-        AddPlantWateringContainer()
+        AddPlantWateringContainer(state.wateringDate, state.setWateringDate)
 
         PrimaryButton("Add Plant",
             onClickLogic = {
@@ -142,7 +149,11 @@ fun AddView(
 // INFO COMPONENTS
 
 @Composable
-fun AddPlantInfoContainer() {
+fun AddPlantInfoContainer(
+    dateState: String,
+    setDate: (String) -> Unit
+
+) {
 
     Column(
         modifier = Modifier
@@ -152,39 +163,120 @@ fun AddPlantInfoContainer() {
     ) {
         // TODO: Connect to Viewmodel
 
-        CalendarTextField("Since when do you have your plant?",
+        CalendarTextField(
+            "Since when do you have your plant?",
             "Select date",
-            selectedDate = toString(),
-            onValueChange = { })
+            selectedDate = dateState,
+            onDateChange = setDate
+        )
 
-        AddParameterContainer("size") {
-            IconButtonsItem("small", R.drawable.plant_base_small, "small", 1, modifier = Modifier.weight(1f))
+        AddParameterContainer("size") { selectedItem, onSelectItem ->
+            IconButtonsItem(
+                "great",
+                R.drawable.plant_base_small,
+                "small",
+                1,
+                selectedItem,
+                onSelectItem,
+                modifier = Modifier.weight(1f)
+            )
             Spacer(modifier = Modifier.width(10.dp))
-            IconButtonsItem("medium", R.drawable.plant_base_medium, "medium", 2,  modifier = Modifier.weight(1f))
+            IconButtonsItem(
+                "okay",
+                R.drawable.plant_base_medium,
+                "medium",
+                2,
+                selectedItem,
+                onSelectItem,
+                modifier = Modifier.weight(1f)
+            )
             Spacer(modifier = Modifier.width(10.dp))
-            IconButtonsItem("large", R.drawable.plant_base_large, "large", 3, modifier = Modifier.weight(1f))
+            IconButtonsItem(
+                "bad",
+                R.drawable.plant_base_large,
+                "large",
+                3,
+                selectedItem,
+                onSelectItem,
+                modifier = Modifier.weight(1f)
+            )
         }
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        AddParameterContainer("location") {
-            IconButtonsItem("light", R.drawable.location_light, "light", 1, modifier = Modifier.weight(1f))
+        AddParameterContainer("location") { selectedItem, onSelectItem ->
+            IconButtonsItem(
+                "light",
+                R.drawable.location_light,
+                "light",
+                1,
+                selectedItem,
+                onSelectItem,
+                modifier = Modifier.weight(1f)
+            )
             Spacer(modifier = Modifier.width(10.dp))
-            IconButtonsItem("half-light", R.drawable.location_half_light, "half-light", 2,  modifier = Modifier.weight(1f))
+            IconButtonsItem(
+                "half-shadow",
+                R.drawable.location_half_light,
+                "half-light",
+                2,
+                selectedItem,
+                onSelectItem,
+                modifier = Modifier.weight(1f)
+            )
             Spacer(modifier = Modifier.width(10.dp))
-            IconButtonsItem("half-shadow", R.drawable.location_half_shadow, "half-shadow", 3, modifier = Modifier.weight(1f))
+            IconButtonsItem(
+                "half-shadow",
+                R.drawable.location_half_shadow,
+                "half-shadow",
+                3,
+                selectedItem,
+                onSelectItem,
+                modifier = Modifier.weight(1f)
+            )
             Spacer(modifier = Modifier.width(10.dp))
-            IconButtonsItem("shadow", R.drawable.location_shadow, "shadow", 4, modifier = Modifier.weight(1f))
-        }
+            IconButtonsItem(
+                "shadow",
+                R.drawable.location_shadow,
+                "shadow",
+                4,
+                selectedItem,
+                onSelectItem,
+                modifier = Modifier.weight(1f)
+            )        }
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        AddParameterContainer("wellbeing") {
-            IconButtonsItem("great", R.drawable.wellbeing_good, "great", 1, modifier = Modifier.weight(1f))
+        AddParameterContainer("wellbeing") { selectedItem, onSelectItem ->
+            IconButtonsItem(
+                "great",
+                R.drawable.wellbeing_good,
+                "great",
+                1,
+                selectedItem,
+                onSelectItem,
+                modifier = Modifier.weight(1f)
+            )
             Spacer(modifier = Modifier.width(10.dp))
-            IconButtonsItem("okay", R.drawable.wellbeing_okay, "okay", 2, modifier = Modifier.weight(1f))
+            IconButtonsItem(
+                "okay",
+                R.drawable.wellbeing_okay,
+                "okay",
+                2,
+                selectedItem,
+                onSelectItem,
+                modifier = Modifier.weight(1f)
+            )
             Spacer(modifier = Modifier.width(10.dp))
-            IconButtonsItem("miserable", R.drawable.wellbeing_bad, "miserable", 3, modifier = Modifier.weight(1f))
+            IconButtonsItem(
+                "bad",
+                R.drawable.wellbeing_bad,
+                "bad",
+                3,
+                selectedItem,
+                onSelectItem,
+                modifier = Modifier.weight(1f)
+            )
         }
     }
     Spacer(modifier = Modifier.height(20.dp))
@@ -192,17 +284,17 @@ fun AddPlantInfoContainer() {
 
 @Composable
 fun AddParameterContainer(
-    headline: String, content: @Composable () -> Unit
+    headline: String,
+    content: @Composable (Int, (Int) -> Unit) -> Unit
 ) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-    ) {
+    var selectedItem by remember { mutableStateOf(-1) }
 
+    Column(modifier = Modifier.fillMaxWidth()) {
         H3Text(text = headline)
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            content()
+        Row(horizontalArrangement = Arrangement.SpaceBetween) {
+            content(selectedItem) { itemId ->
+                selectedItem = itemId  // Update the selected item
+            }
         }
     }
 }
@@ -212,24 +304,23 @@ fun IconButtonsItem(
     headline: String,
     imgPath: Int,
     imgDescription: String,
-    passValue: Int,
+    itemId: Int,  // Unique ID for this item
+    selectedItem: Int,  // ID of the selected item
+    onSelectItem: (Int) -> Unit,  // Callback to update selection
     modifier: Modifier = Modifier
 ) {
-    var isClicked: Boolean = false
+    val isClicked = itemId == selectedItem
 
     Box(
         contentAlignment = Alignment.CenterStart,
         modifier = Modifier
             .clip(RoundedCornerShape(15.dp))
             .clickable {
-                isClicked = true
-
-                if (isClicked) {
-                    // TODO ENTER BUTTON LOGIC HERE
-                }
-
-
-        }
+                onSelectItem(itemId)
+            }
+            .border(if (isClicked) 2.dp else 0.dp,
+                if (isClicked) colorScheme.outline else Color.Transparent,
+                shape = RoundedCornerShape(15.dp))
             .fillMaxHeight()
             .background(colorScheme.onError)
             .padding(top = 20.dp, bottom = 20.dp)
@@ -268,16 +359,23 @@ fun AddPlantSpeciesContainer(
         // TODO: Connect to Viewmodel
 
         var expanded by remember { mutableStateOf(false) }
-        var selectedSpecies by remember { mutableStateOf("Selected Species") }
+        var selectedSpecies by remember { mutableStateOf("Select Species") }
 
         Box(modifier = Modifier
+            .clickable {
+                expanded = true
+                onDropdownTapped()
+            }
             .fillMaxWidth()
+            .height(45.dp)
             .border(width = 2.dp, color = colorScheme.outline, shape = RoundedCornerShape(12.dp)) // Apply border
             .clip(RoundedCornerShape(12.dp)), // Then clip to the same shape
             contentAlignment = Alignment.CenterStart,
             ) {
             Box(
-                modifier = Modifier.padding(start = 40.dp)
+                modifier = Modifier
+                    .padding(start = 40.dp)
+
             ){
                 CopyText(selectedSpecies)
             }
@@ -299,13 +397,9 @@ fun AddPlantSpeciesContainer(
             }
 
             Spacer(modifier = Modifier.matchParentSize())
-            IconButton(onClick = {
-                expanded = true
-                onDropdownTapped()
 
-            }) {
-                Icon(Icons.Filled.ArrowDropDown, contentDescription = "Dropdown Arrow")
-            }
+            Icon(Icons.Filled.ArrowDropDown, contentDescription = "Dropdown Arrow", modifier = Modifier.padding(start = 10.dp, end = 10.dp))
+
         }
 
 
@@ -372,7 +466,10 @@ fun APIIconItem(
 // WATERING COMPONENTS
 
 @Composable
-fun AddPlantWateringContainer() {
+fun AddPlantWateringContainer(
+    dateState: String,
+    setDate: (String) -> Unit
+) {
 
     Column(
         modifier = Modifier
@@ -388,8 +485,9 @@ fun AddPlantWateringContainer() {
         CalendarTextField(
             "Select the date of last watering",
             "Select date",
-            selectedDate = "",
-            onValueChange = { })
+            selectedDate = dateState,
+            onDateChange = setDate
+        )
 
         WateringFrequencySelector("How frequent do you want to water your plant?")
     }
