@@ -47,6 +47,7 @@ import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.getDatabase
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
+import java.time.LocalDate
 
 
 @Composable
@@ -95,7 +96,7 @@ fun AddView(
         }
 
 
-        AddPlantInfoContainer()
+        AddPlantInfoContainer(state.setDate, state.setSize, state.setLocation, state.setWellbeing)
 
         AddPlantSpeciesContainer(state.speciesNames, onDropdownTapped = state.onSpeciesListTapped)
 
@@ -107,6 +108,7 @@ fun AddView(
                     name = state.name.text,
                     date = state.date,
                     size = state.size,
+                    location = state.location,
                     wellbeing = state.wellbeing,
                     wateringDate = state.wateringDate,
                     wateringFrequency = state.wateringFrequency,
@@ -123,7 +125,12 @@ fun AddView(
 // INFO COMPONENTS
 
 @Composable
-fun AddPlantInfoContainer() {
+fun AddPlantInfoContainer(
+    setDate: (String) -> Unit,
+    setSize: (String) -> Unit,
+    setLocation: (String) -> Unit,
+    setWellbeing: (String) -> Unit,
+) {
 
     Column(
         modifier = Modifier
@@ -131,36 +138,46 @@ fun AddPlantInfoContainer() {
             .background(colorScheme.tertiaryContainer)
             .padding(20.dp)
     ) {
-        // TODO: Connect to Viewmodel
 
         CalendarTextField("Since when do you have your plant?",
             "Select date",
             selectedDate = toString(),
-            onValueChange = { })
+            onValueChange = {newDate ->
+                setDate(newDate)
+            })
 
         AddParameterContainer("size") {
             IconButtonsItem(
                 "small",
                 R.drawable.plant_base_small,
                 "small",
-                1,
-                modifier = Modifier.weight(1f)
+                "",
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    setSize("small")
+                }
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
                 "medium",
                 R.drawable.plant_base_medium,
                 "medium",
-                2,
-                modifier = Modifier.weight(1f)
+                "",
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    setSize("medium")
+                }
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
                 "large",
                 R.drawable.plant_base_large,
                 "large",
-                3,
-                modifier = Modifier.weight(1f)
+                "",
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    setSize("large")
+                }
             )
         }
 
@@ -171,32 +188,44 @@ fun AddPlantInfoContainer() {
                 "light",
                 R.drawable.location_light,
                 "light",
-                1,
-                modifier = Modifier.weight(1f)
+                "",
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    setLocation("light")
+                }
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
                 "half-light",
                 R.drawable.location_half_light,
                 "half-light",
-                2,
-                modifier = Modifier.weight(1f)
+                "",
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    setLocation("half-light")
+                }
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
                 "half-shadow",
                 R.drawable.location_half_shadow,
                 "half-shadow",
-                3,
-                modifier = Modifier.weight(1f)
+                "",
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    setLocation("half-shadow")
+                }
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
                 "shadow",
                 R.drawable.location_shadow,
                 "shadow",
-                4,
-                modifier = Modifier.weight(1f)
+                "",
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    setLocation("shadow")
+                }
             )
         }
 
@@ -207,24 +236,33 @@ fun AddPlantInfoContainer() {
                 "great",
                 R.drawable.wellbeing_good,
                 "great",
-                1,
-                modifier = Modifier.weight(1f)
+                "",
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    setWellbeing("great")
+                }
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
                 "okay",
                 R.drawable.wellbeing_okay,
                 "okay",
-                2,
-                modifier = Modifier.weight(1f)
+                "",
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    setWellbeing("okay")
+                }
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
                 "miserable",
                 R.drawable.wellbeing_bad,
                 "miserable",
-                3,
-                modifier = Modifier.weight(1f)
+                "",
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    setWellbeing("miserable")
+                }
             )
         }
     }
@@ -233,28 +271,33 @@ fun AddPlantInfoContainer() {
 
 @Composable
 fun AddParameterContainer(
-    headline: String, content: @Composable () -> Unit
+    headline: String,
+    content: @Composable () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
     ) {
-
         H3Text(text = headline)
         Row(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             content()
+
         }
     }
 }
+
+
+
 
 @Composable
 fun IconButtonsItem(
     headline: String,
     imgPath: Int,
     imgDescription: String,
-    passValue: Int,
-    modifier: Modifier = Modifier
+    sizeValue: String,
+    modifier: Modifier = Modifier,
+    onClick: (String) -> Unit,
 ) {
     var isClicked: Boolean = false
 
@@ -266,11 +309,11 @@ fun IconButtonsItem(
                 isClicked = true
 
                 if (isClicked) {
-                    // TODO ENTER BUTTON LOGIC HERE
+                    onClick(sizeValue)
                 }
 
-
             }
+
             .fillMaxHeight()
             .background(colorScheme.onError)
             .padding(top = 20.dp, bottom = 20.dp)
@@ -364,7 +407,8 @@ fun AddPlantSpeciesContainer(
                 "api value",
                 R.drawable.placeholder,
                 "location icon",
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+
             )
             APIIconItem(
                 "Watering",
@@ -436,7 +480,7 @@ fun AddPlantWateringContainer() {
             "Select the date of last watering",
             "Select date",
             selectedDate = "",
-            onValueChange = { })
+            onValueChange = {})
 
         WateringFrequencySelector("How frequent do you want to water your plant?")
     }

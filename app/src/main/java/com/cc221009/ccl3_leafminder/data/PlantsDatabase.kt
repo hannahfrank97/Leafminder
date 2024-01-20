@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.cc221009.ccl3_leafminder.data.model.Plant
 
-@Database(entities = [Plant::class], version = 1)
+@Database(entities = [Plant::class], version = 2)
 abstract class PlantsDatabase : RoomDatabase() {
     abstract val dao: PlantsDao
 }
