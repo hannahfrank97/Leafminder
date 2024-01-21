@@ -61,6 +61,7 @@ fun EditView(
                                 name = state.name,
                                 date = state.date,
                                 size = state.size,
+                                location = state.location,
                                 wellbeing = state.wellbeing,
                                 wateringDate = state.wateringDate,
                                 wateringFrequency = state.wateringFrequency,
@@ -101,7 +102,15 @@ fun EditView(
             onValueChange = {}
         )
 
-        AddPlantInfoContainer(state.date, state.onDateChange)
+        AddPlantInfoContainer(
+            state.date,
+            setDate = state.onDateChange,
+            setSize = state.onSizeChange,
+            setLocation = state.onLocationChange,
+            setWellbeing = state.onWellbeingChange,
+
+        )
+
 
         AddPlantSpeciesContainer(speciesNames = emptyList(), onDropdownTapped = {})
 
@@ -113,6 +122,7 @@ fun EditView(
                     name = state.name,
                     date = state.date,
                     size = state.size,
+                    location = state.location,
                     wellbeing = state.wellbeing,
                     wateringDate = state.wateringDate,
                     wateringFrequency = state.wateringFrequency,

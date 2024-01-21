@@ -15,6 +15,7 @@ data class EditUIState(
     val name: String,
     val date: String,
     val size: String,
+    val location: String,
     val wellbeing: String,
     val wateringDate: String,
     val wateringFrequency: String,
@@ -22,6 +23,7 @@ data class EditUIState(
     val onNameChange: (String) -> Unit,
     val onDateChange: (String) -> Unit,
     val onSizeChange: (String) -> Unit,
+    val onLocationChange: (String) -> Unit,
     val onWellbeingChange: (String) -> Unit,
     val onWateringDateChange: (String) -> Unit,
     val onWateringFrequencyChange: (String) -> Unit,
@@ -36,6 +38,11 @@ data class EditUIState(
     val clickShowDialog: () -> Unit,
 
     val clickingToDeletePlant: (Plant) -> Unit,
+
+    val setDate: (String) -> Unit,
+    val setSize: (String) -> Unit,
+    val setWellbeing: (String) -> Unit,
+    val setLocation: (String) -> Unit,
 )
 
 class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {
@@ -45,6 +52,7 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
             name = "",
             date = "",
             size = "",
+            location = "",
             wellbeing = "",
             wateringDate = "",
             wateringFrequency = "",
@@ -53,6 +61,7 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
             onDateChange = { newDate: String -> updateDate(newDate) },
             onSizeChange = { newSize: String -> updateSize(newSize) },
             onWellbeingChange = { newWellbeing: String -> updateWellbeing(newWellbeing) },
+            onLocationChange = { newLocation: String -> updateLocation(newLocation) },
             onWateringDateChange = { newWateringDate: String -> updateWateringDate(newWateringDate) },
             onWateringFrequencyChange = { newWateringFrequency: String ->
                 updateWateringFrequency(
@@ -65,6 +74,11 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
             clickDismissDialog = ::dismissDialog,
             clickShowDialog = ::showDialog,
             clickingToDeletePlant = ::clickDeletePlant,
+
+            setDate = ::onDateChange,
+            setLocation = ::onLocationChange,
+            setSize = ::onSizeChange,
+            setWellbeing = ::onWellbeingChange,
 
             )
     )
@@ -103,6 +117,10 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
         _mainViewState.value = _mainViewState.value.copy(size = size)
     }
 
+    fun updateLocation(location: String) {
+        _mainViewState.value = _mainViewState.value.copy(location = location)
+    }
+
     fun updateWellbeing(wellbeing: String) {
         _mainViewState.value = _mainViewState.value.copy(wellbeing = wellbeing)
     }
@@ -117,6 +135,34 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
 
     fun updateImagePath(imagePath: String) {
         _mainViewState.value = _mainViewState.value.copy(imagePath = imagePath)
+    }
+
+    /*fun onNameChange(name: TextFieldValue) {
+        _mainViewState.value = _mainViewState.value.copy(name = name)
+    }*/
+
+    fun onDateChange(date: String) {
+        _mainViewState.value = _mainViewState.value.copy(date = date)
+    }
+
+    fun onSizeChange(size: String) {
+        _mainViewState.value = _mainViewState.value.copy(size = size)
+    }
+
+    fun onWellbeingChange(wellbeing: String) {
+        _mainViewState.value = _mainViewState.value.copy(wellbeing = wellbeing)
+    }
+
+    fun onLocationChange(location: String) {
+        _mainViewState.value = _mainViewState.value.copy(location = location)
+    }
+
+    fun onWateringDateChange(wateringDate: String) {
+        _mainViewState.value = _mainViewState.value.copy(wateringDate = wateringDate)
+    }
+
+    fun onWateringFrequencyChange(wateringFrequency: String) {
+        _mainViewState.value = _mainViewState.value.copy(wateringFrequency = wateringFrequency)
     }
 
     companion object {

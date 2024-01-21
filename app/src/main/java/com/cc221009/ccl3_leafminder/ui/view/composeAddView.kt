@@ -49,6 +49,7 @@ import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.getDatabase
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
+import java.time.LocalDate
 
 
 @Composable
@@ -96,8 +97,7 @@ fun AddView(
             )
         }
 
-
-        AddPlantInfoContainer(state.date, state.setDate)
+        AddPlantInfoContainer(state.date,state.setDate, state.setSize, state.setLocation, state.setWellbeing)
 
         AddPlantSpeciesContainer(state.speciesNames, onDropdownTapped = state.onSpeciesListTapped)
 
@@ -109,6 +109,7 @@ fun AddView(
                     name = state.name.text,
                     date = state.date,
                     size = state.size,
+                    location = state.location,
                     wellbeing = state.wellbeing,
                     wateringDate = state.wateringDate,
                     wateringFrequency = state.wateringFrequency,
@@ -127,8 +128,10 @@ fun AddView(
 @Composable
 fun AddPlantInfoContainer(
     dateState: String,
-    setDate: (String) -> Unit
-
+    setDate: (String) -> Unit,
+    setSize: (String) -> Unit,
+    setLocation: (String) -> Unit,
+    setWellbeing: (String) -> Unit,
 ) {
 
     Column(
@@ -137,7 +140,6 @@ fun AddPlantInfoContainer(
             .background(colorScheme.tertiaryContainer)
             .padding(20.dp)
     ) {
-        // TODO: Connect to Viewmodel
 
         CalendarTextField(
             "Since when do you have your plant?",
@@ -145,6 +147,7 @@ fun AddPlantInfoContainer(
             selectedDate = dateState,
             onDateChange = setDate
         )
+
 
         AddParameterContainer("size") { selectedItem, onSelectItem ->
             IconButtonsItem(
@@ -154,8 +157,11 @@ fun AddPlantInfoContainer(
                 1,
                 selectedItem,
                 onSelectItem,
-
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                "",
+                onClick = {
+                    setSize("small")
+                }
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
@@ -165,8 +171,11 @@ fun AddPlantInfoContainer(
                 2,
                 selectedItem,
                 onSelectItem,
-
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                "",
+                onClick = {
+                    setSize("medium")
+                }
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
@@ -176,8 +185,11 @@ fun AddPlantInfoContainer(
                 3,
                 selectedItem,
                 onSelectItem,
-
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                "",
+                onClick = {
+                    setSize("large")
+                }
             )
         }
 
@@ -192,8 +204,11 @@ fun AddPlantInfoContainer(
                 1,
                 selectedItem,
                 onSelectItem,
-
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                "",
+                onClick = {
+                    setLocation("light")
+                }
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
@@ -203,8 +218,11 @@ fun AddPlantInfoContainer(
                 2,
                 selectedItem,
                 onSelectItem,
-
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                "",
+                onClick = {
+                    setLocation("half-light")
+                }
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
@@ -214,8 +232,11 @@ fun AddPlantInfoContainer(
                 3,
                 selectedItem,
                 onSelectItem,
-
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                "",
+                onClick = {
+                    setLocation("half-shadow")
+                }
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
@@ -225,8 +246,13 @@ fun AddPlantInfoContainer(
                 4,
                 selectedItem,
                 onSelectItem,
-                modifier = Modifier.weight(1f)
-            )        }
+                modifier = Modifier.weight(1f),
+                "",
+                onClick = {
+                    setLocation("shadow")
+                }
+            )
+        }
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -239,8 +265,11 @@ fun AddPlantInfoContainer(
                 1,
                 selectedItem,
                 onSelectItem,
-
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                "",
+                onClick = {
+                    setWellbeing("great")
+                }
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
@@ -250,8 +279,11 @@ fun AddPlantInfoContainer(
                 2,
                 selectedItem,
                 onSelectItem,
-
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                "",
+                onClick = {
+                    setWellbeing("okay")
+                }
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
@@ -261,8 +293,11 @@ fun AddPlantInfoContainer(
                 3,
                 selectedItem,
                 onSelectItem,
-
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                "",
+                onClick = {
+                    setWellbeing("miserable")
+                }
             )
         }
     }
@@ -273,6 +308,7 @@ fun AddPlantInfoContainer(
 fun AddParameterContainer(
     headline: String,
     content: @Composable (Int, (Int) -> Unit) -> Unit
+    //Hannah: content: @Composable () -> Unit
 ) {
     var selectedItem by remember { mutableStateOf(-1) }
 
@@ -286,6 +322,9 @@ fun AddParameterContainer(
     }
 }
 
+
+
+
 @Composable
 fun IconButtonsItem(
     headline: String,
@@ -294,7 +333,9 @@ fun IconButtonsItem(
     itemId: Int,  // Unique ID for this item
     selectedItem: Int,  // ID of the selected item
     onSelectItem: (Int) -> Unit,  // Callback to update selection
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    sizeValue: String,
+    onClick: (String) -> Unit,
 ) {
     val isClicked = itemId == selectedItem
 
@@ -402,7 +443,8 @@ fun AddPlantSpeciesContainer(
                 "api value",
                 R.drawable.placeholder,
                 "location icon",
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+
             )
             APIIconItem(
                 "Watering",

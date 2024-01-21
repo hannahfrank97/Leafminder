@@ -8,6 +8,7 @@ data class Plant(
     val name: String,
     val date: String,
     val size: String,
+    val location: String,
     val wellbeing: String,
     val wateringDate: String,
     val wateringFrequency: String,

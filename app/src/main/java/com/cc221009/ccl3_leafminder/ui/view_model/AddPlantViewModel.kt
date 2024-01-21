@@ -15,22 +15,24 @@ import kotlinx.coroutines.launch
 data class AddUIState(
     val name: TextFieldValue,
     val setName: (TextFieldValue) -> Unit,
-
+    val setDate: (String) -> Unit,
+    val setSize: (String) -> Unit,
+    val setLocation: (String) -> Unit,
+    val setWellbeing: (String) -> Unit,
+    val setWateringDate: (String) -> Unit,
+    val setWateringFrequency: (String) -> Unit,
     val speciesNames: List<String>,
     val onSpeciesListTapped: () -> Unit,
-
     val tappingtoSavePlant: (Plant) -> Unit,
-
     val date: String,
-    val setDate: (String) -> Unit,
     val size: String,
+    val location: String,
     val wellbeing: String,
 
     val wateringDate: String,
-    val setWateringDate: (String) -> Unit,
 
     val wateringFrequency: String,
-    val imagePath: String
+    val imagePath: String,
 
 )
 
@@ -41,21 +43,27 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
         AddUIState(
             name = TextFieldValue(""),
             setName = ::onNameChange,
+            setDate = ::onDateChange,
+            setLocation = ::onLocationChange,
+            setSize = ::onSizeChange,
+            setWellbeing = ::onWellbeingChange,
+            setWateringDate = ::onWateringDateChange,
+            setWateringFrequency = ::onWateringFrequencyChange,
 
             speciesNames = emptyList(),
             onSpeciesListTapped = ::fetchSpeciesNames,
             tappingtoSavePlant = ::saveButtonPlant,
 
             date = "",
-            setDate = ::onDateChange,
             size = "",
+            location = "",
             wellbeing = "",
 
             wateringDate = "",
-            setWateringDate = ::onWateringDateChange,
 
             wateringFrequency = "",
             imagePath = "",
+
 
             )
     )
@@ -69,9 +77,27 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
         _mainViewState.value = _mainViewState.value.copy(date = date)
     }
 
+    fun onLocationChange(location: String) {
+        _mainViewState.value = _mainViewState.value.copy(location = location)
+    }
+
+    fun onSizeChange(size: String) {
+        _mainViewState.value = _mainViewState.value.copy(size = size)
+    }
+
+    fun onWellbeingChange(wellbeing: String) {
+        _mainViewState.value = _mainViewState.value.copy(wellbeing = wellbeing)
+    }
+
     fun onWateringDateChange(wateringDate: String) {
         _mainViewState.value = _mainViewState.value.copy(wateringDate = wateringDate)
     }
+
+    fun onWateringFrequencyChange(wateringFrequency: String) {
+        _mainViewState.value = _mainViewState.value.copy(wateringFrequency = wateringFrequency)
+    }
+
+    //TODO: add image path change (dont know the functionality of image upload so dont know if this is needed)
 
     fun fetchSpeciesNames() {
         viewModelScope.launch {
@@ -97,16 +123,6 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
         }
     }
 
-
-    /*suspend fun getPlants() {
-        viewModelScope.launch {
-            dao.getPlants().collect { plants ->
-                //_mainViewState.update { it.copy(name = plants.) }
-            }
-        }
-
-
-    }*/
 
     //API functions (unsure id this is needed):
     /*class APIViewModel (private val repository: PlantsRepository,apiKey: String): ViewModel() {
