@@ -79,9 +79,19 @@ fun EditView(
                                 wateringDate = state.wateringDate,
                                 wateringFrequency = state.wateringFrequency,
                                 imagePath = state.imagePath,
+                                id = state.plant?.id ?: 0
                             )
                             state.clickingToDeletePlant(plant)
+
+                            navController.navigate(Screen.PlantListView.route) {
+                                popUpTo(Screen.PlantListView.route) {
+                                    inclusive = true
+                                }
+                            }
+
                         })
+
+
                 },
 
                 dismissButton = {
