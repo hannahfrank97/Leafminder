@@ -51,8 +51,6 @@ import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
 import coil.compose.rememberImagePainter
 
-
-
 @Composable
 fun AddView(
     vm: AddPlantViewModel = viewModel(
@@ -158,7 +156,6 @@ fun AddPlantInfoContainer(
                 1,
                 selectedItem,
                 onSelectItem,
-
                 modifier = Modifier.weight(1f)
             )
             Spacer(modifier = Modifier.width(10.dp))

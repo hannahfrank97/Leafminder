@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -16,17 +15,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
-import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
-import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 data class CameraState (
@@ -35,10 +35,9 @@ data class CameraState (
     val cameraPermissionGranted: Boolean = false
 )
 
-class CameraViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {
+class CameraViewModel() : ViewModel() {
     private val _cameraState = MutableStateFlow(CameraState())
-
-
+    val uiState: StateFlow<CameraState> = _cameraState.asStateFlow()
 
     private var _capturedImageUri = mutableStateOf<Uri?>(null)
     var capturedImageUri: State<Uri?> = _capturedImageUri
@@ -96,11 +95,11 @@ class CameraViewModel(private val plantsRepository: PlantsRepository) : ViewMode
     // –––––––––– COMPANION
 
     companion object {
-        fun provideFactory(plantsRepository: PlantsRepository): ViewModelProvider.Factory {
+        fun provideFactory(): ViewModelProvider.Factory {
             return object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return CameraViewModel(plantsRepository) as T
+                    return CameraViewModel() as T
                 }
             }
         }

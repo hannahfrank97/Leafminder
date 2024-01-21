@@ -1,6 +1,5 @@
 package com.cc221009.ccl3_leafminder.ui.view
 
-import android.content.Context
 import androidx.camera.core.ImageCapture
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.padding
@@ -13,10 +12,8 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -25,9 +22,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.cc221009.ccl3_leafminder.R
-import com.cc221009.ccl3_leafminder.data.PlantsRepository
-import com.cc221009.ccl3_leafminder.data.getDatabase
-import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
 import com.cc221009.ccl3_leafminder.ui.view_model.CameraViewModel
 import java.io.File
 import java.util.concurrent.ExecutorService
@@ -46,19 +40,11 @@ sealed class Screen(val route: String) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainView(
-    cameraViewModel: CameraViewModel = viewModel(
-        factory = CameraViewModel.provideFactory(
-            PlantsRepository(
-                getDatabase(LocalContext.current).dao
-            )
-        )
-    ),
+    cameraViewModel: CameraViewModel,
     previewView: PreviewView,
     imageCapture: ImageCapture,
     cameraExecutor: ExecutorService,
-    directory: File,
-    context: Context
-
+    directory: File
 ) {
     val navController = rememberNavController()
 
@@ -104,14 +90,12 @@ fun MainView(
 
             composable(Screen.CameraView.route) {
                 CameraView(
-                    cameraViewModel,
                     navController,
+                    cameraViewModel,
                     previewView,
                     imageCapture,
                     cameraExecutor,
-                    directory,
-                    context
-                    )
+                    directory)
             }
         }
     }

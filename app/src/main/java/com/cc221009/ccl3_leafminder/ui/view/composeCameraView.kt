@@ -1,16 +1,22 @@
 package com.cc221009.ccl3_leafminder.ui.view
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,6 +38,10 @@ import java.util.concurrent.ExecutorService
 
 @Composable
 fun CameraView(
+    navController: NavHostController,
+    cameraViewModel: CameraViewModel, previewView: PreviewView, imageCapture: ImageCapture, cameraExecutor: ExecutorService, directory: File,
+
+   /*
     vm: CameraViewModel = viewModel(
         factory = CameraViewModel.provideFactory(
             PlantsRepository(
@@ -39,14 +49,53 @@ fun CameraView(
             )
         )
     ),
-    navController: NavHostController,
+
     previewView: PreviewView,
     imageCapture: ImageCapture,
     cameraExecutor: ExecutorService,
     directory: File,
     context: Context,
+*/
 ) {
-    Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.fillMaxSize()) {
+
+    Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.fillMaxSize()){
+        AndroidView({previewView}, modifier = Modifier.fillMaxSize())
+        Button(
+            modifier = Modifier.padding(25.dp),
+            onClick = {
+                val photoFile = File(
+                    directory,
+                    SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.US).format(System.currentTimeMillis()) + ".jpg"
+                )
+
+                imageCapture.takePicture(
+                    ImageCapture.OutputFileOptions.Builder(photoFile).build(),
+                    cameraExecutor,
+                    object: ImageCapture.OnImageSavedCallback {
+                        override fun onError(exception: ImageCaptureException) {
+                            Log.e("camApp","Error when capturing image")
+                        }
+
+                        override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                            cameraViewModel.setNewUri(Uri.fromFile(photoFile))
+                        }
+                    }
+                )
+            }
+        ) {
+            androidx.compose.material3.Icon(
+                Icons.Default.AddCircle,
+                "Take Photo",
+                tint = Color.White
+            )
+        }
+    }
+
+    // val state by vm.uiState.collectAsState()
+
+    // Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.fillMaxSize()) {
+
+        /*
 
         AndroidView({ previewView }, modifier = Modifier.fillMaxSize())
         Box(
@@ -54,7 +103,7 @@ fun CameraView(
                 .align(Alignment.TopStart)
                 .padding(40.dp)
         ){
-            // TODO implement back Button
+            //
         }
         Button(
             modifier = Modifier.padding(25.dp),
@@ -99,5 +148,6 @@ fun CameraView(
                 tint = Color.White
             )
         }
+
+        */
     }
-}

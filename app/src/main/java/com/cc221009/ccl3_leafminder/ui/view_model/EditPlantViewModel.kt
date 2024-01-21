@@ -1,15 +1,22 @@
 package com.cc221009.ccl3_leafminder.ui.view_model
 
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
+import androidx.camera.core.ImageCapture
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
+import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.concurrent.ExecutorService
 
 data class EditUIState(
     val name: String,
@@ -118,6 +125,9 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
     fun updateImagePath(imagePath: String) {
         _mainViewState.value = _mainViewState.value.copy(imagePath = imagePath)
     }
+
+
+
 
     companion object {
         fun provideFactory(
