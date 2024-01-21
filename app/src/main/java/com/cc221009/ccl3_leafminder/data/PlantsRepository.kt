@@ -1,5 +1,6 @@
 package com.cc221009.ccl3_leafminder.data
 
+import android.util.Log
 import com.cc221009.ccl3_leafminder.data.model.Plant
 
 /*class PlantsRepository(private val apiPlantsService: APIPlantsService) {
@@ -54,6 +55,10 @@ class PlantsRepository(val dao: PlantsDao) {
     }
 
     suspend fun getPlantById(plantId: Int): Plant {
-        return dao.getPlantById(plantId)
+        Log.d("Repository", "Fetching plant with ID: $plantId")
+        val plant = dao.getPlantById(plantId)
+        Log.d("Repository", "Fetched plant: $plant")
+        return plant
     }
+
 }

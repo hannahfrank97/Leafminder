@@ -1,5 +1,7 @@
 package com.cc221009.ccl3_leafminder.ui.view_model
 
+import android.util.Log
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -12,7 +14,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class EditUIState(
-    val name: String,
+    val loadPlant: (Int) -> Unit,
+    val plant: Plant? = null,
+
+    val name: TextFieldValue,
     val date: String,
     val size: String,
     val location: String,
@@ -20,7 +25,7 @@ data class EditUIState(
     val wateringDate: String,
     val wateringFrequency: String,
     val imagePath: String,
-    val onNameChange: (String) -> Unit,
+    val onNameChange: (TextFieldValue) -> Unit,
     val onDateChange: (String) -> Unit,
     val onSizeChange: (String) -> Unit,
     val onLocationChange: (String) -> Unit,
@@ -39,6 +44,7 @@ data class EditUIState(
 
     val clickingToDeletePlant: (Plant) -> Unit,
 
+    val setName: (TextFieldValue) -> Unit,
     val setDate: (String) -> Unit,
     val setSize: (String) -> Unit,
     val setWellbeing: (String) -> Unit,
@@ -46,13 +52,14 @@ data class EditUIState(
     val setWateringFrequency: (Int) -> Unit,
     val setWateringDate: (String) -> Unit,
     val waterInterval: Int,
+
 )
 
 class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {
 
     private val _mainViewState = MutableStateFlow(
         EditUIState(
-            name = "",
+            name = TextFieldValue(""),
             date = "",
             size = "",
             location = "",
@@ -60,7 +67,9 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
             wateringDate = "",
             wateringFrequency = "",
             imagePath = "",
-            onNameChange = { newName: String -> updateName(newName) },
+
+
+            onNameChange = {    newName: TextFieldValue -> updateName(newName) },
             onDateChange = { newDate: String -> updateDate(newDate) },
             onSizeChange = { newSize: String -> updateSize(newSize) },
             onWellbeingChange = { newWellbeing: String -> updateWellbeing(newWellbeing) },
@@ -78,6 +87,7 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
             clickShowDialog = ::showDialog,
             clickingToDeletePlant = ::clickDeletePlant,
 
+            setName = ::onNameChange,
             setDate = ::onDateChange,
             setLocation = ::onLocationChange,
             setSize = ::onSizeChange,
@@ -86,6 +96,9 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
             setWateringDate = ::onWateringDateChange,
 
             waterInterval = 20,
+
+            loadPlant = ::getPlantDetails,
+            plant = null,
 
             )
     )
@@ -98,6 +111,16 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
         }
     }
 
+    fun getPlantDetails(plantId: Int) {
+        Log.d("ViewModel", "Loading plant details for ID: $plantId")
+        viewModelScope.launch {
+            val plantDetails = plantsRepository.getPlantById(plantId)
+            Log.d("ViewModel", "Loaded plant details: $plantDetails")
+            _mainViewState.value = _mainViewState.value.copy(plant = plantDetails)
+        }
+    }
+
+
     fun showDialog() {
         _mainViewState.update { it.copy(openDialog = true) }
     }
@@ -106,14 +129,40 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
         _mainViewState.update { it.copy(openDialog = false) }
     }
 
-    fun saveEditedPlant(plant: Plant) {
+    fun saveEditedPlant(editedPlant: Plant) {
         viewModelScope.launch {
-            plantsRepository.updatePlant(plant)
+            val existingPlant = uiState.value.plant
+            if (existingPlant != null) {
+                val updatedPlant = existingPlant.copy(
+                    name = if (editedPlant.name.isNotBlank()) editedPlant.name else existingPlant.name,
+                    date = if (editedPlant.date.isNotBlank()) editedPlant.date else existingPlant.date,
+                    size = if (editedPlant.size.isNotBlank()) editedPlant.size else existingPlant.size,
+                    location = if (editedPlant.location.isNotBlank()) editedPlant.location else existingPlant.location,
+                    wellbeing = if (editedPlant.wellbeing.isNotBlank()) editedPlant.wellbeing else existingPlant.wellbeing,
+                    wateringDate = if (editedPlant.wateringDate.isNotBlank()) editedPlant.wateringDate else existingPlant.wateringDate,
+                    wateringFrequency = if (editedPlant.wateringFrequency.isNotBlank()) editedPlant.wateringFrequency else existingPlant.wateringFrequency,
+                    imagePath = if (editedPlant.imagePath.isNotBlank()) editedPlant.imagePath else existingPlant.imagePath,
+
+                    id = existingPlant.id
+                )
+
+                try {
+                    plantsRepository.updatePlant(updatedPlant)
+                    Log.d("ViewModel", "Plant updated: $updatedPlant")
+                } catch (e: Exception) {
+                    Log.e("ViewModel", "Error updating plant: $e")
+                }
+            } else {
+                Log.e("ViewModel", "No existing plant found to update")
+            }
         }
     }
 
-    fun updateName(name: String) {
+
+    fun updateName(name: TextFieldValue) {
+        Log.d("Database", "Updating plant name in database: ")
         _mainViewState.value = _mainViewState.value.copy(name = name)
+        Log.d("Database", "Plant name updated in database:")
     }
 
     fun updateDate(date: String) {
@@ -144,9 +193,9 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
         _mainViewState.value = _mainViewState.value.copy(imagePath = imagePath)
     }
 
-    /*fun onNameChange(name: TextFieldValue) {
+    fun onNameChange(name: TextFieldValue) {
         _mainViewState.value = _mainViewState.value.copy(name = name)
-    }*/
+    }
 
     fun onDateChange(date: String) {
         _mainViewState.value = _mainViewState.value.copy(date = date)
@@ -175,24 +224,17 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
         _mainViewState.value = _mainViewState.value.copy(wateringDate = wateringDate)
     }
 
-    fun onWaterIntervalChange(waterInterval: Int) {
-        _mainViewState.value = _mainViewState.value.copy(
-            waterInterval = waterInterval,
-            wateringFrequency = waterInterval.toString()
-        )
-    }
-
 
     companion object {
-        fun provideFactory(
-            plantsRepository: PlantsRepository
-        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return EditPlantViewModel(plantsRepository) as T
+        fun provideFactory(plantsRepository: PlantsRepository): ViewModelProvider.Factory {
+            return object : ViewModelProvider.Factory {
+                @Suppress("UNCHECKED_CAST")
+                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                    return EditPlantViewModel(plantsRepository) as T
+                }
             }
         }
     }
-
 
 }
 

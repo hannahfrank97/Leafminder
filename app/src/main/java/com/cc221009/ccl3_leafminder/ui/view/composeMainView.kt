@@ -65,9 +65,12 @@ fun MainView() {
                 DetailView(plantId, navController = navController)
             }
 
-
-            composable(Screen.EditView.route) {
-                EditView(navController = navController)
+            composable(
+                "EditView/{plantId}",
+                arguments = listOf(navArgument("plantId") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val plantId = backStackEntry.arguments?.getInt("plantId")!!
+                EditView(plantId, navController = navController)
             }
 
             composable(Screen.PlantListView.route) {

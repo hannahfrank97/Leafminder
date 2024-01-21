@@ -93,7 +93,10 @@ fun AddView(
             modifier = Modifier.padding(start = 20.dp, end = 20.dp)
         ) {
             DefaultTextField(
-                "Name", "Name", text = state.name, onValueChange = state.setName
+                "Name",
+                "Name",
+                text = state.name,
+                onValueChange = state.setName
             )
         }
 
