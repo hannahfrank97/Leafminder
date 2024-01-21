@@ -148,10 +148,10 @@ fun AddPlantInfoContainer(
             onDateChange = setDate
         )
 
-
+4
         AddParameterContainer("size") { selectedItem, onSelectItem ->
             IconButtonsItem(
-                "great",
+                "small",
                 R.drawable.plant_base_small,
                 "small",
                 1,
@@ -165,7 +165,7 @@ fun AddPlantInfoContainer(
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
-                "okay",
+                "medium",
                 R.drawable.plant_base_medium,
                 "medium",
                 2,
@@ -179,7 +179,7 @@ fun AddPlantInfoContainer(
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
-                "bad",
+                "large",
                 R.drawable.plant_base_large,
                 "large",
                 3,
@@ -334,7 +334,7 @@ fun IconButtonsItem(
     selectedItem: Int,  // ID of the selected item
     onSelectItem: (Int) -> Unit,  // Callback to update selection
     modifier: Modifier = Modifier,
-    sizeValue: String,
+    itemValue: String,
     onClick: (String) -> Unit,
 ) {
     val isClicked = itemId == selectedItem
@@ -345,6 +345,7 @@ fun IconButtonsItem(
             .clip(RoundedCornerShape(15.dp))
             .clickable {
                 onSelectItem(itemId)
+                onClick(itemValue)
             }
             .border(if (isClicked) 2.dp else 0.dp,
                 if (isClicked) colorScheme.outline else Color.Transparent,
