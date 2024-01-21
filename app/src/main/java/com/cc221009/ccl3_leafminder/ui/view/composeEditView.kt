@@ -114,7 +114,7 @@ fun EditView(
 
         AddPlantSpeciesContainer(speciesNames = emptyList(), onDropdownTapped = {})
 
-        AddPlantWateringContainer(state.date, state.onDateChange)
+        //AddPlantWateringContainer(state.date, state.onWateringFrequencyChange,state.onDateChange, waterInterval = Int)
 
         PrimaryButton("Save Changes",
             onClickLogic = {

@@ -101,7 +101,7 @@ fun AddView(
 
         AddPlantSpeciesContainer(state.speciesNames, onDropdownTapped = state.onSpeciesListTapped)
 
-        AddPlantWateringContainer(state.wateringDate, state.setWateringDate)
+        AddPlantWateringContainer(state.wateringDate,state.setWateringFrequency, state.setWateringDate, state.waterInterval)
 
         PrimaryButton("Add Plant",
             onClickLogic = {
@@ -112,7 +112,7 @@ fun AddView(
                     location = state.location,
                     wellbeing = state.wellbeing,
                     wateringDate = state.wateringDate,
-                    wateringFrequency = state.wateringFrequency,
+                    wateringFrequency = state.waterInterval.toString(),
                     imagePath = state.imagePath
 
                 )
@@ -502,7 +502,9 @@ fun APIIconItem(
 @Composable
 fun AddPlantWateringContainer(
     dateState: String,
-    setDate: (String) -> Unit
+    setwaterFrequency: (Int) -> Unit,
+    setDate: (String) -> Unit,
+    waterInterval: Int
 ) {
 
     Column(
@@ -523,7 +525,8 @@ fun AddPlantWateringContainer(
             onDateChange = setDate
         )
 
-        WateringFrequencySelector("How frequent do you want to water your plant?")
+        WateringFrequencySelector(
+            "How frequent do you want to water your plant?", waterInterval, setwaterFrequency)
     }
     Spacer(modifier = Modifier.height(20.dp))
 
@@ -532,9 +535,17 @@ fun AddPlantWateringContainer(
 @Composable
 fun WateringFrequencySelector(
     headline: String,
+    waterInterval: Int,
+    setwaterInterval: (Int) -> Unit
 ) {
-    var waterInterval by remember { mutableStateOf(20) } // Initial value
 
+    var waterInterval by remember { mutableStateOf(waterInterval) }
+
+    fun handleWaterIntervalChange(newWaterInterval: Int) {
+        val updatedInterval = newWaterInterval.coerceAtLeast(0)
+        waterInterval = updatedInterval
+        setwaterInterval(updatedInterval)
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -550,8 +561,7 @@ fun WateringFrequencySelector(
             verticalAlignment = Alignment.CenterVertically
         ) {
             PlusMinusButton(R.drawable.icon_minus, onClickLogic = {
-                waterInterval =
-                    (waterInterval - 1).coerceAtLeast(0) // Decrease and ensure not below 0
+                    handleWaterIntervalChange(waterInterval - 1)
             })
 
             Column(
@@ -563,7 +573,7 @@ fun WateringFrequencySelector(
             }
 
             PlusMinusButton(R.drawable.icon_plus, onClickLogic = {
-                waterInterval++ // Increase the frequency
+                handleWaterIntervalChange(waterInterval + 1)
             })
         }
     }

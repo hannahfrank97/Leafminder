@@ -1,6 +1,7 @@
 package com.cc221009.ccl3_leafminder.ui.view_model
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -20,7 +21,8 @@ data class AddUIState(
     val setLocation: (String) -> Unit,
     val setWellbeing: (String) -> Unit,
     val setWateringDate: (String) -> Unit,
-    val setWateringFrequency: (String) -> Unit,
+    val setWateringFrequency: (Int) -> Unit,
+    val setwaterInterval: (Int) -> Unit,
     val speciesNames: List<String>,
     val onSpeciesListTapped: () -> Unit,
     val tappingtoSavePlant: (Plant) -> Unit,
@@ -33,6 +35,9 @@ data class AddUIState(
 
     val wateringFrequency: String,
     val imagePath: String,
+
+    val waterInterval: Int,
+
 
 )
 
@@ -49,7 +54,7 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
             setWellbeing = ::onWellbeingChange,
             setWateringDate = ::onWateringDateChange,
             setWateringFrequency = ::onWateringFrequencyChange,
-
+            setwaterInterval = ::onWaterIntervalChange,
             speciesNames = emptyList(),
             onSpeciesListTapped = ::fetchSpeciesNames,
             tappingtoSavePlant = ::saveButtonPlant,
@@ -64,8 +69,10 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
             wateringFrequency = "",
             imagePath = "",
 
+            waterInterval = 20,
 
-            )
+
+    )
     )
     val uiState: StateFlow<AddUIState> = _mainViewState.asStateFlow()
 
@@ -93,9 +100,22 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
         _mainViewState.value = _mainViewState.value.copy(wateringDate = wateringDate)
     }
 
-    fun onWateringFrequencyChange(wateringFrequency: String) {
-        _mainViewState.value = _mainViewState.value.copy(wateringFrequency = wateringFrequency)
+    fun onWateringFrequencyChange(wateringFrequency: Int) {
+        _mainViewState.value = _mainViewState.value.copy(
+            wateringFrequency = wateringFrequency.toString(),
+            waterInterval = wateringFrequency
+        )
     }
+
+    fun onWaterIntervalChange(waterInterval: Int) {
+        _mainViewState.value = _mainViewState.value.copy(
+            waterInterval = waterInterval,
+            wateringFrequency = waterInterval.toString()
+        )
+    }
+
+
+
 
     //TODO: add image path change (dont know the functionality of image upload so dont know if this is needed)
 
