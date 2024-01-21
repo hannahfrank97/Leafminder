@@ -43,6 +43,9 @@ data class EditUIState(
     val setSize: (String) -> Unit,
     val setWellbeing: (String) -> Unit,
     val setLocation: (String) -> Unit,
+    val setWateringFrequency: (Int) -> Unit,
+    val setWateringDate: (String) -> Unit,
+    val waterInterval: Int,
 )
 
 class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {
@@ -79,6 +82,10 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
             setLocation = ::onLocationChange,
             setSize = ::onSizeChange,
             setWellbeing = ::onWellbeingChange,
+            setWateringFrequency = ::onWateringFrequencyChange,
+            setWateringDate = ::onWateringDateChange,
+
+            waterInterval = 20,
 
             )
     )
@@ -157,13 +164,24 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
         _mainViewState.value = _mainViewState.value.copy(location = location)
     }
 
+    fun onWateringFrequencyChange(wateringFrequency: Int) {
+        _mainViewState.value = _mainViewState.value.copy(
+            wateringFrequency = wateringFrequency.toString(),
+            waterInterval = wateringFrequency
+        )
+    }
+
     fun onWateringDateChange(wateringDate: String) {
         _mainViewState.value = _mainViewState.value.copy(wateringDate = wateringDate)
     }
 
-    fun onWateringFrequencyChange(wateringFrequency: String) {
-        _mainViewState.value = _mainViewState.value.copy(wateringFrequency = wateringFrequency)
+    fun onWaterIntervalChange(waterInterval: Int) {
+        _mainViewState.value = _mainViewState.value.copy(
+            waterInterval = waterInterval,
+            wateringFrequency = waterInterval.toString()
+        )
     }
+
 
     companion object {
         fun provideFactory(
