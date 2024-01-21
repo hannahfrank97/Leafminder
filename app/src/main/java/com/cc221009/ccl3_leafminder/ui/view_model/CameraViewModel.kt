@@ -1,22 +1,14 @@
 package com.cc221009.ccl3_leafminder.ui.view_model
 
-import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.camera.core.CameraSelector
+import android.util.Log
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.cc221009.ccl3_leafminder.R
-import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,7 +24,7 @@ import java.util.concurrent.Executors
 data class CameraState (
     val photosListState: List<Uri> = emptyList(),
     val enableCameraPreview: Boolean = false,
-    val cameraPermissionGranted: Boolean = false
+    val cameraPermissionGranted: Boolean = false,
 )
 
 class CameraViewModel() : ViewModel() {
@@ -44,6 +36,8 @@ class CameraViewModel() : ViewModel() {
 
     fun updateCapturedImageUri(uri: Uri?) {
         _capturedImageUri.value = uri
+        Log.e("_capturedImageUri", _capturedImageUri.toString())
+        Log.e("capturedImageUri", capturedImageUri.toString())
     }
 
     fun setCameraPermission(value: Boolean){
@@ -61,7 +55,7 @@ class CameraViewModel() : ViewModel() {
 
     fun takePicture(imageCapture: ImageCapture, context: Context, onSuccess: (Uri) -> Unit, onError: (ImageCaptureException) -> Unit) {
         // Get or create the directory where images will be stored
-        val directory = context.filesDir.resolve("bookImages").apply { mkdirs() }
+        val directory = context.filesDir.resolve("plantimages").apply { mkdirs() }
 
         // Create a file to save the image
         val photoFile = File(directory, SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.US).format(System.currentTimeMillis()) + ".jpg")
@@ -84,8 +78,8 @@ class CameraViewModel() : ViewModel() {
                     // Update the UI on the main thread
                     CoroutineScope(Dispatchers.Main).launch {
                         val uri = Uri.fromFile(photoFile)
+                        updateCapturedImageUri(uri)
                         onSuccess(uri)
-                        updateCapturedImageUri(uri) // Update capturedImageUri on main thread
                     }
                 }
             }

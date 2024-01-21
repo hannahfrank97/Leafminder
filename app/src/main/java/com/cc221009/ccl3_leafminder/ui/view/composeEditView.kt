@@ -23,6 +23,7 @@ import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.getDatabase
 import com.cc221009.ccl3_leafminder.data.model.Plant
+import com.cc221009.ccl3_leafminder.ui.view_model.CameraViewModel
 import com.cc221009.ccl3_leafminder.ui.view_model.EditPlantViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,11 +36,13 @@ fun EditView(
             )
         )
     ),
-
-    navController: NavController
+    navController: NavController,
+    cameraViewModel: CameraViewModel
 ) {
 
     val state by vm.uiState.collectAsState()
+    val capturedImageUriState = cameraViewModel.capturedImageUri
+    val capturedImageUri = capturedImageUriState.value
 
     Column(
         modifier = Modifier
@@ -90,8 +93,8 @@ fun EditView(
             })
 
         // Profile Image
-        PlantImage(null,
-            null,
+        PlantImage("",
+            capturedImgUri = capturedImageUri,
             onClickLogic = {
                 navController.navigate(Screen.CameraView.route)
             })

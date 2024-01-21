@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
@@ -16,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.cc221009.ccl3_leafminder.ui.theme.CCL3_LeafminderTheme
@@ -28,7 +30,8 @@ import java.util.concurrent.Executors
 
 class MainActivity : ComponentActivity() {
 
-    private val cameraViewModel = CameraViewModel()
+    private val cameraViewModel by viewModels<CameraViewModel>()
+
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ){
@@ -86,7 +89,8 @@ class MainActivity : ComponentActivity() {
                         previewView,
                         imageCapture,
                         cameraExecutor,
-                        getOutputDirectory()
+                        getOutputDirectory(),
+                        LocalContext.current
                     )
                 }
             }
@@ -116,72 +120,4 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-    /*
-    // CAMERA IMPLEMENTATION
-
-
-    private fun setupCamera() {
-        cameraExecutor = Executors.newSingleThreadExecutor()
-        imageCapture = ImageCapture.Builder().build()
-        previewView = PreviewView(this)
-
-        cameraProviderFuture = ProcessCameraProvider.getInstance(this)
-        cameraProviderFuture.addListener({
-            val cameraProvider = cameraProviderFuture.get()
-            bindPreview(cameraProvider)
-        }, ContextCompat.getMainExecutor(this))
-    }
-
-    private fun bindPreview(cameraProvider: ProcessCameraProvider) {
-        val preview: Preview = Preview.Builder().build()
-        val cameraSelector = CameraSelector.Builder()
-            .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-            .build()
-
-        cameraProvider.unbindAll()
-        cameraProvider.bindToLifecycle(
-            this,
-            cameraSelector,
-            preview,
-            imageCapture
-        )
-
-        preview.setSurfaceProvider(previewView.surfaceProvider)
-    }
-
-
-    private fun requestCameraPermission() {
-        when (PackageManager.PERMISSION_GRANTED) {
-            ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) -> {
-                cameraViewModel.setCameraPermission(true)
-            }
-            else -> {
-                requestPermissionLauncher.launch(Manifest.permission.CAMERA)
-            }
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        cameraExecutor.shutdown()
-    }
-
-    private fun getOutputDirectory(): File {
-        val mediaDir = externalMediaDirs.firstOrNull()?.let {
-            File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
-        }
-
-        return if (mediaDir != null && mediaDir.exists()) mediaDir else filesDir
-    }
-
-    private fun requestPermission(){
-        ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA).let{ result ->
-            if(result != PackageManager.PERMISSION_GRANTED){
-                requestPermissionLauncher.launch(Manifest.permission.CAMERA)
-            } else {
-                cameraViewModel.setCameraPermission(true)
-            }
-        }
-    } */
 }

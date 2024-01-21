@@ -1,5 +1,6 @@
 package com.cc221009.ccl3_leafminder.ui.view
 
+import android.content.Context
 import androidx.camera.core.ImageCapture
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.padding
@@ -44,7 +45,8 @@ fun MainView(
     previewView: PreviewView,
     imageCapture: ImageCapture,
     cameraExecutor: ExecutorService,
-    directory: File
+    directory: File,
+    context: Context,
 ) {
     val navController = rememberNavController()
 
@@ -65,7 +67,7 @@ fun MainView(
             }
 
             composable(Screen.AddView.route) {
-                AddView(navController = navController)
+                AddView(navController = navController, cameraViewModel = cameraViewModel)
             }
 
             composable(
@@ -77,7 +79,7 @@ fun MainView(
             }
 
             composable(Screen.EditView.route) {
-                EditView(navController = navController)
+                EditView(navController = navController, cameraViewModel = cameraViewModel)
             }
 
             composable(Screen.PlantListView.route) {
@@ -95,7 +97,8 @@ fun MainView(
                     previewView,
                     imageCapture,
                     cameraExecutor,
-                    directory)
+                    directory,
+                    context)
             }
         }
     }

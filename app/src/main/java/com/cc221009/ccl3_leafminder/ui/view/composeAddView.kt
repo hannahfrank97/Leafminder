@@ -1,5 +1,7 @@
 package com.cc221009.ccl3_leafminder.ui.view
 
+import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -42,6 +44,7 @@ import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.cc221009.ccl3_leafminder.R
@@ -50,6 +53,7 @@ import com.cc221009.ccl3_leafminder.data.getDatabase
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
 import coil.compose.rememberImagePainter
+import com.cc221009.ccl3_leafminder.ui.view_model.CameraViewModel
 
 @Composable
 fun AddView(
@@ -60,10 +64,18 @@ fun AddView(
             )
         )
     ),
-    navController: NavController
+    navController: NavController,
+    cameraViewModel: CameraViewModel
 ) {
 
     val state by vm.uiState.collectAsState()
+    val capturedImageUriState = cameraViewModel.capturedImageUri
+    val capturedImageUri = capturedImageUriState.value
+
+
+
+    Log.e("addview", capturedImageUri.toString())
+    Log.e("addview", capturedImageUriState.toString())
 
 
     Column(
@@ -83,10 +95,11 @@ fun AddView(
 
         // Profile Image
         PlantImage(
-            null,
-            null,
+            "",
+            capturedImgUri = capturedImageUri,
             onClickLogic = {
-            navController.navigate(Screen.CameraView.route)
+                cameraViewModel.enableCameraPreview(true)
+                navController.navigate(Screen.CameraView.route)
         })
 
         // Textfield Name
@@ -549,10 +562,12 @@ fun PlusMinusButton(
 
 @Composable
 fun PlantImage(
-    imgPath: Int?,
-    capturedImgUri: Int?,
+    imgPath: String,
+    capturedImgUri: Uri?,
     onClickLogic: () -> Unit
 ) {
+
+    Log.e("capturedImgUri", capturedImgUri.toString())
     Spacer(modifier = Modifier.height(20.dp))
 
     Box(
@@ -563,7 +578,7 @@ fun PlantImage(
     ) {
         if (capturedImgUri != null) {
             Image(
-                painter = painterResource(id = capturedImgUri),
+                painter = rememberImagePainter(data = capturedImgUri),
                 contentDescription = "Profile Picture",
                 modifier = Modifier
                     .clip(CircleShape)
@@ -573,7 +588,7 @@ fun PlantImage(
             )
         } else if (imgPath != null) {
             Image(
-                painter = rememberImagePainter(data = imgPath),
+                painter = rememberImagePainter(imgPath),
                 contentDescription = "Profile Picture",
                 modifier = Modifier
                     .clip(CircleShape)
