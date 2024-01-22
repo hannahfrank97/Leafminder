@@ -2,7 +2,16 @@ package com.cc221009.ccl3_leafminder.ui.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,6 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.getDatabase
@@ -73,9 +83,9 @@ fun DetailView(
                 navController.navigate("EditView/${plantId}")
             })
 
-        PlantDetailImage(state.plant!!, R.drawable.placeholder, "plant species")
+        PlantDetailImage(state.plant!!, "R..placeholder", "plant species")
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(30.dp))
 
         PlantDetailGeneralContainer()
 
@@ -107,7 +117,7 @@ fun DetailView(
             Spacer(modifier = Modifier.width(10.dp))
 
             SpecificInfoContainer(
-                "234", "your plant survived", R.drawable.placeholder, colorScheme.tertiaryContainer,
+                "234", "your plant survived", null, colorScheme.tertiaryContainer,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -152,7 +162,7 @@ fun DetailView(
 @Composable
 fun PlantDetailImage(
     plant: Plant,
-    imgPath: Int,
+    imgPath: String?,
     plantSpecies: String
 ) {
     Box(
@@ -161,15 +171,29 @@ fun PlantDetailImage(
             .background(color = colorScheme.primary, shape = CircleShape)
     ) {
 
-        Image(
-            painter = painterResource(id = imgPath),
-            contentDescription = "Profile Picture",
-            modifier = Modifier
-                .clip(CircleShape)
-                .align(Alignment.Center) // Center the image inside the Box
-                .size(175.dp), // Clip the image to a circle shape
-            contentScale = ContentScale.Crop
-        )
+        if (plant.imagePath != "") {
+            Image(
+                painter = rememberImagePainter(plant.imagePath),
+                contentDescription = "Profile Picture",
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .align(Alignment.Center) // Center the image inside the Box
+                    .size(175.dp), // Clip the image to a circle shape
+                contentScale = ContentScale.Crop
+            )
+        } else {
+            Image(
+                painter = painterResource(id = R.drawable.graphics_placeholder_plant),
+                contentDescription = "Profile Picture",
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .align(Alignment.Center) // Center the image inside the Box
+                    .size(175.dp)
+                    .background(colorScheme.surface), // Clip the image to a circle shape
+                contentScale = ContentScale.Crop
+            )
+        }
+
 
 
     }
@@ -225,7 +249,7 @@ fun PlantDetailItem(
 fun SpecificInfoContainer(
     text: String,
     headline: String,
-    imgPath: Int,
+    imgPath: Int?,
     backgroundColor: Color,
     modifier: Modifier = Modifier
 ) {
@@ -235,9 +259,9 @@ fun SpecificInfoContainer(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .clip(RoundedCornerShape(15.dp))
-            .fillMaxHeight()
+            .height(150.dp)
             .background(backgroundColor)
-            .padding(20.dp)
+            .padding(10.dp)
             .then(modifier)
     ) {
 
@@ -246,11 +270,14 @@ fun SpecificInfoContainer(
         Box(
             contentAlignment = Alignment.Center,
         ) {
+
+            if (imgPath != null) {
             Image(
                 painter = painterResource(id = imgPath),
                 contentDescription = "Profile Picture",
                 contentScale = ContentScale.Fit
             )
+            }
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

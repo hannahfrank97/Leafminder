@@ -78,8 +78,6 @@ fun MainView(
                 DetailView(plantId, navController = navController)
             }
 
-            composable(Screen.EditView.route) {
-                EditView(navController = navController, cameraViewModel = cameraViewModel)
             composable(
                 "EditView/{plantId}",
                 arguments = listOf(navArgument("plantId") { type = NavType.IntType })

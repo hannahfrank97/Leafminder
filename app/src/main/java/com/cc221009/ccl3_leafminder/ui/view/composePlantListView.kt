@@ -31,6 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.getDatabase
@@ -61,7 +62,6 @@ fun PlantListView(
             navController,
             plant = plant,
             species = "Species",//API call to get species name
-            imgPath = R.drawable.placeholder,
             needsWater = false,
         )
     }
@@ -88,7 +88,6 @@ fun PlantListView(
                         navController,
                         plant = plant,
                         species = "Species",//API call to get species name
-                        imgPath = R.drawable.placeholder,
                         needsWater = false,
                     )
                 }
@@ -104,7 +103,6 @@ fun PlantListView(
 fun PlantListItem(
     navController: NavController,
     species: String?,
-    imgPath: Int,
     needsWater: Boolean,
     plant: Plant,
 
@@ -129,15 +127,29 @@ fun PlantListItem(
                 .size(80.dp) // Set the size including the border
                 .background(color = borderColor, shape = CircleShape),
         ) {
-            Image(
-                painter = painterResource(id = imgPath),
-                contentDescription = "Profile Picture",
-                modifier = Modifier
-                    .size(75.dp) // Image size, smaller than the Box to create a border effect
-                    .align(Alignment.Center) // Center the image inside the Box
-                    .clip(CircleShape), // Clip the image to a circle shape
-                contentScale = ContentScale.Crop,
-            )
+            if (plant.imagePath != "") {
+                Image(
+                    painter = rememberImagePainter(plant.imagePath),
+                    contentDescription = "Profile Picture",
+                    modifier = Modifier
+                        .size(75.dp) // Image size, smaller than the Box to create a border effect
+                        .align(Alignment.Center) // Center the image inside the Box
+                        .clip(CircleShape), // Clip the image to a circle shape
+                    contentScale = ContentScale.Crop,
+                )
+            } else {
+                Image(
+                    painter = painterResource(id = R.drawable.graphics_placeholder_plant),
+                    contentDescription = "Profile Picture",
+                    modifier = Modifier
+                        .size(75.dp) // Image size, smaller than the Box to create a border effect
+                        .align(Alignment.Center) // Center the image inside the Box
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.surface), // Clip the image to a circle shape
+                    contentScale = ContentScale.Crop,
+                )
+            }
+
 
             if (needsWater) {
                 Box(

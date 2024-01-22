@@ -40,21 +40,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.getDatabase
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
-import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.ui.view_model.CameraViewModel
-import java.time.LocalDate
 
 @Composable
 fun AddView(
@@ -131,11 +128,16 @@ fun AddView(
                     wellbeing = state.wellbeing,
                     wateringDate = state.wateringDate,
                     wateringFrequency = state.waterInterval.toString(),
-                    imagePath = state.imagePath
-
+                    imagePath = capturedImageUri?.toString() ?: ""
                 )
                 state.tappingtoSavePlant(plant)
                 println("Button was clicked")
+
+                navController.navigate(Screen.PlantListView.route) {
+                    popUpTo(Screen.PlantListView.route) {
+                        inclusive = true
+                    }
+                }
             })
     }
 
@@ -175,8 +177,7 @@ fun AddPlantInfoContainer(
                 1,
                 selectedItem,
                 onSelectItem,
-                modifier = Modifier.weight(1f)
-
+                modifier = Modifier.weight(1f),
                 "",
                 onClick = {
                     setSize("small")
@@ -634,17 +635,17 @@ fun PlantImage(
             .background(color = colorScheme.primary, shape = CircleShape)
             .clickable { onClickLogic() },
     ) {
-        if (capturedImgUri != null) {
+        if (capturedImgUri.toString() != "") {
             Image(
                 painter = rememberImagePainter(data = capturedImgUri),
                 contentDescription = "Profile Picture",
                 modifier = Modifier
                     .clip(CircleShape)
                     .align(Alignment.Center) // Center the image inside the Box
-                    .size(70.dp), // Clip the image to a circle shape
+                    .size(115.dp), // Clip the image to a circle shape
                 contentScale = ContentScale.Crop
             )
-        } else if (imgPath != null) {
+        } else if (imgPath != "") {
             Image(
                 painter = rememberImagePainter(imgPath),
                 contentDescription = "Profile Picture",
@@ -656,13 +657,13 @@ fun PlantImage(
             )
         } else {
             Image(
-                painter = painterResource(id = R.drawable.icon_add),
+                painter = painterResource(id = R.drawable.icon_camera_white),
                 contentDescription = "Profile Picture",
                 modifier = Modifier
                     .clip(CircleShape)
                     .align(Alignment.Center) // Center the image inside the Box
-                    .size(70.dp), // Clip the image to a circle shape
-                contentScale = ContentScale.Crop
+                    .size(100.dp), // Clip the image to a circle shape
+                contentScale = ContentScale.Fit
             )
         }
     }

@@ -1,7 +1,6 @@
 package com.cc221009.ccl3_leafminder.ui.view_model
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -69,7 +68,7 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
             wateringFrequency = "",
             imagePath = "",
 
-            waterInterval = 20,
+            waterInterval = 7,
 
 
     )

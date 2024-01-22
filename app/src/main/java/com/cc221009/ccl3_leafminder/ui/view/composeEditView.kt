@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -28,7 +26,6 @@ import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.CameraViewModel
 import com.cc221009.ccl3_leafminder.ui.view_model.EditPlantViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditView(
     plantId: Int,
@@ -81,7 +78,7 @@ fun EditView(
                                 wellbeing = state.wellbeing,
                                 wateringDate = state.wateringDate,
                                 wateringFrequency = state.wateringFrequency,
-                                imagePath = state.imagePath,
+                                imagePath = capturedImageUri.toString(),
                                 id = state.plant?.id ?: 0
                             )
                             state.clickingToDeletePlant(plant)
@@ -111,13 +108,13 @@ fun EditView(
         // Header
         Header("Edit this plant", R.drawable.icon_delete,
             leftIconLogic = {
-                navController.navigate(Screen.DetailView.route)
+                navController.navigate("DetailView/${state.plant?.id ?: 0}")
             }, rightIconLogic = {
                 state.clickShowDialog()
             })
 
         // Profile Image
-        PlantImage("",
+        PlantImage(state.imagePath,
             capturedImgUri = capturedImageUri,
             onClickLogic = {
                 navController.navigate(Screen.CameraView.route)
@@ -153,11 +150,17 @@ fun EditView(
                     wellbeing = state.wellbeing,
                     wateringDate = state.wateringDate,
                     wateringFrequency = state.wateringFrequency,
-                    imagePath = state.imagePath,
+                    imagePath = capturedImageUri?.toString() ?: "",
                     id = state.plant?.id ?: 0
                 )
                 state.onSaveEditedPlant(editedPlant)
                 println("Button was clicked")
+
+                navController.navigate(Screen.PlantListView.route) {
+                    popUpTo(Screen.PlantListView.route) {
+                        inclusive = true
+                    }
+                }
             })
     }
 
