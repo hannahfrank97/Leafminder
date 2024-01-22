@@ -37,6 +37,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
+import com.cc221009.ccl3_leafminder.data.calculateDaysUntilNextWatering
 import com.cc221009.ccl3_leafminder.data.getDatabase
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.DetailViewModel
@@ -84,8 +85,10 @@ fun DetailView(
 
     try {
         val lastWateringDate = LocalDate.parse(state.plant!!.wateringDate, formatter)
-        val nextWateringDate = lastWateringDate.plusDays(state.plant!!.wateringFrequency.toLong())
-        nextWateringIn = ChronoUnit.DAYS.between(currentDate, nextWateringDate).toInt()
+        nextWateringIn = calculateDaysUntilNextWatering(
+            lastWateringDate,
+            state.plant!!.wateringFrequency.toInt()
+        )
     } catch (e: Exception) {
         Log.e("DetailView", "Error calculating next watering: ${e.message}")
     }

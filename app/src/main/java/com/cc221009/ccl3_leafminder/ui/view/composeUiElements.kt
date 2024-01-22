@@ -52,6 +52,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter.ofPattern
@@ -263,7 +264,7 @@ fun PlantItem(
     navController: NavController,
     plantName: String,
     species: String?,
-    imgPath: Int,
+    imgPath: String,
     needsWater: Boolean
 ) {
     Column(
@@ -284,7 +285,7 @@ fun PlantItem(
                 .background(color = borderColor, shape = CircleShape),
         ) {
             Image(
-                painter = painterResource(id = imgPath),
+                painter = rememberImagePainter(imgPath),
                 contentDescription = "Profile Picture",
                 modifier = Modifier
                     .size(75.dp) // Image size, smaller than the Box to create a border effect

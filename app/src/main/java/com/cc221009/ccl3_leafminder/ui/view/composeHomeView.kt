@@ -22,19 +22,47 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.cc221009.ccl3_leafminder.R
+import com.cc221009.ccl3_leafminder.data.PlantsRepository
+import com.cc221009.ccl3_leafminder.data.getDatabase
+import com.cc221009.ccl3_leafminder.data.model.Plant
+import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
+import com.cc221009.ccl3_leafminder.ui.view_model.HomeUIState
+import com.cc221009.ccl3_leafminder.ui.view_model.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeView(navController: NavController) {
+fun HomeView(
+    vm: HomeViewModel = viewModel(
+        factory = HomeViewModel.provideFactory(
+            PlantsRepository(
+                getDatabase(LocalContext.current).dao
+            )
+        )
+    ),
+
+    navController: NavController
+) {
+
+    val state by vm.uiState.collectAsState()
+
+    LaunchedEffect(key1 = true) {
+        state.seeAllPlants()
+    }
+
 
     Column(
         modifier = Modifier
@@ -46,7 +74,7 @@ fun HomeView(navController: NavController) {
 
         HomeHeaderContainer()
 
-        PlantListOverview(navController)
+        PlantListOverview(state, navController)
 
         PlantDashboard(navController)
 
@@ -136,7 +164,9 @@ fun HomeHeaderContainerItem(
 
 // PLAST LIST COMPOSABLE
 @Composable
-fun PlantListOverview(navController: NavController) {
+fun PlantListOverview(
+    state: HomeUIState,
+    navController: NavController) {
     val scrollState = rememberScrollState()
 
     Column() {
@@ -148,15 +178,18 @@ fun PlantListOverview(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .horizontalScroll(scrollState),
+
         ) {
-            PlantItem(navController, "Linda", null, R.drawable.placeholder, true)
-            PlantItem(navController, "Linda", null, R.drawable.placeholder, false)
-            PlantItem(navController, "Linda", null, R.drawable.placeholder, false)
-            PlantItem(navController, "Linda", null, R.drawable.placeholder, false)
-            PlantItem(navController, "Linda", null, R.drawable.placeholder, false)
-            PlantItem(navController, "Linda", null, R.drawable.placeholder, false)
-            PlantItem(navController, "Linda", null, R.drawable.placeholder, false)
-            PlantItem(navController, "Linda", null, R.drawable.placeholder, false)
+            state.plants.take(10).forEach { plant ->
+                PlantItem(
+                    navController,
+                    plantName = plant.name,
+                    species = "" ,
+                    imgPath = plant.imagePath,
+                    needsWater = false,
+                )
+            }
+
         }
 
         Spacer(modifier = Modifier.height(20.dp))

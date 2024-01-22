@@ -91,6 +91,7 @@ dependencies {
     implementation("androidx.camera:camera-view:${camerax_version}")
 
     // Coil for async image rendering from local directories or the internet
+
     implementation("io.coil-kt:coil-compose:1.4.0")
 
     ksp("androidx.room:room-compiler:2.5.0")
