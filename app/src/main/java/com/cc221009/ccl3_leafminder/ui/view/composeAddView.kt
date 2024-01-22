@@ -151,7 +151,7 @@ fun AddPlantInfoContainer(
             onDateChange = setDate
         )
 
-4
+
         AddParameterContainer("size") { selectedItem, onSelectItem ->
             IconButtonsItem(
                 "small",
