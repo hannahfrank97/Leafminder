@@ -48,6 +48,10 @@ class CameraViewModel() : ViewModel() {
         _cameraState.update { it.copy(enableCameraPreview = value) }
     }
 
+    fun resetCapturedImageUri() {
+        _capturedImageUri.value = null
+    }
+
     fun setNewUri(value: Uri){
         _cameraState.update { it.copy(photosListState = it.photosListState + value) }
         enableCameraPreview(false)

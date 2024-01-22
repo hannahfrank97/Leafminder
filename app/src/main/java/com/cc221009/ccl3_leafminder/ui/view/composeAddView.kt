@@ -140,7 +140,7 @@ fun AddView(
                 )
                 state.tappingtoSavePlant(plant)
                 println("Button was clicked")
-
+                cameraViewModel.resetCapturedImageUri()
                 navController.navigate(Screen.PlantListView.route) {
                     popUpTo(Screen.PlantListView.route) {
                         inclusive = true
