@@ -55,6 +55,7 @@ fun DetailView(
         Text(text = "Loading...")
         return
     }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -87,7 +88,7 @@ fun DetailView(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             SpecificInfoContainer(
-                "14",
+                state.plant!!.wateringFrequency,
                 "Water Interval",
                 R.drawable.graphics_blur_calendar,
                 colorScheme.secondaryContainer,
