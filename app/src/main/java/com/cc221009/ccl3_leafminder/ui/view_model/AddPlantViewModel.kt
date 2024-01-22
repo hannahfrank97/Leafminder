@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 data class AddUIState(
     val name: TextFieldValue,
@@ -58,12 +60,12 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
             onSpeciesListTapped = ::fetchSpeciesNames,
             tappingtoSavePlant = ::saveButtonPlant,
 
-            date = "",
+            date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
             size = "",
             location = "",
             wellbeing = "",
 
-            wateringDate = "",
+            wateringDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
 
             wateringFrequency = "",
             imagePath = "",

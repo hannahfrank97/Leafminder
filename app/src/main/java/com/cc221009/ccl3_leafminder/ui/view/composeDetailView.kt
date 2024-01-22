@@ -71,16 +71,26 @@ fun DetailView(
 
     }
     val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-    val daysSurvived: Int
+    val currentDate = LocalDate.now()
+    var daysSurvived = 0
+    var nextWateringIn = 0
 
     try {
         val acquisitionDate = LocalDate.parse(state.plant!!.date, formatter)
-        val currentDate = LocalDate.now()
         daysSurvived = ChronoUnit.DAYS.between(acquisitionDate, currentDate).toInt()
     } catch (e: Exception) {
-        Log.e("DetailView", "Error parsing date: ${e.message}")
-        return
+        Log.e("DetailView", "Error calculating days survived: ${e.message}")
     }
+
+    try {
+        val lastWateringDate = LocalDate.parse(state.plant!!.wateringDate, formatter)
+        val nextWateringDate = lastWateringDate.plusDays(state.plant!!.wateringFrequency.toLong())
+        nextWateringIn = ChronoUnit.DAYS.between(currentDate, nextWateringDate).toInt()
+    } catch (e: Exception) {
+        Log.e("DetailView", "Error calculating next watering: ${e.message}")
+    }
+
+
 
 
     Column(
@@ -125,7 +135,7 @@ fun DetailView(
             Spacer(modifier = Modifier.width(10.dp))
 
             SpecificInfoContainer(
-                "3",
+                nextWateringIn.toString(),
                 "Next watering in",
                 R.drawable.graphics_blur_waterdrop,
                 colorScheme.secondaryContainer,
