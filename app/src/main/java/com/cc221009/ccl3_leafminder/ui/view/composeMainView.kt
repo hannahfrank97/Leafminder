@@ -80,6 +80,12 @@ fun MainView(
 
             composable(Screen.EditView.route) {
                 EditView(navController = navController, cameraViewModel = cameraViewModel)
+            composable(
+                "EditView/{plantId}",
+                arguments = listOf(navArgument("plantId") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val plantId = backStackEntry.arguments?.getInt("plantId")!!
+                EditView(plantId, navController = navController, cameraViewModel = cameraViewModel)
             }
 
             composable(Screen.PlantListView.route) {

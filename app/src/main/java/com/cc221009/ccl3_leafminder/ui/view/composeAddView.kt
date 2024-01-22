@@ -54,6 +54,7 @@ import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
 import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.ui.view_model.CameraViewModel
+import java.time.LocalDate
 
 @Composable
 fun AddView(
@@ -107,16 +108,18 @@ fun AddView(
             modifier = Modifier.padding(start = 20.dp, end = 20.dp)
         ) {
             DefaultTextField(
-                "Name", "Name", text = state.name, onValueChange = state.setName
+                "Name",
+                "Name",
+                text = state.name,
+                onValueChange = state.setName
             )
         }
 
-
-        AddPlantInfoContainer(state.date, state.setDate)
+        AddPlantInfoContainer(state.date,state.setDate, state.setSize, state.setLocation, state.setWellbeing)
 
         AddPlantSpeciesContainer(state.speciesNames, onDropdownTapped = state.onSpeciesListTapped)
 
-        AddPlantWateringContainer(state.wateringDate, state.setWateringDate)
+        AddPlantWateringContainer(state.wateringDate,state.setWateringFrequency, state.setWateringDate, state.waterInterval)
 
         PrimaryButton("Add Plant",
             onClickLogic = {
@@ -124,9 +127,10 @@ fun AddView(
                     name = state.name.text,
                     date = state.date,
                     size = state.size,
+                    location = state.location,
                     wellbeing = state.wellbeing,
                     wateringDate = state.wateringDate,
-                    wateringFrequency = state.wateringFrequency,
+                    wateringFrequency = state.waterInterval.toString(),
                     imagePath = state.imagePath
 
                 )
@@ -142,8 +146,10 @@ fun AddView(
 @Composable
 fun AddPlantInfoContainer(
     dateState: String,
-    setDate: (String) -> Unit
-
+    setDate: (String) -> Unit,
+    setSize: (String) -> Unit,
+    setLocation: (String) -> Unit,
+    setWellbeing: (String) -> Unit,
 ) {
 
     Column(
@@ -152,7 +158,6 @@ fun AddPlantInfoContainer(
             .background(colorScheme.tertiaryContainer)
             .padding(20.dp)
     ) {
-        // TODO: Connect to Viewmodel
 
         CalendarTextField(
             "Since when do you have your plant?",
@@ -161,37 +166,49 @@ fun AddPlantInfoContainer(
             onDateChange = setDate
         )
 
+
         AddParameterContainer("size") { selectedItem, onSelectItem ->
             IconButtonsItem(
-                "great",
+                "small",
                 R.drawable.plant_base_small,
                 "small",
                 1,
                 selectedItem,
                 onSelectItem,
                 modifier = Modifier.weight(1f)
+
+                "",
+                onClick = {
+                    setSize("small")
+                }
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
-                "okay",
+                "medium",
                 R.drawable.plant_base_medium,
                 "medium",
                 2,
                 selectedItem,
                 onSelectItem,
-
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                "",
+                onClick = {
+                    setSize("medium")
+                }
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
-                "bad",
+                "large",
                 R.drawable.plant_base_large,
                 "large",
                 3,
                 selectedItem,
                 onSelectItem,
-
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                "",
+                onClick = {
+                    setSize("large")
+                }
             )
         }
 
@@ -206,8 +223,11 @@ fun AddPlantInfoContainer(
                 1,
                 selectedItem,
                 onSelectItem,
-
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                "",
+                onClick = {
+                    setLocation("light")
+                }
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
@@ -217,8 +237,11 @@ fun AddPlantInfoContainer(
                 2,
                 selectedItem,
                 onSelectItem,
-
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                "",
+                onClick = {
+                    setLocation("half-light")
+                }
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
@@ -228,8 +251,11 @@ fun AddPlantInfoContainer(
                 3,
                 selectedItem,
                 onSelectItem,
-
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                "",
+                onClick = {
+                    setLocation("half-shadow")
+                }
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
@@ -239,8 +265,13 @@ fun AddPlantInfoContainer(
                 4,
                 selectedItem,
                 onSelectItem,
-                modifier = Modifier.weight(1f)
-            )        }
+                modifier = Modifier.weight(1f),
+                "",
+                onClick = {
+                    setLocation("shadow")
+                }
+            )
+        }
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -253,8 +284,11 @@ fun AddPlantInfoContainer(
                 1,
                 selectedItem,
                 onSelectItem,
-
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                "",
+                onClick = {
+                    setWellbeing("great")
+                }
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
@@ -264,8 +298,11 @@ fun AddPlantInfoContainer(
                 2,
                 selectedItem,
                 onSelectItem,
-
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                "",
+                onClick = {
+                    setWellbeing("okay")
+                }
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
@@ -275,8 +312,11 @@ fun AddPlantInfoContainer(
                 3,
                 selectedItem,
                 onSelectItem,
-
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                "",
+                onClick = {
+                    setWellbeing("miserable")
+                }
             )
         }
     }
@@ -287,6 +327,7 @@ fun AddPlantInfoContainer(
 fun AddParameterContainer(
     headline: String,
     content: @Composable (Int, (Int) -> Unit) -> Unit
+    //Hannah: content: @Composable () -> Unit
 ) {
     var selectedItem by remember { mutableStateOf(-1) }
 
@@ -300,6 +341,9 @@ fun AddParameterContainer(
     }
 }
 
+
+
+
 @Composable
 fun IconButtonsItem(
     headline: String,
@@ -308,7 +352,9 @@ fun IconButtonsItem(
     itemId: Int,  // Unique ID for this item
     selectedItem: Int,  // ID of the selected item
     onSelectItem: (Int) -> Unit,  // Callback to update selection
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    itemValue: String,
+    onClick: (String) -> Unit,
 ) {
     val isClicked = itemId == selectedItem
 
@@ -318,6 +364,7 @@ fun IconButtonsItem(
             .clip(RoundedCornerShape(15.dp))
             .clickable {
                 onSelectItem(itemId)
+                onClick(itemValue)
             }
             .border(if (isClicked) 2.dp else 0.dp,
                 if (isClicked) colorScheme.outline else Color.Transparent,
@@ -416,7 +463,8 @@ fun AddPlantSpeciesContainer(
                 "api value",
                 R.drawable.placeholder,
                 "location icon",
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+
             )
             APIIconItem(
                 "Watering",
@@ -473,7 +521,9 @@ fun APIIconItem(
 @Composable
 fun AddPlantWateringContainer(
     dateState: String,
-    setDate: (String) -> Unit
+    setwaterFrequency: (Int) -> Unit,
+    setDate: (String) -> Unit,
+    waterInterval: Int
 ) {
 
     Column(
@@ -494,7 +544,8 @@ fun AddPlantWateringContainer(
             onDateChange = setDate
         )
 
-        WateringFrequencySelector("How frequent do you want to water your plant?")
+        WateringFrequencySelector(
+            "How frequent do you want to water your plant?", waterInterval, setwaterFrequency)
     }
     Spacer(modifier = Modifier.height(20.dp))
 
@@ -503,9 +554,17 @@ fun AddPlantWateringContainer(
 @Composable
 fun WateringFrequencySelector(
     headline: String,
+    waterInterval: Int,
+    setwaterInterval: (Int) -> Unit
 ) {
-    var waterInterval by remember { mutableStateOf(20) } // Initial value
 
+    var waterInterval by remember { mutableStateOf(waterInterval) }
+
+    fun handleWaterIntervalChange(newWaterInterval: Int) {
+        val updatedInterval = newWaterInterval.coerceAtLeast(0)
+        waterInterval = updatedInterval
+        setwaterInterval(updatedInterval)
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -521,8 +580,7 @@ fun WateringFrequencySelector(
             verticalAlignment = Alignment.CenterVertically
         ) {
             PlusMinusButton(R.drawable.icon_minus, onClickLogic = {
-                waterInterval =
-                    (waterInterval - 1).coerceAtLeast(0) // Decrease and ensure not below 0
+                    handleWaterIntervalChange(waterInterval - 1)
             })
 
             Column(
@@ -534,7 +592,7 @@ fun WateringFrequencySelector(
             }
 
             PlusMinusButton(R.drawable.icon_plus, onClickLogic = {
-                waterInterval++ // Increase the frequency
+                handleWaterIntervalChange(waterInterval + 1)
             })
         }
     }

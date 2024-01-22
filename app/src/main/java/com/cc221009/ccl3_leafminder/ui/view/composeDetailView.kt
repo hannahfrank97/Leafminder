@@ -70,7 +70,7 @@ fun DetailView(
                 navController.navigate(Screen.HomeView.route)
             },
             rightIconLogic = {
-                navController.navigate(Screen.EditView.route)
+                navController.navigate("EditView/${plantId}")
             })
 
         PlantDetailImage(state.plant!!, R.drawable.placeholder, "plant species")

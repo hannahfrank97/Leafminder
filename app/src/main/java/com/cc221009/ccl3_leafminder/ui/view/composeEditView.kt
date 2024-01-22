@@ -1,5 +1,6 @@
 package com.cc221009.ccl3_leafminder.ui.view
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +11,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -29,6 +31,7 @@ import com.cc221009.ccl3_leafminder.ui.view_model.EditPlantViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditView(
+    plantId: Int,
     vm: EditPlantViewModel = viewModel(
         factory = EditPlantViewModel.provideFactory(
             PlantsRepository(
@@ -43,6 +46,16 @@ fun EditView(
     val state by vm.uiState.collectAsState()
     val capturedImageUriState = cameraViewModel.capturedImageUri
     val capturedImageUri = capturedImageUriState.value
+
+    if (state.plant == null) {
+
+        LaunchedEffect(key1 = plantId) {
+            state.loadPlant(plantId)
+            Log.d("composeEditView", "Loaded plant id: $plantId")
+        }
+        Text(text = "Loading...")
+        return
+    }
 
     Column(
         modifier = Modifier
@@ -61,16 +74,27 @@ fun EditView(
                     PrimaryButton("Delete",
                         onClickLogic = {
                             val plant = Plant(
-                                name = state.name,
+                                name = state.name.text,
                                 date = state.date,
                                 size = state.size,
+                                location = state.location,
                                 wellbeing = state.wellbeing,
                                 wateringDate = state.wateringDate,
                                 wateringFrequency = state.wateringFrequency,
-                                imagePath = state.imagePath
+                                imagePath = state.imagePath,
+                                id = state.plant?.id ?: 0
                             )
                             state.clickingToDeletePlant(plant)
+
+                            navController.navigate(Screen.PlantListView.route) {
+                                popUpTo(Screen.PlantListView.route) {
+                                    inclusive = true
+                                }
+                            }
+
                         })
+
+
                 },
 
                 dismissButton = {
@@ -101,28 +125,38 @@ fun EditView(
 
         // Textfield Name
         DefaultTextField("Name", "Name",
-            text = TextFieldValue(""),
-            onValueChange = {}
+            text = state.name,
+            onValueChange = state.onNameChange,
         )
 
-        AddPlantInfoContainer(state.date, state.onDateChange)
+        AddPlantInfoContainer(
+            state.date,
+            setDate = state.onDateChange,
+            setSize = state.onSizeChange,
+            setLocation = state.onLocationChange,
+            setWellbeing = state.onWellbeingChange,
+
+        )
+
 
         AddPlantSpeciesContainer(speciesNames = emptyList(), onDropdownTapped = {})
 
-        AddPlantWateringContainer(state.date, state.onDateChange)
+        AddPlantWateringContainer(state.wateringDate,state.setWateringFrequency, state.setWateringDate, state.waterInterval)
 
         PrimaryButton("Save Changes",
             onClickLogic = {
-                val plant = Plant(
-                    name = state.name,
+                val editedPlant = Plant(
+                    name = state.name.text,
                     date = state.date,
                     size = state.size,
+                    location = state.location,
                     wellbeing = state.wellbeing,
                     wateringDate = state.wateringDate,
                     wateringFrequency = state.wateringFrequency,
-                    imagePath = state.imagePath
+                    imagePath = state.imagePath,
+                    id = state.plant?.id ?: 0
                 )
-                state.onSaveEditedPlant(plant)
+                state.onSaveEditedPlant(editedPlant)
                 println("Button was clicked")
             })
     }
