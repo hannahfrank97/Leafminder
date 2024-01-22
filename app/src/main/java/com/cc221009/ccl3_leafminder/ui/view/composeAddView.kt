@@ -1,5 +1,4 @@
 package com.cc221009.ccl3_leafminder.ui.view
-
 import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Image

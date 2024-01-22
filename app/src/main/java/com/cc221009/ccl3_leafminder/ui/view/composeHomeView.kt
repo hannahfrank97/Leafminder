@@ -35,13 +35,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.getDatabase
 import com.cc221009.ccl3_leafminder.data.model.Plant
+import com.cc221009.ccl3_leafminder.data.needsToBeWatered
 import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
 import com.cc221009.ccl3_leafminder.ui.view_model.HomeUIState
 import com.cc221009.ccl3_leafminder.ui.view_model.HomeViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,7 +80,7 @@ fun HomeView(
 
         PlantListOverview(state, navController)
 
-        PlantDashboard(navController)
+        PlantDashboard(state, navController = navController)
 
     }
 
@@ -203,6 +207,7 @@ fun PlantListOverview(
 
 @Composable
 fun PlantDashboard(
+    state: HomeUIState,
     navController: NavController,
 ) {
 
@@ -211,28 +216,26 @@ fun PlantDashboard(
 
         Spacer(modifier = Modifier.height(15.dp))
 
+        val plantNeedsWater = state.plants.filter { plant ->
+            val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+            val wateringDateAsLocalDate = LocalDate.parse(plant.wateringDate, formatter)
+            val wateringFrequencyAsInt = plant.wateringFrequency.toInt()
+            needsToBeWatered(wateringDateAsLocalDate, wateringFrequencyAsInt)
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxWidth(),
         ) {
-            HomeViewWateringNotification(
-                navController,
-                "Linda",
-                "plant species",
-                R.drawable.placeholder
-            )
-            HomeViewWateringNotification(
-                navController,
-                "Linda",
-                "plant species",
-                R.drawable.placeholder
-            )
-            HomeViewWateringNotification(
-                navController,
-                "Linda",
-                "plant species",
-                R.drawable.placeholder
-            )
+            plantNeedsWater.forEach { plant ->
+                HomeViewWateringNotification(
+                    navController = navController,
+                    name = plant.name,
+                    plantSpecies = "",
+                    imgPath = plant.imagePath,
+                )
+            }
+
         }
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -246,7 +249,7 @@ fun HomeViewWateringNotification(
     navController: NavController,
     name: String,
     plantSpecies: String,
-    imgPath: Int,
+    imgPath: String,
 ) {
     Row(
         modifier = Modifier
@@ -267,7 +270,7 @@ fun HomeViewWateringNotification(
                     .background(color = MaterialTheme.colorScheme.secondary, shape = CircleShape),
             ) {
                 Image(
-                    painter = painterResource(id = imgPath),
+                    painter = rememberImagePainter(imgPath),
                     contentDescription = "Profile Picture",
                     modifier = Modifier
                         .size(60.dp) // Image size, smaller than the Box to create a border effect

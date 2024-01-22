@@ -64,6 +64,7 @@ dependencies {
     implementation("androidx.room:room-common:2.6.1")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.6")
     implementation("androidx.camera:camera-core:1.3.1")
+    implementation("com.google.android.libraries.places:places:3.3.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
