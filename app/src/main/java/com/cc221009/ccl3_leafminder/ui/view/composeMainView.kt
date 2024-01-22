@@ -51,7 +51,7 @@ fun MainView() {
             startDestination = Screen.SplashScreen.route
         ) {
             composable(Screen.HomeView.route) {
-                HomeView(navController)
+                HomeView(navController= navController)
             }
 
             composable(Screen.AddView.route) {
