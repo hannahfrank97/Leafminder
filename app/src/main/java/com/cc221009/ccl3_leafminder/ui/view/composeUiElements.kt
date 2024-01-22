@@ -423,7 +423,7 @@ fun showDatePicker(context: Context, onDateSelected: (String) -> Unit) {
         context,
         { _, year, month, dayOfMonth ->
             val selectedDate = LocalDate.of(year, month + 1, dayOfMonth)
-            onDateSelected(selectedDate.format(ofPattern("dd. MM. yyyy"))) // Update format as needed
+            onDateSelected(selectedDate.format(ofPattern("dd.MM.yyyy")))
         },
         calendar.get(Calendar.YEAR),
         calendar.get(Calendar.MONTH),

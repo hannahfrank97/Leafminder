@@ -1,5 +1,6 @@
 package com.cc221009.ccl3_leafminder.ui.view
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -39,6 +40,10 @@ import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.getDatabase
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.DetailViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
+import kotlin.math.log
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,7 +69,20 @@ fun DetailView(
         }
         Text(text = "Loading...")
         return
+
     }
+    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+    val daysSurvived: Int
+
+    try {
+        val acquisitionDate = LocalDate.parse(state.plant!!.date, formatter)
+        val currentDate = LocalDate.now()
+        daysSurvived = ChronoUnit.DAYS.between(acquisitionDate, currentDate).toInt()
+    } catch (e: Exception) {
+        Log.e("DetailView", "Error parsing date: ${e.message}")
+        return
+    }
+
 
     Column(
         modifier = Modifier
@@ -118,7 +136,10 @@ fun DetailView(
             Spacer(modifier = Modifier.width(10.dp))
 
             SpecificInfoContainer(
-                "234", "your plant survived", null, colorScheme.tertiaryContainer,
+                daysSurvived.toString(),
+                "your plant survived",
+                R.drawable.placeholder,
+                colorScheme.tertiaryContainer,
                 modifier = Modifier.weight(1f)
             )
         }
