@@ -26,6 +26,7 @@ import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.ui.view_model.CameraViewModel
 import java.io.File
 import java.util.concurrent.ExecutorService
+import com.cc221009.ccl3_leafminder.data.model.Plant
 
 // https://kotlinlang.org/docs/sealed-classes.html
 sealed class Screen(val route: String) {
@@ -74,7 +75,7 @@ fun MainView(
                 "DetailView/{plantId}",
                 arguments = listOf(navArgument("plantId") { type = NavType.IntType })
             ) { backStackEntry ->
-                val plantId = backStackEntry.arguments?.getInt("plantId")!!
+                val plantId = backStackEntry.arguments?.getInt("plantId") ?: return@composable
                 DetailView(plantId, navController = navController)
             }
 
