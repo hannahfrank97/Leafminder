@@ -77,7 +77,7 @@ fun DetailView(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        PlantDetailGeneralContainer()
+        PlantDetailGeneralContainer(state.plant!!)
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -182,7 +182,9 @@ fun PlantDetailImage(
 }
 
 @Composable
-fun PlantDetailGeneralContainer() {
+fun PlantDetailGeneralContainer(
+    plant: Plant
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -191,12 +193,34 @@ fun PlantDetailGeneralContainer() {
             .padding(20.dp),
         horizontalArrangement = Arrangement.SpaceAround
     ) {
-        PlantDetailItem(R.drawable.plant_base_small, "small")
+        val drawableResSize = when (plant.size) {
+            "small" -> R.drawable.plant_base_small
+            "medium" -> R.drawable.plant_base_medium
+            else -> R.drawable.plant_base_large
+        }
+
+        val drawableResWellbeing = when (plant.wellbeing) {
+            "great" -> R.drawable.wellbeing_good
+            "okay" -> R.drawable.wellbeing_okay
+            else -> R.drawable.wellbeing_bad
+        }
+
+        val drawableResLocation = when (plant.location) {
+            "light" -> R.drawable.location_light
+            "half-light" -> R.drawable.location_half_light
+            "half-shadow" -> R.drawable.location_half_shadow
+            else -> R.drawable.location_shadow
+        }
+
+        PlantDetailItem(drawableResSize, plant.size)
         Spacer(modifier = Modifier.width(20.dp))
-        PlantDetailItem(R.drawable.wellbeing_okay, "okay")
+        PlantDetailItem(drawableResWellbeing, plant.wellbeing)
         Spacer(modifier = Modifier.width(20.dp))
-        PlantDetailItem(R.drawable.location_half_shadow, "half-shadow")
+        PlantDetailItem(drawableResLocation, plant.location)
+
     }
+
+
 }
 
 @Composable

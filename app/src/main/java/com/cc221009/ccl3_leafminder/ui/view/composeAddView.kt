@@ -215,7 +215,7 @@ fun AddPlantInfoContainer(
             )
             Spacer(modifier = Modifier.width(10.dp))
             IconButtonsItem(
-                "half-shadow",
+                "half-light",
                 R.drawable.location_half_light,
                 "half-light",
                 2,
@@ -299,7 +299,7 @@ fun AddPlantInfoContainer(
                 modifier = Modifier.weight(1f),
                 "",
                 onClick = {
-                    setWellbeing("miserable")
+                    setWellbeing("bad")
                 }
             )
         }
