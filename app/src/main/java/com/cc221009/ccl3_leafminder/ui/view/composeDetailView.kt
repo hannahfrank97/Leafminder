@@ -43,7 +43,6 @@ import com.cc221009.ccl3_leafminder.ui.view_model.DetailViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import kotlin.math.log
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -96,7 +95,7 @@ fun DetailView(
         Header(
             null, R.drawable.icon_edit,
             leftIconLogic = {
-                navController.navigate(Screen.HomeView.route)
+                navController.navigate(Screen.PlantListView.route)
             },
             rightIconLogic = {
                 navController.navigate("EditView/${plantId}")
@@ -138,7 +137,7 @@ fun DetailView(
             SpecificInfoContainer(
                 daysSurvived.toString(),
                 "your plant survived",
-                R.drawable.placeholder,
+                null,
                 colorScheme.tertiaryContainer,
                 modifier = Modifier.weight(1f)
             )
@@ -189,7 +188,7 @@ fun PlantDetailImage(
 ) {
     Box(
         modifier = Modifier
-            .size(180.dp) // Set the size including the border
+            .size(181.dp) // Set the size including the border
             .background(color = colorScheme.primary, shape = CircleShape)
     ) {
 
@@ -219,6 +218,7 @@ fun PlantDetailImage(
 
 
     }
+    Spacer(modifier = Modifier.height(20.dp))
 
     H1Text(text = plant.name)
 
@@ -284,9 +284,9 @@ fun PlantDetailItem(
             modifier = Modifier
                 .height(50.dp)
                 .width(50.dp),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Fit
         )
-
+        Spacer(modifier = Modifier.height(10.dp))
         CopyText(text = text)
     }
 }

@@ -2,6 +2,7 @@ package com.cc221009.ccl3_leafminder.ui.view
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -112,7 +113,7 @@ fun Header(
 @Composable
 fun DefaultTextField(
     headline: String,
-    placeholderText: String,
+    placeholderText: String?,
     text: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit
 ) {
@@ -145,11 +146,16 @@ fun DefaultTextField(
                     )
                 }
         ) {
+            Log.e("name text", text.toString())
+
             TextField(
                 value = text,
                 onValueChange = onValueChange,
-                label = { CopyText(text = placeholderText) },
-                placeholder = { CopyText(text = placeholderText) },
+                placeholder = {
+                    if (placeholderText != null) {
+                        CopyText(text = placeholderText)
+                    }
+                              },
                 colors = TextFieldDefaults.textFieldColors(
                     textColor = MaterialTheme.colorScheme.primary,
                     cursorColor = MaterialTheme.colorScheme.primary,
@@ -327,7 +333,8 @@ fun H1Text(
         text = text,
         style = TextStyle(
             fontFamily = FontFamily(Font(R.font.grandhotel_regular)),
-            fontSize = 44.sp
+            fontSize = 44.sp,
+            lineHeight = 20.sp
         )
     )
 }

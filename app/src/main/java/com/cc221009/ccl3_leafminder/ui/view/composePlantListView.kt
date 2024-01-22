@@ -48,22 +48,12 @@ fun PlantListView(
             )
         )
     ),
-
     navController: NavController
 ) {
     val state by vm.uiState.collectAsState()
 
     LaunchedEffect(key1 = true) {
         state.seeAllPlants()
-    }
-
-    state.plants.forEach { plant ->
-        PlantListItem(
-            navController,
-            plant = plant,
-            species = "Species",//API call to get species name
-            needsWater = false,
-        )
     }
 
     Column(

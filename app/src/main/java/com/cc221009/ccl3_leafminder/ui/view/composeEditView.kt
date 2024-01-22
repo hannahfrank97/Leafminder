@@ -113,15 +113,23 @@ fun EditView(
                 state.clickShowDialog()
             })
 
+
         // Profile Image
-        PlantImage(state.imagePath,
+        PlantImage(
+            state.imagePath,
             capturedImgUri = capturedImageUri,
             onClickLogic = {
                 navController.navigate(Screen.CameraView.route)
             })
 
+        Log.e("name text outside", state.plant.toString())
+
+        Log.e("name text outside", state.name.toString())
+
         // Textfield Name
-        DefaultTextField("Name", "Name",
+        DefaultTextField(
+            "Name",
+            null,
             text = state.name,
             onValueChange = state.onNameChange,
         )
@@ -129,8 +137,11 @@ fun EditView(
         AddPlantInfoContainer(
             state.date,
             setDate = state.onDateChange,
+            state.size,
             setSize = state.onSizeChange,
+            state.location,
             setLocation = state.onLocationChange,
+            state.wellbeing,
             setWellbeing = state.onWellbeingChange,
 
         )

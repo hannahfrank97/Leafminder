@@ -112,7 +112,15 @@ fun AddView(
             )
         }
 
-        AddPlantInfoContainer(state.date,state.setDate, state.setSize, state.setLocation, state.setWellbeing)
+        AddPlantInfoContainer(
+            state.date,
+            state.setDate,
+            state.size,
+            state.setSize,
+            state.location,
+            state.setLocation,
+            state.wellbeing,
+            state.setWellbeing)
 
         AddPlantSpeciesContainer(state.speciesNames, onDropdownTapped = state.onSpeciesListTapped)
 
@@ -149,12 +157,16 @@ fun AddView(
 fun AddPlantInfoContainer(
     dateState: String,
     setDate: (String) -> Unit,
+    sizeState: String,
     setSize: (String) -> Unit,
+    locationState: String,
     setLocation: (String) -> Unit,
+    wellbeingState: String,
     setWellbeing: (String) -> Unit,
 ) {
 
     Column(
+
         modifier = Modifier
             .clip(RoundedCornerShape(15.dp))
             .background(colorScheme.tertiaryContainer)
@@ -559,12 +571,8 @@ fun WateringFrequencySelector(
     setwaterInterval: (Int) -> Unit
 ) {
 
-    var waterInterval by remember { mutableStateOf(waterInterval) }
-
     fun handleWaterIntervalChange(newWaterInterval: Int) {
-        val updatedInterval = newWaterInterval.coerceAtLeast(0)
-        waterInterval = updatedInterval
-        setwaterInterval(updatedInterval)
+        setwaterInterval(newWaterInterval)
     }
 
     Column(
@@ -621,7 +629,7 @@ fun PlusMinusButton(
 
 @Composable
 fun PlantImage(
-    imgPath: String,
+    imgPath: String?,
     capturedImgUri: Uri?,
     onClickLogic: () -> Unit
 ) {

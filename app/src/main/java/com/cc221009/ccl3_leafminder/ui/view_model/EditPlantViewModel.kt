@@ -1,10 +1,5 @@
 package com.cc221009.ccl3_leafminder.ui.view_model
 
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
-import androidx.camera.core.ImageCapture
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
 import android.util.Log
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
@@ -12,13 +7,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
-import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.concurrent.ExecutorService
 
 data class EditUIState(
     val loadPlant: (Int) -> Unit,
@@ -64,6 +57,8 @@ data class EditUIState(
 
 class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {
 
+    private var plant: Plant? = null
+
     private val _mainViewState = MutableStateFlow(
         EditUIState(
             name = TextFieldValue(""),
@@ -74,7 +69,6 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
             wateringDate = "",
             wateringFrequency = "",
             imagePath = "",
-
 
             onNameChange = {    newName: TextFieldValue -> updateName(newName) },
             onDateChange = { newDate: String -> updateDate(newDate) },
@@ -102,7 +96,7 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
             setWateringFrequency = ::onWateringFrequencyChange,
             setWateringDate = ::onWateringDateChange,
 
-            waterInterval = 20,
+            waterInterval = 7,
 
             loadPlant = ::getPlantDetails,
             plant = null,
@@ -123,7 +117,19 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
         viewModelScope.launch {
             val plantDetails = plantsRepository.getPlantById(plantId)
             Log.d("ViewModel", "Loaded plant details: $plantDetails")
-            _mainViewState.value = _mainViewState.value.copy(plant = plantDetails)
+            _mainViewState.value = _mainViewState.value.copy(
+                plant = plantDetails,
+                name = TextFieldValue(plantDetails.name ?: ""),
+                date = plantDetails.date ?: "",
+                size = plantDetails.size ?: "",
+                location = plantDetails.location ?: "",
+                wellbeing = plantDetails.wellbeing ?: "",
+                wateringDate = plantDetails.wateringDate ?: "",
+                wateringFrequency = plantDetails.wateringFrequency ?: "",
+                imagePath = plantDetails.imagePath ?: "",
+                waterInterval = plantDetails.wateringFrequency.toInt() ?: 7,
+
+                )
         }
     }
 
