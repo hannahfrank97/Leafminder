@@ -87,7 +87,7 @@ fun AddView(
         // Header
         Header("Add a new plant", null,
             leftIconLogic = {
-                navController.navigate(Screen.HomeView.route)
+                navController.popBackStack()
             }, rightIconLogic = {})
 
         // Profile Image

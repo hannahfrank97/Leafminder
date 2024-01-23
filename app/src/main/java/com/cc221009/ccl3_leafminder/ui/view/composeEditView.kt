@@ -108,7 +108,7 @@ fun EditView(
         // Header
         Header("Edit this plant", R.drawable.icon_delete,
             leftIconLogic = {
-                navController.navigate("DetailView/${state.plant?.id ?: 0}")
+                navController.popBackStack()
             }, rightIconLogic = {
                 state.clickShowDialog()
             })

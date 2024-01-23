@@ -26,7 +26,6 @@ import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.ui.view_model.CameraViewModel
 import java.io.File
 import java.util.concurrent.ExecutorService
-import com.cc221009.ccl3_leafminder.data.model.Plant
 
 // https://kotlinlang.org/docs/sealed-classes.html
 sealed class Screen(val route: String) {
@@ -53,7 +52,8 @@ fun MainView(
 
     Scaffold(
         bottomBar = {
-            if (navController.currentBackStackEntryAsState().value?.destination?.route !== Screen.SplashScreen.route) {
+            if (navController.currentBackStackEntryAsState().value?.destination?.route != Screen.SplashScreen.route
+                && navController.currentBackStackEntryAsState().value?.destination?.route != Screen.CameraView.route) {
                 BottomNavigationBar(navController)
             }
         }

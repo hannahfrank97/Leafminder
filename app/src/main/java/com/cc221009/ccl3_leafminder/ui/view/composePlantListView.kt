@@ -61,9 +61,13 @@ fun PlantListView(
             .fillMaxSize()
             .padding(20.dp),
     ) {
-        Header("Your Plants", null, leftIconLogic = {
-            navController.navigate(Screen.HomeView.route)
-        }, rightIconLogic = {
+        Header(
+            "Your Plants",
+            null,
+            leftIconLogic = {
+            navController.popBackStack()
+            },
+            rightIconLogic = {
             navController.navigate(Screen.EditView.route)
         })
 

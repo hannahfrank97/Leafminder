@@ -55,7 +55,7 @@ import java.util.Calendar
 fun Header(
     viewName: String?,
     rightIconPath: Int?,
-    leftIconLogic: () -> Unit?,
+    leftIconLogic: () -> Unit,
     rightIconLogic: () -> Unit,
     onClickLogic: (() -> Unit)? = null
 ) {

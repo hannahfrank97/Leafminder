@@ -108,7 +108,7 @@ fun DetailView(
         Header(
             null, R.drawable.icon_edit,
             leftIconLogic = {
-                // navController.popBackStack()
+                navController.popBackStack()
             },
             rightIconLogic = {
                 navController.navigate("EditView/${plantId}")

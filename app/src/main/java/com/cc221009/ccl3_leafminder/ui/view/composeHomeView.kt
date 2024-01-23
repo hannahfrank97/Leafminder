@@ -259,7 +259,9 @@ fun HomeViewWateringNotification(
 ) {
     Row(
         modifier = Modifier
-            .clickable { }
+            .clickable {
+                navController.navigate("DetailView/${plantId}")
+            }
             .fillMaxWidth()
             .clip(RoundedCornerShape(15.dp))
             .background(MaterialTheme.colorScheme.secondaryContainer)
