@@ -152,7 +152,8 @@ fun AddView(
                     wellbeing = state.wellbeing,
                     wateringDate = state.wateringDate,
                     wateringFrequency = state.waterInterval.toString(),
-                    imagePath = capturedImageUri?.toString() ?: ""
+                    imagePath = capturedImageUri?.toString() ?: "",
+                    apiId = state.apiId
                 )
                 state.tappingtoSavePlant(plant)
                 println("Button was clicked")
@@ -437,6 +438,7 @@ fun AddPlantSpeciesContainer(
     speciesNames: List<String>,
     plantDetails: PlantDetails,
     onDropdownTapped: () -> Unit,
+    speciesItem: List<SpeciesItem>
 ) {
 
     Column(
