@@ -12,6 +12,10 @@ data class SpeciesListResponse(
     val data: List<OnlyScientificName>
 )
 
+data class PlantDetails(
+    val sunlight: List<String>
+)
+
 
 interface APIPlantsService {
     @GET("species-list")

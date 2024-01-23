@@ -47,6 +47,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.R
+import com.cc221009.ccl3_leafminder.data.PlantDetails
 import com.cc221009.ccl3_leafminder.data.determineLocationIconFor
 import com.cc221009.ccl3_leafminder.data.determinePoisonousnessIconFor
 import com.cc221009.ccl3_leafminder.data.determineWateringIconFor
@@ -124,7 +125,13 @@ fun AddView(
             state.setWellbeing
         )
 
-        AddPlantSpeciesContainer(state.speciesNames, onDropdownTapped = state.onSpeciesListTapped)
+        AddPlantSpeciesContainer(
+            state.speciesNames,
+            onDropdownTapped = state.onSpeciesListTapped,
+            plantDetails = PlantDetails(
+              sunlight =   listOf("sunny", "half-shady", "shady")
+            )
+        )
 
         AddPlantWateringContainer(
             state.wateringDate,
@@ -353,11 +360,11 @@ fun AddParameterContainer(
     val newSizeState: Int
     if (parameterState == "small" || parameterState == "light" || parameterState == "great") {
         newSizeState = 1
-    } else if (parameterState == "medium" || parameterState == "half-light" || parameterState == "okay"){
+    } else if (parameterState == "medium" || parameterState == "half-light" || parameterState == "okay") {
         newSizeState = 2
     } else if (parameterState == "large" || parameterState == "half-shadow" || parameterState == "bad") {
         newSizeState = 3
-    } else if ( parameterState == "shadow" ) {
+    } else if (parameterState == "shadow") {
         newSizeState = 4
     } else {
         newSizeState = -1
@@ -426,6 +433,7 @@ fun IconButtonsItem(
 @Composable
 fun AddPlantSpeciesContainer(
     speciesNames: List<String>,
+    plantDetails: PlantDetails,
     onDropdownTapped: () -> Unit,
 ) {
 
@@ -501,10 +509,10 @@ fun AddPlantSpeciesContainer(
                 APIIconItem(
                     "Location",
                     "api value",
-                    determineLocationIconFor("full sun"),
+                    determineLocationIconFor(plantDetails.sunlight.first()),
                     "location icon",
                     modifier = Modifier.weight(1f),
-                    )
+                )
                 APIIconItem(
                     "Watering",
                     "api value",
@@ -539,7 +547,7 @@ fun APIIconItem(
     Column(
         modifier = Modifier
             .background(colorScheme.surface)
-            .padding(top= 20.dp)
+            .padding(top = 20.dp)
             .fillMaxWidth(0.3f)
             .height(100.dp)
             .then(modifier),

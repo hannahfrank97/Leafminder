@@ -21,8 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.cc221009.ccl3_leafminder.R
-import com.cc221009.ccl3_leafminder.data.PlantsRepository
-import com.cc221009.ccl3_leafminder.data.getDatabase
+import com.cc221009.ccl3_leafminder.data.PlantDetails
 import com.cc221009.ccl3_leafminder.data.makePlantRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.CameraViewModel
@@ -142,12 +141,21 @@ fun EditView(
             state.wellbeing,
             setWellbeing = state.onWellbeingChange,
 
+            )
+
+
+        AddPlantSpeciesContainer(
+            speciesNames = emptyList(), onDropdownTapped = {}, plantDetails = PlantDetails(
+                listOf("sunny"),
+            )
         )
 
-
-        AddPlantSpeciesContainer(speciesNames = emptyList(), onDropdownTapped = {})
-
-        AddPlantWateringContainer(state.wateringDate,state.setWateringFrequency, state.setWateringDate, state.waterInterval)
+        AddPlantWateringContainer(
+            state.wateringDate,
+            state.setWateringFrequency,
+            state.setWateringDate,
+            state.waterInterval
+        )
 
         PrimaryButton("Save Changes",
             onClickLogic = {
