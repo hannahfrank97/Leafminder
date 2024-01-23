@@ -92,9 +92,10 @@ fun AddView(
 
         // Profile Image
         PlantImage(
-            "",
+            null,
             capturedImgUri = capturedImageUri,
             onClickLogic = {
+                // setupCamera()
                 cameraViewModel.enableCameraPreview(true)
                 navController.navigate(Screen.CameraView.route)
         })
@@ -660,6 +661,7 @@ fun PlantImage(
                 contentDescription = "Profile Picture",
                 modifier = Modifier
                     .clip(CircleShape)
+                    .background(colorScheme.surface)
                     .align(Alignment.Center) // Center the image inside the Box
                     .size(115.dp), // Clip the image to a circle shape
                 contentScale = ContentScale.Crop
@@ -670,6 +672,7 @@ fun PlantImage(
                 contentDescription = "Profile Picture",
                 modifier = Modifier
                     .clip(CircleShape)
+                    .background(colorScheme.surface)
                     .align(Alignment.Center) // Center the image inside the Box
                     .size(115.dp), // Clip the image to a circle shape
                 contentScale = ContentScale.Crop
@@ -680,7 +683,7 @@ fun PlantImage(
                 contentDescription = "Profile Picture",
                 modifier = Modifier
                     .clip(CircleShape)
-                    .background(colorScheme.primaryContainer)
+                    .background(colorScheme.surface)
                     .align(Alignment.Center) // Center the image inside the Box
                     .size(100.dp), // Clip the image to a circle shape
                 contentScale = ContentScale.Fit

@@ -184,6 +184,8 @@ fun PlantListOverview(
                 .horizontalScroll(scrollState),
 
         ) {
+            AddPlantItem(navController)
+
             state.plants.take(10).forEach { plant ->
                 PlantItem(
                     navController,
@@ -448,5 +450,49 @@ fun PlantItem(
             CopyItalicText(text = it, MaterialTheme.colorScheme.outline)
 
         }
+    }
+}
+
+@Composable
+fun AddPlantItem(
+    navController: NavController,
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .padding(end = 20.dp)
+    ) {
+
+        Box(
+            modifier = Modifier
+                .size(80.dp) // Set the size including the border
+                .clip(shape = CircleShape)
+                .background(color = MaterialTheme.colorScheme.primary)
+                .clickable {
+                    navController.navigate("AddView")
+                },
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(75.dp)
+                    .align(Alignment.Center)
+                    .background(color = MaterialTheme.colorScheme.background, shape = CircleShape),
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.icon_plus),
+                    contentDescription = "Profile Picture",
+                    modifier = Modifier
+                        .size(30.dp) // Image size, smaller than the Box to create a border effect
+                        .align(Alignment.Center) // Center the image inside the Box
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop,
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(5.dp))
+        CopyText(text = "Add Plant")
+
     }
 }

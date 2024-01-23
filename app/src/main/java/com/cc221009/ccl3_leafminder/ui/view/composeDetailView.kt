@@ -46,6 +46,7 @@ import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.calculateDaysUntilNextWatering
+import com.cc221009.ccl3_leafminder.data.checkIfNeedsWater
 import com.cc221009.ccl3_leafminder.data.getDatabase
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.DetailViewModel
@@ -126,7 +127,8 @@ fun DetailView(
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        if (true) {
+        val needsWater = checkIfNeedsWater(state.plant!!.wateringFrequency, state.plant!!.wateringDate)
+        if (needsWater) {
             PlantDetail_WateringNotification(state.plant!!.name)
         }
 
@@ -146,6 +148,7 @@ fun DetailView(
                 "Water Interval",
                 R.drawable.graphics_blur_calendar,
                 colorScheme.secondaryContainer,
+                false,
                 modifier = Modifier.weight(1f)
             )
 
@@ -156,6 +159,7 @@ fun DetailView(
                 "Next watering in",
                 R.drawable.graphics_blur_waterdrop,
                 colorScheme.secondaryContainer,
+                needsWater,
                 modifier = Modifier.weight(1f)
             )
 
@@ -166,6 +170,7 @@ fun DetailView(
                 "your plant survived",
                 null,
                 colorScheme.tertiaryContainer,
+                false,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -324,8 +329,11 @@ fun SpecificInfoContainer(
     headline: String,
     imgPath: Int?,
     backgroundColor: Color,
-    modifier: Modifier = Modifier
+    needsWater: Boolean,
+    modifier: Modifier = Modifier,
 ) {
+
+    val borderColor = if (needsWater) colorScheme.secondary else Color.Transparent
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -334,6 +342,7 @@ fun SpecificInfoContainer(
             .clip(RoundedCornerShape(15.dp))
             .height(150.dp)
             .background(backgroundColor)
+            .border(width = 3.dp, color = borderColor, RoundedCornerShape(15.dp))
             .padding(10.dp)
             .then(modifier)
     ) {
@@ -356,7 +365,11 @@ fun SpecificInfoContainer(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                H1Text(text = text)
+                if (text.toInt() <= 0) {
+                    H1Text(text = "0")
+                } else {
+                    H1Text(text = text)
+                }
                 Text(text = "days")
             }
         }
