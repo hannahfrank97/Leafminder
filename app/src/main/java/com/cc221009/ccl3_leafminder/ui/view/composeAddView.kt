@@ -354,8 +354,10 @@ fun AddParameterContainer(
         newSizeState = 2
     } else if (parameterState == "large" || parameterState == "half-shadow" || parameterState == "bad") {
         newSizeState = 3
-    } else {
+    } else if ( parameterState == "shadow" ) {
         newSizeState = 4
+    } else {
+        newSizeState = -1
     }
 
     var selectedItem by remember { mutableStateOf(newSizeState) }
