@@ -39,13 +39,12 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
+import com.cc221009.ccl3_leafminder.data.checkAllIfNeedsWater
 import com.cc221009.ccl3_leafminder.data.checkIfNeedsWater
 import com.cc221009.ccl3_leafminder.data.getDatabase
-import com.cc221009.ccl3_leafminder.data.needsToBeWatered
+import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.HomeUIState
 import com.cc221009.ccl3_leafminder.ui.view_model.HomeViewModel
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,7 +66,6 @@ fun HomeView(
         state.seeAllPlants()
     }
 
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -76,7 +74,7 @@ fun HomeView(
         verticalArrangement = Arrangement.Center
     ) {
 
-        HomeHeaderContainer()
+        HomeHeaderContainer(state.plants)
 
         PlantListOverview(state, navController)
 
@@ -88,7 +86,15 @@ fun HomeView(
 }
 
 @Composable
-fun HomeHeaderContainer() {
+fun HomeHeaderContainer(
+    plantsList: List<Plant>
+) {
+
+    val listCount: String = plantsList.count().toString()
+    // TODO Code Logic for Species Count
+    var listSpeciesCount: String = "3"
+    val plantsNeedingWater: String = checkAllIfNeedsWater(plantsList).count().toString()
+
 
     Row(
         modifier = Modifier
@@ -97,7 +103,7 @@ fun HomeHeaderContainer() {
     ) {
         HomeHeaderContainerItem(
             "Current Plants",
-            "25",
+            listCount.toString(),
             R.drawable.graphics_blur_pot,
             MaterialTheme.colorScheme.tertiaryContainer,
             modifier = Modifier.weight(1f)
@@ -107,7 +113,7 @@ fun HomeHeaderContainer() {
 
         HomeHeaderContainerItem(
             "Species",
-            "25",
+            plantsNeedingWater,
             R.drawable.graphics_blur_leaf,
             MaterialTheme.colorScheme.surface,
             modifier = Modifier.weight(1f)
@@ -117,7 +123,7 @@ fun HomeHeaderContainer() {
 
         HomeHeaderContainerItem(
             "Needing Water",
-            "25",
+            plantsNeedingWater,
             R.drawable.graphics_blur_waterdrop,
             MaterialTheme.colorScheme.secondaryContainer,
             modifier = Modifier.weight(1f)
@@ -137,6 +143,8 @@ fun HomeHeaderContainerItem(
     backgroundColor: Color,
     modifier: Modifier = Modifier
 ) {
+
+
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -220,12 +228,7 @@ fun PlantDashboard(
 
         Spacer(modifier = Modifier.height(15.dp))
 
-        val plantNeedsWater = state.plants.filter { plant ->
-            val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-            val wateringDateAsLocalDate = LocalDate.parse(plant.wateringDate, formatter)
-            val wateringFrequencyAsInt = plant.wateringFrequency.toInt()
-            needsToBeWatered(wateringDateAsLocalDate, wateringFrequencyAsInt)
-        }
+        val plantNeedsWater = checkAllIfNeedsWater(state.plants)
 
         Column(
             modifier = Modifier

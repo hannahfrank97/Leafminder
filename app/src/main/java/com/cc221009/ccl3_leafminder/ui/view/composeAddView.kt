@@ -472,42 +472,43 @@ fun AddPlantSpeciesContainer(
                 }
             }
 
-            Spacer(modifier = Modifier.matchParentSize())
+            Spacer(modifier = Modifier.height(10.dp))
 
             Icon(Icons.Filled.ArrowDropDown, contentDescription = "Dropdown Arrow", modifier = Modifier.padding(start = 10.dp, end = 10.dp))
 
         }
 
+        if (selectedSpecies != "Select Species") {
+            Row(
+                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                APIIconItem(
+                    "Location",
+                    "api value",
+                    R.drawable.location_shadow,
+                    "location icon",
+                    modifier = Modifier.weight(1f),
 
-
-        Row(
-            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            APIIconItem(
-                "Location",
-                "api value",
-                R.drawable.placeholder,
-                "location icon",
-                modifier = Modifier.weight(1f),
-
-            )
-            APIIconItem(
-                "Watering",
-                "api value",
-                R.drawable.placeholder,
-                "watering icon",
-                modifier = Modifier.weight(1f)
-            )
-            APIIconItem(
-                "Poisinousness",
-                "api value",
-                R.drawable.placeholder,
-                "poisonousness icon",
-                modifier = Modifier.weight(1f)
-            )
+                    )
+                APIIconItem(
+                    "Watering",
+                    "api value",
+                    R.drawable.watering_normal,
+                    "watering icon",
+                    modifier = Modifier.weight(1f)
+                )
+                APIIconItem(
+                    "Poisinousness",
+                    "api value",
+                    R.drawable.poisonous_false,
+                    "poisonousness icon",
+                    modifier = Modifier.weight(1f)
+                )
+            }
         }
+
     }
-    Spacer(modifier = Modifier.height(20.dp))
+    Spacer(modifier = Modifier.height(30.dp))
 
 }
 
@@ -523,21 +524,28 @@ fun APIIconItem(
     Column(
         modifier = Modifier
             .background(colorScheme.surface)
-            .padding(20.dp)
+            .padding(top= 20.dp)
             .fillMaxWidth(0.3f)
             .height(100.dp)
             .then(modifier),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
         Image(
             painter = painterResource(id = imgPath),
             imgDescription,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
+            modifier = Modifier
+                .height(60.dp),
+            contentScale = ContentScale.Fit
         )
-        H4Text(text = headline)
-        CopyText(text = apiValue)
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            H4Text(text = headline)
+            CopyText(text = apiValue)
+        }
     }
 }
 

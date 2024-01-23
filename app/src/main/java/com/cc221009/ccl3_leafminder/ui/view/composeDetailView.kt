@@ -125,7 +125,7 @@ fun DetailView(
 
         PlantDetailImage(state.plant!!, "R..placeholder", "plant species")
 
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         val needsWater = checkIfNeedsWater(state.plant!!.wateringFrequency, state.plant!!.wateringDate)
         if (needsWater) {
@@ -255,8 +255,6 @@ fun PlantDetailImage(
     H1Text(text = plant.name)
 
     CopyItalicText(text = plantSpecies, colorScheme.primary)
-    Spacer(modifier = Modifier.height(10.dp))
-
 }
 
 @Composable
