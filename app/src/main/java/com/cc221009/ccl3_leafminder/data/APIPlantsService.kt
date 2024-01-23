@@ -5,6 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 data class OnlyScientificName(
+    val id: Int,
     val scientific_name: List<String>,
 )
 

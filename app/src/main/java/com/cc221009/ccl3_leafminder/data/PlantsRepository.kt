@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.data.model.plantAPIService
+import com.cc221009.ccl3_leafminder.ui.view_model.SpeciesItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
@@ -23,20 +24,25 @@ class PlantsRepository(
     val apiKey: String
 ) {
 
-    suspend fun getAllSpeciesNames(searchFilter: String): List<String> {
+    suspend fun getAllSpeciesNames(searchFilter: String): List<SpeciesItem> {
         return withContext(Dispatchers.IO) {
             val request = apiPlantsService.getSpeciesList(apiKey, searchFilter)
             val response = request.execute().body()
             val plants = response?.data ?: emptyList()
-            plants.map { it.scientific_name.firstOrNull() ?: "Unknown" }
+            plants.map {
+                SpeciesItem(
+                    id = it.id,
+                    APIname = it.scientific_name.firstOrNull() ?: "Unknown"
+                )
+            }
         }
     }
 
-    suspend fun getSpeciesDetails(Id:Int): PlantDetails {
+    suspend fun getSpeciesDetails(Id: Int): PlantDetails {
         return withContext(Dispatchers.IO) {
             val request = apiPlantsService.getPlantDetails(Id, apiKey)
             val response = request.execute().body()
-            response ?:PlantDetails(
+            response ?: PlantDetails(
                 sunlight = listOf("Unknown"),
                 watering = "Unknown",
                 poisonousnes = false,
