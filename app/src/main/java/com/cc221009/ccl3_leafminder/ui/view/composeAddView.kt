@@ -47,6 +47,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.R
+import com.cc221009.ccl3_leafminder.data.determineLocationIconFor
+import com.cc221009.ccl3_leafminder.data.determinePoisonousnessIconFor
+import com.cc221009.ccl3_leafminder.data.determineWateringIconFor
 import com.cc221009.ccl3_leafminder.data.makePlantRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
@@ -486,7 +489,7 @@ fun AddPlantSpeciesContainer(
             APIIconItem(
                 "Location",
                 "api value",
-                R.drawable.placeholder,
+                determineLocationIconFor("FUll sun"),
                 "location icon",
                 modifier = Modifier.weight(1f),
 
@@ -494,14 +497,14 @@ fun AddPlantSpeciesContainer(
             APIIconItem(
                 "Watering",
                 "api value",
-                R.drawable.placeholder,
+                determineWateringIconFor("Average"),
                 "watering icon",
                 modifier = Modifier.weight(1f)
             )
             APIIconItem(
                 "Poisinousness",
                 "api value",
-                R.drawable.placeholder,
+                determinePoisonousnessIconFor("True"),
                 "poisonousness icon",
                 modifier = Modifier.weight(1f)
             )
