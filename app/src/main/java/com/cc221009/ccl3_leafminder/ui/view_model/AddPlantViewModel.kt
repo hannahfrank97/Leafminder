@@ -40,7 +40,7 @@ data class AddUIState(
     val waterInterval: Int,
 
 
-)
+    )
 
 class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {
 
@@ -73,7 +73,7 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
             waterInterval = 7,
 
 
-    )
+            )
     )
     val uiState: StateFlow<AddUIState> = _mainViewState.asStateFlow()
 
@@ -115,15 +115,10 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
         )
     }
 
-
-
-
-    //TODO: add image path change (dont know the functionality of image upload so dont know if this is needed)
-
     fun fetchSpeciesNames() {
         viewModelScope.launch {
             try {
-                val speciesNames = plantsRepository.getTestAPIDATA()
+                val speciesNames = plantsRepository.getAllSpeciesNames("rubrum")
                 _mainViewState.value = _mainViewState.value.copy(speciesNames = speciesNames)
             } catch (e: Exception) {
                 e.printStackTrace()

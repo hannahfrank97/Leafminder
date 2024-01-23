@@ -22,6 +22,7 @@ import androidx.navigation.NavController
 import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.getDatabase
+import com.cc221009.ccl3_leafminder.data.makePlantRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.CameraViewModel
 import com.cc221009.ccl3_leafminder.ui.view_model.EditPlantViewModel
@@ -31,9 +32,7 @@ fun EditView(
     plantId: Int,
     vm: EditPlantViewModel = viewModel(
         factory = EditPlantViewModel.provideFactory(
-            PlantsRepository(
-                getDatabase(LocalContext.current).dao
-            )
+            makePlantRepository(LocalContext.current)
         )
     ),
     navController: NavController,
