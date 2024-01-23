@@ -439,8 +439,6 @@ fun AddPlantSpeciesContainer(
         //HEADLINE
         H3Text(text = "Species")
 
-        // TODO: Connect to Viewmodel
-
         var expanded by remember { mutableStateOf(false) }
         var selectedSpecies by remember { mutableStateOf("Select Species") }
 
