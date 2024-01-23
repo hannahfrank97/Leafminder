@@ -35,6 +35,7 @@ import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.getDatabase
+import com.cc221009.ccl3_leafminder.data.makePlantRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.PlantListViewModel
 
@@ -43,9 +44,7 @@ import com.cc221009.ccl3_leafminder.ui.view_model.PlantListViewModel
 fun PlantListView(
     vm: PlantListViewModel = viewModel(
         factory = PlantListViewModel.provideFactory(
-            PlantsRepository(
-                getDatabase(LocalContext.current).dao
-            )
+            makePlantRepository(LocalContext.current)
         )
     ),
     navController: NavController

@@ -1,4 +1,5 @@
 package com.cc221009.ccl3_leafminder.ui.view
+
 import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -46,8 +47,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.R
-import com.cc221009.ccl3_leafminder.data.PlantsRepository
-import com.cc221009.ccl3_leafminder.data.getDatabase
+import com.cc221009.ccl3_leafminder.data.makePlantRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
 import com.cc221009.ccl3_leafminder.ui.view_model.CameraViewModel
@@ -56,9 +56,7 @@ import com.cc221009.ccl3_leafminder.ui.view_model.CameraViewModel
 fun AddView(
     vm: AddPlantViewModel = viewModel(
         factory = AddPlantViewModel.provideFactory(
-            PlantsRepository(
-                getDatabase(LocalContext.current).dao
-            )
+            makePlantRepository(LocalContext.current)
         )
     ),
     navController: NavController,
@@ -97,7 +95,7 @@ fun AddView(
             onClickLogic = {
                 cameraViewModel.enableCameraPreview(true)
                 navController.navigate(Screen.CameraView.route)
-        })
+            })
 
         // Textfield Name
         Box(
@@ -119,11 +117,17 @@ fun AddView(
             state.location,
             state.setLocation,
             state.wellbeing,
-            state.setWellbeing)
+            state.setWellbeing
+        )
 
         AddPlantSpeciesContainer(state.speciesNames, onDropdownTapped = state.onSpeciesListTapped)
 
-        AddPlantWateringContainer(state.wateringDate,state.setWateringFrequency, state.setWateringDate, state.waterInterval)
+        AddPlantWateringContainer(
+            state.wateringDate,
+            state.setWateringFrequency,
+            state.setWateringDate,
+            state.waterInterval
+        )
 
         PrimaryButton("Add Plant",
             onClickLogic = {
@@ -354,8 +358,6 @@ fun AddParameterContainer(
 }
 
 
-
-
 @Composable
 fun IconButtonsItem(
     headline: String,
@@ -378,9 +380,11 @@ fun IconButtonsItem(
                 onSelectItem(itemId)
                 onClick(itemValue)
             }
-            .border(if (isClicked) 2.dp else 0.dp,
+            .border(
+                if (isClicked) 2.dp else 0.dp,
                 if (isClicked) colorScheme.outline else Color.Transparent,
-                shape = RoundedCornerShape(15.dp))
+                shape = RoundedCornerShape(15.dp)
+            )
 
             .fillMaxHeight()
             .background(colorScheme.onError)
@@ -422,15 +426,20 @@ fun AddPlantSpeciesContainer(
         var expanded by remember { mutableStateOf(false) }
         var selectedSpecies by remember { mutableStateOf("Select Species") }
 
-        Box(modifier = Modifier
-            .clickable {
-                expanded = true
-                onDropdownTapped()
-            }
-            .fillMaxWidth()
-            .height(45.dp)
-            .border(width = 2.dp, color = colorScheme.outline, shape = RoundedCornerShape(12.dp)) // Apply border
-            .clip(RoundedCornerShape(12.dp)), // Then clip to the same shape
+        Box(
+            modifier = Modifier
+                .clickable {
+                    expanded = true
+                    onDropdownTapped()
+                }
+                .fillMaxWidth()
+                .height(45.dp)
+                .border(
+                    width = 2.dp,
+                    color = colorScheme.outline,
+                    shape = RoundedCornerShape(12.dp)
+                ) // Apply border
+                .clip(RoundedCornerShape(12.dp)), // Then clip to the same shape
 
             contentAlignment = Alignment.CenterStart,
         ) {
@@ -438,7 +447,7 @@ fun AddPlantSpeciesContainer(
                 modifier = Modifier
                     .padding(start = 40.dp)
 
-            ){
+            ) {
 
                 CopyText(selectedSpecies)
             }
@@ -461,7 +470,11 @@ fun AddPlantSpeciesContainer(
 
             Spacer(modifier = Modifier.matchParentSize())
 
-            Icon(Icons.Filled.ArrowDropDown, contentDescription = "Dropdown Arrow", modifier = Modifier.padding(start = 10.dp, end = 10.dp))
+            Icon(
+                Icons.Filled.ArrowDropDown,
+                contentDescription = "Dropdown Arrow",
+                modifier = Modifier.padding(start = 10.dp, end = 10.dp)
+            )
 
         }
 
@@ -477,7 +490,7 @@ fun AddPlantSpeciesContainer(
                 "location icon",
                 modifier = Modifier.weight(1f),
 
-            )
+                )
             APIIconItem(
                 "Watering",
                 "api value",
@@ -557,7 +570,8 @@ fun AddPlantWateringContainer(
         )
 
         WateringFrequencySelector(
-            "How frequent do you want to water your plant?", waterInterval, setwaterFrequency)
+            "How frequent do you want to water your plant?", waterInterval, setwaterFrequency
+        )
     }
     Spacer(modifier = Modifier.height(20.dp))
 
@@ -588,7 +602,7 @@ fun WateringFrequencySelector(
             verticalAlignment = Alignment.CenterVertically
         ) {
             PlusMinusButton(R.drawable.icon_minus, onClickLogic = {
-                    handleWaterIntervalChange(waterInterval - 1)
+                handleWaterIntervalChange(waterInterval - 1)
             })
 
             Column(
