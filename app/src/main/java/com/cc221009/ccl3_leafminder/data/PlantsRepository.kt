@@ -18,7 +18,8 @@ fun makePlantRepository(context: Context): PlantsRepository {
 }
 
 class PlantsRepository(
-    val dao: PlantsDao, val apiPlantsService: APIPlantsService,
+    val dao: PlantsDao,
+    val apiPlantsService: APIPlantsService,
     val apiKey: String
 ) {
 
@@ -30,6 +31,7 @@ class PlantsRepository(
             plants.map { it.scientific_name.firstOrNull() ?: "Unknown" }
         }
     }
+
 
     suspend fun addPlant(plant: Plant) {
         dao.insertPlant(plant)
