@@ -13,7 +13,9 @@ data class SpeciesListResponse(
 )
 
 data class PlantDetails(
-    val sunlight: List<String>
+    val sunlight: List<String>,
+    val watering: String,
+    val poisonousnes: Boolean,
 )
 
 

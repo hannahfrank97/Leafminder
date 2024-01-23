@@ -39,6 +39,8 @@ data class AddUIState(
 
     val waterInterval: Int,
 
+    val plantDetails: List<String>
+
 
     )
 
@@ -71,6 +73,8 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
             imagePath = "",
 
             waterInterval = 7,
+
+            plantDetails = emptyList()
 
 
             )

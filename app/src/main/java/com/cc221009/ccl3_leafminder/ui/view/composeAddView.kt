@@ -129,7 +129,9 @@ fun AddView(
             state.speciesNames,
             onDropdownTapped = state.onSpeciesListTapped,
             plantDetails = PlantDetails(
-              sunlight =   listOf("sunny", "half-shady", "shady")
+              sunlight =   listOf("sunny", "half-shady", "shady"),
+                watering = "Frequent",
+                poisonousnes = true
             )
         )
 
@@ -516,14 +518,14 @@ fun AddPlantSpeciesContainer(
                 APIIconItem(
                     "Watering",
                     "api value",
-                    determineWateringIconFor("frequent"),
+                    determineWateringIconFor(plantDetails.watering),
                     "watering icon",
                     modifier = Modifier.weight(1f)
                 )
                 APIIconItem(
                     "Poisinousness",
                     "api value",
-                    determinePoisonousnessIconFor("true"),
+                    determinePoisonousnessIconFor(plantDetails.poisonousnes.toString()),
                     "poisonousness icon",
                     modifier = Modifier.weight(1f)
                 )
