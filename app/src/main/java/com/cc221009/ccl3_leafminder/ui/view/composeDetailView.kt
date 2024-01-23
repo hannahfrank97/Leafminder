@@ -3,6 +3,8 @@ package com.cc221009.ccl3_leafminder.ui.view
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +20,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,7 +34,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
@@ -117,6 +125,12 @@ fun DetailView(
         PlantDetailImage(state.plant!!, "R..placeholder", "plant species")
 
         Spacer(modifier = Modifier.height(30.dp))
+
+        if (true) {
+            PlantDetail_WateringNotification(state.plant!!.name)
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
 
         PlantDetailGeneralContainer(state.plant!!)
 
@@ -386,6 +400,68 @@ fun ApiInfoItem(
         // Conditionally display textDetail if it's not null
         textDetail?.let {
             CopyText(text = it)
+        }
+    }
+}
+
+
+@Composable
+fun PlantDetail_WateringNotification(
+    text: String
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(15.dp))
+            .background(colorScheme.secondaryContainer)
+            .border(width = 3.dp, color = colorScheme.secondary, RoundedCornerShape(15.dp))
+            .padding(20.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+
+        ) {
+        Image(
+            painter = painterResource(id = R.drawable.icon_waterdrop_large_blur),
+            contentDescription = "Waterdrop",
+            modifier = Modifier
+                .height(50.dp)
+                .width(50.dp)
+                .padding(end = 15.dp),
+            contentScale = ContentScale.Fit
+        )
+
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.Start,
+        ) {
+            Text(
+                text = "Have you already watered ${text}?",
+                style = TextStyle(
+                    fontFamily = FontFamily(Font(R.font.opensans_bold)),
+                    fontSize = 13.sp,
+                    textAlign = TextAlign.Left
+                )
+            )
+            CopyText(text = "Your plant needs water!")
+        }
+
+        Box(
+            modifier = Modifier
+                .clickable {
+                    // TODO LOGIC FOR MARK AS WATERED
+                }
+                .padding(start = 20.dp)
+                .clip(CircleShape)
+                .size(45.dp)
+                .background(MaterialTheme.colorScheme.secondary)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.icon_tick),
+                contentDescription = "Waterdrop",
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(25.dp),
+            )
         }
     }
 }
