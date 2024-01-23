@@ -48,6 +48,7 @@ import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.calculateDaysUntilNextWatering
 import com.cc221009.ccl3_leafminder.data.checkIfNeedsWater
 import com.cc221009.ccl3_leafminder.data.getDatabase
+import com.cc221009.ccl3_leafminder.data.makePlantRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.DetailViewModel
 import java.time.LocalDate
@@ -60,9 +61,7 @@ fun DetailView(
     plantId: Int,
     vm: DetailViewModel = viewModel(
         factory = DetailViewModel.provideFactory(
-            PlantsRepository(
-                getDatabase(LocalContext.current).dao
-            )
+            makePlantRepository(LocalContext.current)
         )
 
     ),

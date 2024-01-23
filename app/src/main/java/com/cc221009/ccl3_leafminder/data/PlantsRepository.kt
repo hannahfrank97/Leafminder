@@ -1,7 +1,11 @@
 package com.cc221009.ccl3_leafminder.data
 
+import android.content.Context
 import android.util.Log
 import com.cc221009.ccl3_leafminder.data.model.Plant
+import com.cc221009.ccl3_leafminder.data.model.plantAPIService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -34,10 +38,26 @@ import java.time.format.DateTimeFormatter
             val poisonous_to_humans: Boolean,
         ) */
 
-class PlantsRepository(val dao: PlantsDao) {
+fun makePlantRepository(context: Context): PlantsRepository {
+    return PlantsRepository(
+        getDatabase(context).dao,
+        plantAPIService,
+        "sk-OSgg65a63fbd07e653800"
+    )
+}
 
-    suspend fun getTestAPIDATA(): List<String> {
-        return listOf("A", "B", "C")
+class PlantsRepository(
+    val dao: PlantsDao, val apiPlantsService: APIPlantsService,
+    val apiKey: String
+) {
+
+    suspend fun getAllSpeciesNames(searchFilter: String): List<String> {
+        return withContext(Dispatchers.IO) {
+            val request = apiPlantsService.getSpeciesList(apiKey, searchFilter)
+            val response = request.execute().body()
+            val plants = response?.data ?: emptyList()
+            plants.map { it.scientific_name.firstOrNull() ?: "Unknown" }
+        }
     }
 
     suspend fun addPlant(plant: Plant) {
@@ -63,7 +83,7 @@ class PlantsRepository(val dao: PlantsDao) {
         return plant
     }
 
-    suspend fun upDateWateringDate(plantId: Int, newDate:LocalDate) {
+    suspend fun upDateWateringDate(plantId: Int, newDate: LocalDate) {
         val plant = getPlantById(plantId)
         Log.d("Repository", "Fetching plant watering date with ID: $plantId")
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")

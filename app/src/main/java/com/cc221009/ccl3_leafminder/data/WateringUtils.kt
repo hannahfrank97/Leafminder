@@ -18,6 +18,7 @@ fun needsToBeWatered(lastWatered: LocalDate, wateringFrequency: Int): Boolean {
     return calculateDaysUntilNextWatering(lastWatered, wateringFrequency) <= 0
 }
 
+
 fun checkIfNeedsWater(wateringFrequency: String, wateringDate: String): Boolean {
     val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
     val wateringDateAsLocalDate = LocalDate.parse(wateringDate, formatter)
@@ -41,6 +42,5 @@ fun checkAllIfNeedsWater(plants: List<Plant>): List<Plant> {
 val all: List<Plant> = listOf()
 // all.filter(plants => plants.size == "Large")
 val largePlants = all.filter { plant -> plant.size == "Large" }
-
 
 

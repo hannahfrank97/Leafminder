@@ -43,6 +43,9 @@ import com.cc221009.ccl3_leafminder.data.checkAllIfNeedsWater
 import com.cc221009.ccl3_leafminder.data.checkIfNeedsWater
 import com.cc221009.ccl3_leafminder.data.getDatabase
 import com.cc221009.ccl3_leafminder.data.model.Plant
+import com.cc221009.ccl3_leafminder.data.makePlantRepository
+import com.cc221009.ccl3_leafminder.data.model.Plant
+import com.cc221009.ccl3_leafminder.data.needsToBeWatered
 import com.cc221009.ccl3_leafminder.ui.view_model.HomeUIState
 import com.cc221009.ccl3_leafminder.ui.view_model.HomeViewModel
 
@@ -51,9 +54,8 @@ import com.cc221009.ccl3_leafminder.ui.view_model.HomeViewModel
 fun HomeView(
     vm: HomeViewModel = viewModel(
         factory = HomeViewModel.provideFactory(
-            PlantsRepository(
-                getDatabase(LocalContext.current).dao
-            )
+            makePlantRepository(LocalContext.current)
+
         )
     ),
 
