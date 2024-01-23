@@ -1,5 +1,6 @@
 package com.cc221009.ccl3_leafminder.ui.view
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -80,7 +81,7 @@ fun HomeView(
 
         PlantListOverview(state, navController)
 
-        PlantDashboard(state, navController = navController)
+        PlantDashboard( state = state, navController = navController)
 
     }
 
@@ -233,6 +234,8 @@ fun PlantDashboard(
                     name = plant.name,
                     plantSpecies = "",
                     imgPath = plant.imagePath,
+                    plantId = plant.id,
+                    state = state
                 )
             }
 
@@ -247,13 +250,15 @@ fun PlantDashboard(
 @Composable
 fun HomeViewWateringNotification(
     navController: NavController,
+    plantId: Int,
     name: String,
     plantSpecies: String,
     imgPath: String,
+    state: HomeUIState,
 ) {
     Row(
         modifier = Modifier
-            .clickable { navController.navigate(Screen.DetailView.route) }
+            .clickable { }
             .fillMaxWidth()
             .clip(RoundedCornerShape(15.dp))
             .background(MaterialTheme.colorScheme.secondaryContainer)
@@ -281,7 +286,7 @@ fun HomeViewWateringNotification(
                 Box(
                     modifier = Modifier
                         .clickable {
-                            //TODO create clicking button here
+
                         }
                         .clip(CircleShape)
                         .size(30.dp)
@@ -303,6 +308,7 @@ fun HomeViewWateringNotification(
                 modifier = Modifier
                     .fillMaxHeight()
                     .padding(start = 10.dp),
+
             ) {
                 Row {
                     CopyBoldText(text = name, MaterialTheme.colorScheme.primary)
@@ -321,7 +327,11 @@ fun HomeViewWateringNotification(
                 .padding(end = 5.dp)
                 .clip(CircleShape)
                 .size(45.dp)
-                .background(MaterialTheme.colorScheme.secondary),
+                .background(MaterialTheme.colorScheme.secondary)
+                .clickable {
+                    Log.d("Debug", "Waterdrop clicked for plant ID: $plantId")
+                    state.updateWateringDate(plantId)
+            }
         ) {
             Image(
                 painter = painterResource(id = R.drawable.icon_tick),
