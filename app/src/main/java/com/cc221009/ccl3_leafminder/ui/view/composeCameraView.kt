@@ -49,8 +49,7 @@ fun CameraView(
                     context = context,
                     onSuccess = { uri ->
                         cameraViewModel.updateCapturedImageUri(uri) // Update the URI of the captured image
-                            navController.navigate(Screen.AddView.route) {
-                        }
+                            navController.popBackStack()
                     },
                     onError = { exception ->
                         Log.e("camApp", "Error when capturing image", exception)

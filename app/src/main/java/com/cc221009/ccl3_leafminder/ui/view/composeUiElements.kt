@@ -3,8 +3,6 @@ package com.cc221009.ccl3_leafminder.ui.view
 import android.app.DatePickerDialog
 import android.content.Context
 import android.util.Log
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -36,11 +33,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -51,8 +46,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter.ofPattern
@@ -259,69 +252,6 @@ fun PrimaryButton(
     }
 }
 
-@Composable
-fun PlantItem(
-    navController: NavController,
-    plantName: String,
-    species: String?,
-    imgPath: String,
-    needsWater: Boolean
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .padding(end = 20.dp)
-            .clickable {
-                navController.navigate(Screen.DetailView.route)
-            }
-    ) {
-        val borderColor =
-            if (needsWater) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
-
-        Box(
-            modifier = Modifier
-                .size(80.dp) // Set the size including the border
-                .background(color = borderColor, shape = CircleShape),
-        ) {
-            Image(
-                painter = rememberImagePainter(imgPath),
-                contentDescription = "Profile Picture",
-                modifier = Modifier
-                    .size(75.dp) // Image size, smaller than the Box to create a border effect
-                    .align(Alignment.Center) // Center the image inside the Box
-                    .clip(CircleShape), // Clip the image to a circle shape
-                contentScale = ContentScale.Crop,
-            )
-
-            if (needsWater) {
-                Box(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .size(35.dp)
-                        .align(Alignment.TopEnd) // Center the image inside the Box
-                        .background(MaterialTheme.colorScheme.secondary),
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.icon_waterdrop_small),
-                        contentDescription = "Waterdrop",
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                    )
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(5.dp))
-        CopyText(text = plantName)
-
-        // Conditionally display textDetail if it's not null
-        species?.let {
-            CopyItalicText(text = it, MaterialTheme.colorScheme.outline)
-
-        }
-    }
-}
 
 
 // ––––––––––––––––––––– TYPO –––––––––––––––––––––––

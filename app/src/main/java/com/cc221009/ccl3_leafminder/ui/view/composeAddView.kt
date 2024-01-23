@@ -668,6 +668,7 @@ fun PlantImage(
                 contentDescription = "Profile Picture",
                 modifier = Modifier
                     .clip(CircleShape)
+                    .background(colorScheme.primaryContainer)
                     .align(Alignment.Center) // Center the image inside the Box
                     .size(100.dp), // Clip the image to a circle shape
                 contentScale = ContentScale.Fit

@@ -38,10 +38,9 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
+import com.cc221009.ccl3_leafminder.data.checkIfNeedsWater
 import com.cc221009.ccl3_leafminder.data.getDatabase
-import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.data.needsToBeWatered
-import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
 import com.cc221009.ccl3_leafminder.ui.view_model.HomeUIState
 import com.cc221009.ccl3_leafminder.ui.view_model.HomeViewModel
 import java.time.LocalDate
@@ -187,10 +186,12 @@ fun PlantListOverview(
             state.plants.take(10).forEach { plant ->
                 PlantItem(
                     navController,
+                    plantId = plant.id,
                     plantName = plant.name,
                     species = "" ,
                     imgPath = plant.imagePath,
-                    needsWater = false,
+                    wateringDate = plant.wateringDate,
+                    wateringFrequency = plant.wateringFrequency
                 )
             }
 
@@ -269,15 +270,29 @@ fun HomeViewWateringNotification(
                     .size(65.dp) // Set the size including the border
                     .background(color = MaterialTheme.colorScheme.secondary, shape = CircleShape),
             ) {
-                Image(
-                    painter = rememberImagePainter(imgPath),
-                    contentDescription = "Profile Picture",
-                    modifier = Modifier
-                        .size(60.dp) // Image size, smaller than the Box to create a border effect
-                        .align(Alignment.Center) // Center the image inside the Box
-                        .clip(CircleShape), // Clip the image to a circle shape
-                    contentScale = ContentScale.Crop,
-                )
+                if (imgPath != "") {
+                    Image(
+                        painter = rememberImagePainter(imgPath),
+                        contentDescription = "Profile Picture",
+                        modifier = Modifier
+                            .size(60.dp) // Image size, smaller than the Box to create a border effect
+                            .align(Alignment.Center) // Center the image inside the Box
+                            .clip(CircleShape), // Clip the image to a circle shape
+                        contentScale = ContentScale.Crop,
+                    )
+                } else {
+                    Image(
+                        painter = painterResource(id = R.drawable.graphics_placeholder_plant),
+                        contentDescription = "Profile Picture",
+                        modifier = Modifier
+                            .size(60.dp)
+                            .align(Alignment.Center) // Center the image inside the Box
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.surface), // Clip the image to a circle shape
+                        contentScale = ContentScale.Crop,
+                    )
+                }
+
                 Box(
                     modifier = Modifier
                         .clickable {
@@ -335,4 +350,91 @@ fun HomeViewWateringNotification(
     }
 
     Spacer(modifier = Modifier.height(10.dp))
+}
+
+
+
+
+
+@Composable
+fun PlantItem(
+    navController: NavController,
+    plantId: Int,
+    plantName: String,
+    species: String?,
+    imgPath: String,
+    wateringDate: String, // Assuming this is in "dd.MM.yyyy" format
+    wateringFrequency: String // Assuming this is a String that can be converted to Int
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .padding(end = 20.dp)
+            .clickable {
+                navController.navigate("DetailView/${plantId}")
+            }
+    ) {
+
+        val needsWater = checkIfNeedsWater(wateringFrequency, wateringDate)
+
+        val borderColor =
+            if (needsWater) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary
+
+        Box(
+            modifier = Modifier
+                .size(80.dp) // Set the size including the border
+                .background(color = borderColor, shape = CircleShape),
+        ) {
+
+            if (imgPath != "") {
+                Image(
+                    painter = rememberImagePainter(imgPath),
+                    contentDescription = "Profile Picture",
+                    modifier = Modifier
+                        .size(75.dp) // Image size, smaller than the Box to create a border effect
+                        .align(Alignment.Center) // Center the image inside the Box
+                        .clip(CircleShape), // Clip the image to a circle shape
+                    contentScale = ContentScale.Crop,
+                )
+            } else {
+                Image(
+                    painter = painterResource(id = R.drawable.graphics_placeholder_plant),
+                    contentDescription = "Profile Picture",
+                    modifier = Modifier
+                        .size(75.dp)
+                        .align(Alignment.Center) // Center the image inside the Box
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.surface), // Clip the image to a circle shape
+                    contentScale = ContentScale.Crop,
+                )
+            }
+
+            if (needsWater) {
+                Box(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .size(35.dp)
+                        .align(Alignment.TopEnd) // Center the image inside the Box
+                        .background(MaterialTheme.colorScheme.secondary),
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.icon_waterdrop_small),
+                        contentDescription = "Waterdrop",
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(5.dp))
+        CopyText(text = plantName)
+
+        // Conditionally display textDetail if it's not null
+        species?.let {
+            CopyItalicText(text = it, MaterialTheme.colorScheme.outline)
+
+        }
+    }
 }
