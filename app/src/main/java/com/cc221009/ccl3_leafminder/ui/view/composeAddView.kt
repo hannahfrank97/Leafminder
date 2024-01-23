@@ -180,7 +180,7 @@ fun AddPlantInfoContainer(
         )
 
 
-        AddParameterContainer("size") { selectedItem, onSelectItem ->
+        AddParameterContainer("size", sizeState) { selectedItem, onSelectItem ->
             IconButtonsItem(
                 "small",
                 R.drawable.plant_base_small,
@@ -226,7 +226,7 @@ fun AddPlantInfoContainer(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        AddParameterContainer("location") { selectedItem, onSelectItem ->
+        AddParameterContainer("location", locationState) { selectedItem, onSelectItem ->
 
             IconButtonsItem(
                 "light",
@@ -287,7 +287,7 @@ fun AddPlantInfoContainer(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        AddParameterContainer("wellbeing") { selectedItem, onSelectItem ->
+        AddParameterContainer("wellbeing", wellbeingState) { selectedItem, onSelectItem ->
 
             IconButtonsItem(
                 "great",
@@ -338,10 +338,22 @@ fun AddPlantInfoContainer(
 @Composable
 fun AddParameterContainer(
     headline: String,
+    parameterState: String,
     content: @Composable (Int, (Int) -> Unit) -> Unit
     //Hannah: content: @Composable () -> Unit
 ) {
-    var selectedItem by remember { mutableStateOf(-1) }
+    val newSizeState: Int
+    if (parameterState == "small" || parameterState == "light" || parameterState == "great") {
+        newSizeState = 1
+    } else if (parameterState == "medium" || parameterState == "half-light" || parameterState == "okay"){
+        newSizeState = 2
+    } else if (parameterState == "large" || parameterState == "half-shadow" || parameterState == "bad") {
+        newSizeState = 3
+    } else {
+        newSizeState = 4
+    }
+
+    var selectedItem by remember { mutableStateOf(newSizeState) }
 
     Column(modifier = Modifier.fillMaxWidth()) {
         H3Text(text = headline)
