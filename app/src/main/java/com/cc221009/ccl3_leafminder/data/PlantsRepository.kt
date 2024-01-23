@@ -9,35 +9,6 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-/*class PlantsRepository(private val apiPlantsService: APIPlantsService) {
-    suspend fun getPlantsWithDetails(apiKey:String): List<APIPlantsWithDetails> {
-        val plantsAPI = apiPlantsService.getlistAPIPlants(apiKey).execute().body() ?: emptyList()
-        return withContext(Dispatchers.IO) {
-            plantsAPI.map { plant ->
-                async {
-                    val details = apiPlantsService.getAPIDetails(plant.id, apiKey).execute().body()
-                    APIPlantsWithDetails(
-                        id = plant.id,
-                        scientific_name = plant.scientific_name,
-                        watering = plant.watering,
-                        sunlight = plant.sunlight,
-                        default_image = plant.default_image,
-                        poisonous_to_humans = details?.poisonous_to_humans ?: false,
-                    )
-                }
-                }.awaitAll()
-            }
-
-
-        data class APIPlantsWithDetails(
-            val id: Int,
-            val scientific_name: String,
-            val watering: String,
-            val sunlight: List<String>,
-            val default_image: PlantImage,
-            val poisonous_to_humans: Boolean,
-        ) */
-
 fun makePlantRepository(context: Context): PlantsRepository {
     return PlantsRepository(
         getDatabase(context).dao,
