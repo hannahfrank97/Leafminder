@@ -2,6 +2,8 @@ package com.cc221009.ccl3_leafminder.data
 
 import android.util.Log
 import com.cc221009.ccl3_leafminder.data.model.Plant
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 /*class PlantsRepository(private val apiPlantsService: APIPlantsService) {
     suspend fun getPlantsWithDetails(apiKey:String): List<APIPlantsWithDetails> {
@@ -59,6 +61,16 @@ class PlantsRepository(val dao: PlantsDao) {
         val plant = dao.getPlantById(plantId)
         Log.d("Repository", "Fetched plant: $plant")
         return plant
+    }
+
+    suspend fun upDateWateringDate(plantId: Int, newDate:LocalDate) {
+        val plant = getPlantById(plantId)
+        Log.d("Repository", "Fetching plant watering date with ID: $plantId")
+        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+        val formattedDate = newDate.format(formatter)
+        val updatetedPlant = plant.copy(wateringDate = formattedDate)
+        Log.d("Repository", "updatet watering date with newDate: $plant")
+        updatePlant(updatetedPlant)
     }
 
 }
