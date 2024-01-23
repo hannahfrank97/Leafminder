@@ -72,8 +72,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setupCamera()
        requestPermission()
-       setupCamera()
 
         setContent {
             CCL3_LeafminderTheme {

@@ -93,9 +93,10 @@ fun AddView(
 
         // Profile Image
         PlantImage(
-            "",
+            null,
             capturedImgUri = capturedImageUri,
             onClickLogic = {
+                // setupCamera()
                 cameraViewModel.enableCameraPreview(true)
                 navController.navigate(Screen.CameraView.route)
             })
@@ -187,7 +188,7 @@ fun AddPlantInfoContainer(
         )
 
 
-        AddParameterContainer("size") { selectedItem, onSelectItem ->
+        AddParameterContainer("size", sizeState) { selectedItem, onSelectItem ->
             IconButtonsItem(
                 "small",
                 R.drawable.plant_base_small,
@@ -233,7 +234,7 @@ fun AddPlantInfoContainer(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        AddParameterContainer("location") { selectedItem, onSelectItem ->
+        AddParameterContainer("location", locationState) { selectedItem, onSelectItem ->
 
             IconButtonsItem(
                 "light",
@@ -294,7 +295,7 @@ fun AddPlantInfoContainer(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        AddParameterContainer("wellbeing") { selectedItem, onSelectItem ->
+        AddParameterContainer("wellbeing", wellbeingState) { selectedItem, onSelectItem ->
 
             IconButtonsItem(
                 "great",
@@ -345,10 +346,24 @@ fun AddPlantInfoContainer(
 @Composable
 fun AddParameterContainer(
     headline: String,
+    parameterState: String,
     content: @Composable (Int, (Int) -> Unit) -> Unit
     //Hannah: content: @Composable () -> Unit
 ) {
-    var selectedItem by remember { mutableStateOf(-1) }
+    val newSizeState: Int
+    if (parameterState == "small" || parameterState == "light" || parameterState == "great") {
+        newSizeState = 1
+    } else if (parameterState == "medium" || parameterState == "half-light" || parameterState == "okay"){
+        newSizeState = 2
+    } else if (parameterState == "large" || parameterState == "half-shadow" || parameterState == "bad") {
+        newSizeState = 3
+    } else if ( parameterState == "shadow" ) {
+        newSizeState = 4
+    } else {
+        newSizeState = -1
+    }
+
+    var selectedItem by remember { mutableStateOf(newSizeState) }
 
     Column(modifier = Modifier.fillMaxWidth()) {
         H3Text(text = headline)
@@ -471,7 +486,7 @@ fun AddPlantSpeciesContainer(
                 }
             }
 
-            Spacer(modifier = Modifier.matchParentSize())
+            Spacer(modifier = Modifier.height(10.dp))
 
             Icon(
                 Icons.Filled.ArrowDropDown,
@@ -481,36 +496,36 @@ fun AddPlantSpeciesContainer(
 
         }
 
-
-
-        Row(
-            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            APIIconItem(
-                "Location",
-                "api value",
-                determineLocationIconFor("FUll sun"),
-                "location icon",
-                modifier = Modifier.weight(1f),
-
+        if (selectedSpecies != "Select Species") {
+            Row(
+                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                APIIconItem(
+                    "Location",
+                    "api value",
+                    determineLocationIconFor("full sun"),
+                    "location icon",
+                    modifier = Modifier.weight(1f),
+                    )
+                APIIconItem(
+                    "Watering",
+                    "api value",
+                    determineWateringIconFor("frequent"),
+                    "watering icon",
+                    modifier = Modifier.weight(1f)
                 )
-            APIIconItem(
-                "Watering",
-                "api value",
-                determineWateringIconFor("Average"),
-                "watering icon",
-                modifier = Modifier.weight(1f)
-            )
-            APIIconItem(
-                "Poisinousness",
-                "api value",
-                determinePoisonousnessIconFor("True"),
-                "poisonousness icon",
-                modifier = Modifier.weight(1f)
-            )
+                APIIconItem(
+                    "Poisinousness",
+                    "api value",
+                    determinePoisonousnessIconFor("true"),
+                    "poisonousness icon",
+                    modifier = Modifier.weight(1f)
+                )
+            }
         }
+
     }
-    Spacer(modifier = Modifier.height(20.dp))
+    Spacer(modifier = Modifier.height(30.dp))
 
 }
 
@@ -526,21 +541,28 @@ fun APIIconItem(
     Column(
         modifier = Modifier
             .background(colorScheme.surface)
-            .padding(20.dp)
+            .padding(top= 20.dp)
             .fillMaxWidth(0.3f)
             .height(100.dp)
             .then(modifier),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
         Image(
             painter = painterResource(id = imgPath),
             imgDescription,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
+            modifier = Modifier
+                .height(60.dp),
+            contentScale = ContentScale.Fit
         )
-        H4Text(text = headline)
-        CopyText(text = apiValue)
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            H4Text(text = headline)
+            CopyText(text = apiValue)
+        }
     }
 }
 
@@ -665,6 +687,7 @@ fun PlantImage(
                 contentDescription = "Profile Picture",
                 modifier = Modifier
                     .clip(CircleShape)
+                    .background(colorScheme.surface)
                     .align(Alignment.Center) // Center the image inside the Box
                     .size(115.dp), // Clip the image to a circle shape
                 contentScale = ContentScale.Crop
@@ -675,6 +698,7 @@ fun PlantImage(
                 contentDescription = "Profile Picture",
                 modifier = Modifier
                     .clip(CircleShape)
+                    .background(colorScheme.surface)
                     .align(Alignment.Center) // Center the image inside the Box
                     .size(115.dp), // Clip the image to a circle shape
                 contentScale = ContentScale.Crop
@@ -685,7 +709,7 @@ fun PlantImage(
                 contentDescription = "Profile Picture",
                 modifier = Modifier
                     .clip(CircleShape)
-                    .background(colorScheme.primaryContainer)
+                    .background(colorScheme.surface)
                     .align(Alignment.Center) // Center the image inside the Box
                     .size(100.dp), // Clip the image to a circle shape
                 contentScale = ContentScale.Fit

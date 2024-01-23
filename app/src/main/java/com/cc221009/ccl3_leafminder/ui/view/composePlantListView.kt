@@ -34,6 +34,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
+import com.cc221009.ccl3_leafminder.data.checkIfNeedsWater
 import com.cc221009.ccl3_leafminder.data.getDatabase
 import com.cc221009.ccl3_leafminder.data.makePlantRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
@@ -81,7 +82,6 @@ fun PlantListView(
                         navController,
                         plant = plant,
                         species = "Species",//API call to get species name
-                        needsWater = false,
                     )
                 }
             }
@@ -96,7 +96,6 @@ fun PlantListView(
 fun PlantListItem(
     navController: NavController,
     species: String?,
-    needsWater: Boolean,
     plant: Plant,
 
     ) {
@@ -109,6 +108,7 @@ fun PlantListItem(
                 navController.navigate("DetailView/${plant.id}")
             }
     ) {
+        val needsWater = checkIfNeedsWater(plant.wateringFrequency, plant.wateringDate)
 
         val borderColor =
             if (needsWater) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.primary

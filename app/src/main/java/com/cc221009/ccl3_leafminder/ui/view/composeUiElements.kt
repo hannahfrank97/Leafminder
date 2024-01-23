@@ -3,6 +3,7 @@ package com.cc221009.ccl3_leafminder.ui.view
 import android.app.DatePickerDialog
 import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -252,6 +253,46 @@ fun PrimaryButton(
     }
 }
 
+@Composable
+fun PrimaryButton2(
+    text: String,
+    onClickLogic: () -> Unit
+) {
+    Button(
+        modifier = Modifier
+            .height(80.dp)
+            .padding(bottom = 20.dp),
+        shape = RoundedCornerShape(15.dp),
+        onClick = { onClickLogic() },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = colorScheme.primary,
+        ),
+    ) {
+        CopyBoldText(text = text, colorScheme.background)
+    }
+}
+
+@Composable
+fun SecondaryButton(
+    text: String,
+    onClickLogic: () -> Unit
+) {
+    Button(
+        modifier = Modifier
+            .height(80.dp)
+            .padding(bottom = 20.dp)
+            .border(color = colorScheme.primary, width = 2.dp, shape = RoundedCornerShape(15.dp))
+        ,
+        shape = RoundedCornerShape(15.dp),
+        onClick = { onClickLogic() },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Transparent,
+        ),
+    ) {
+        CopyBoldText(text = text, colorScheme.primary)
+    }
+}
+
 
 
 // ––––––––––––––––––––– TYPO –––––––––––––––––––––––
@@ -308,6 +349,20 @@ fun H4Text(
             fontFamily = FontFamily(Font(R.font.opensans_bold)),
             fontSize = 13.sp,
             textAlign = TextAlign.Center
+        )
+    )
+}
+
+@Composable
+fun H4TextLeft(
+    text: String,
+) {
+    Text(
+        text = text,
+        style = TextStyle(
+            fontFamily = FontFamily(Font(R.font.opensans_bold)),
+            fontSize = 13.sp,
+            textAlign = TextAlign.Left
         )
     )
 }
