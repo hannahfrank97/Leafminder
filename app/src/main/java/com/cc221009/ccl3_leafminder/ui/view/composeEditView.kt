@@ -147,7 +147,10 @@ fun EditView(
         AddPlantSpeciesContainer(
             speciesNames = emptyList(), onDropdownTapped = {}, plantDetails = PlantDetails(
                 listOf("sunny"),
-            )
+                "frequent",
+                false,
+
+                )
         )
 
         AddPlantWateringContainer(

@@ -129,9 +129,9 @@ fun AddView(
             state.speciesNames,
             onDropdownTapped = state.onSpeciesListTapped,
             plantDetails = PlantDetails(
-              sunlight =   listOf("sunny", "half-shady", "shady"),
-                watering = "Frequent",
-                poisonousnes = true
+              sunlight =   listOf(),
+                watering = "",
+                poisonousnes = false,
             )
         )
 
@@ -357,7 +357,7 @@ fun AddParameterContainer(
     headline: String,
     parameterState: String,
     content: @Composable (Int, (Int) -> Unit) -> Unit
-    //Hannah: content: @Composable () -> Unit
+
 ) {
     val newSizeState: Int
     if (parameterState == "small" || parameterState == "light" || parameterState == "great") {

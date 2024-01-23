@@ -39,14 +39,14 @@ data class AddUIState(
 
     val waterInterval: Int,
 
-    val plantDetails: List<String>
+    val plantDetails: List<String>,
 
+    val tappingOnSpeciesToShowDetails: (Int) -> Unit,
 
     )
 
 class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {
 
-    //for the api: val plantsDetails = MutableLiveData<List<APIPlantsWithDetails>>()
     private val _mainViewState = MutableStateFlow(
         AddUIState(
             name = TextFieldValue(""),
@@ -61,6 +61,7 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
             speciesNames = emptyList(),
             onSpeciesListTapped = ::fetchSpeciesNames,
             tappingtoSavePlant = ::saveButtonPlant,
+            tappingOnSpeciesToShowDetails = ::fetchSpeciesDetails,
 
             date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
             size = "",
@@ -77,7 +78,7 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
             plantDetails = emptyList()
 
 
-            )
+        )
     )
     val uiState: StateFlow<AddUIState> = _mainViewState.asStateFlow()
 
@@ -130,6 +131,17 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
         }
 
 
+    }
+
+    fun fetchSpeciesDetails(Id: Int) {
+        viewModelScope.launch {
+            try {
+                val plantDetails = plantsRepository.getSpeciesDetails(Id)
+                //_mainViewState.value = _mainViewState.value.copy(speciesNames = speciesNames)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     fun saveButtonPlant(plant: Plant) {

@@ -32,6 +32,18 @@ class PlantsRepository(
         }
     }
 
+    suspend fun getSpeciesDetails(Id:Int): PlantDetails {
+        return withContext(Dispatchers.IO) {
+            val request = apiPlantsService.getPlantDetails(Id, apiKey)
+            val response = request.execute().body()
+            response ?:PlantDetails(
+                sunlight = listOf("Unknown"),
+                watering = "Unknown",
+                poisonousnes = false,
+            )
+        }
+    }
+
 
     suspend fun addPlant(plant: Plant) {
         dao.insertPlant(plant)

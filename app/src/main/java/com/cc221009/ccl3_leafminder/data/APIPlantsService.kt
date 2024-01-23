@@ -22,7 +22,14 @@ data class PlantDetails(
 interface APIPlantsService {
     @GET("species-list")
     fun getSpeciesList(
-        @Query("key") apiKey: String, @Query("q") query: String
+        @Query("key") apiKey: String,
+        @Query("q") query: String
     ): Call<SpeciesListResponse>
+
+   @GET("species-details")
+   fun getPlantDetails(
+       @Query("id") Id: Int,
+       @Query("key") apiKey: String,
+   ): Call <PlantDetails>
 }
 
