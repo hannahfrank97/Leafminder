@@ -79,6 +79,7 @@ fun EditView(
                                 wateringDate = state.wateringDate,
                                 wateringFrequency = state.wateringFrequency,
                                 imagePath = capturedImageUri.toString(),
+                                apiId = 0, // TODO: Get the actual api id
                                 id = state.plant?.id ?: 0
                             )
                             state.clickingToDeletePlant(plant)
@@ -171,6 +172,7 @@ fun EditView(
                     wateringDate = state.wateringDate,
                     wateringFrequency = state.wateringFrequency,
                     imagePath = capturedImageUri?.toString() ?: "",
+                    apiId = 0, // TODO: Get the actual api id
                     id = state.plant?.id ?: 0
                 )
                 state.onSaveEditedPlant(editedPlant)
