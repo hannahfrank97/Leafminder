@@ -32,18 +32,12 @@ data class AddUIState(
     val location: String,
     val wellbeing: String,
     val apiId: Int,
-
     val wateringDate: String,
-
     val wateringFrequency: String,
     val imagePath: String,
-
     val waterInterval: Int,
-
     val plantDetails: List<String>,
-
     val tappingOnSpeciesToShowDetails: (Int) -> Unit,
-
     )
 
 data class SpeciesItem(
