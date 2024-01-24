@@ -32,7 +32,6 @@ data class AddUIState(
     val size: String,
     val location: String,
     val wellbeing: String,
-    val apiId: Int,
     val wateringDate: String,
     val wateringFrequency: String,
     val imagePath: String,
@@ -68,7 +67,6 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
             size = "",
             location = "",
             wellbeing = "",
-            apiId = 0,
 
             wateringDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
 
@@ -102,6 +100,7 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
             try {
                 val plantDetails = plantsRepository.getSpeciesDetails(apiId)
                 _mainViewState.value = _mainViewState.value.copy(speciesDetails = plantDetails)
+
             } catch (e: Exception) {
                 e.printStackTrace()
             }
