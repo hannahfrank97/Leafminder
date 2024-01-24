@@ -22,11 +22,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.IconButton
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
@@ -48,12 +44,8 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.PlantDetails
-import com.cc221009.ccl3_leafminder.data.determineLocationIconFor
-import com.cc221009.ccl3_leafminder.data.determinePoisonousnessIconFor
-import com.cc221009.ccl3_leafminder.data.determineWateringIconFor
 import com.cc221009.ccl3_leafminder.data.makePlantRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
-import com.cc221009.ccl3_leafminder.ui.view_model.APISpeciesItem
 import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
 import com.cc221009.ccl3_leafminder.ui.view_model.CameraViewModel
 
@@ -433,111 +425,6 @@ fun IconButtonsItem(
 }
 
 // API COMPONENTS
-
-@Composable
-fun AddPlantSpeciesContainer(
-    speciesItems: List<APISpeciesItem>,
-    plantDetails: PlantDetails,
-    onDropdownTapped: () -> Unit,
-) {
-
-    Column(
-        modifier = Modifier
-            .clip(RoundedCornerShape(15.dp))
-            .background(colorScheme.surface)
-            .padding(20.dp)
-            .fillMaxWidth()
-    ) {
-        //HEADLINE
-        H3Text(text = "Species")
-
-        var expanded by remember { mutableStateOf(false) }
-        var selectedSpecies by remember { mutableStateOf("Select Species") }
-
-        Box(
-            modifier = Modifier
-                .clickable {
-                    expanded = true
-                    onDropdownTapped()
-                }
-                .fillMaxWidth()
-                .height(45.dp)
-                .border(
-                    width = 2.dp,
-                    color = colorScheme.outline,
-                    shape = RoundedCornerShape(12.dp)
-                ) // Apply border
-                .clip(RoundedCornerShape(12.dp)), // Then clip to the same shape
-
-            contentAlignment = Alignment.CenterStart,
-        ) {
-            Box(
-                modifier = Modifier
-                    .padding(start = 40.dp)
-
-            ) {
-
-                CopyText(selectedSpecies)
-            }
-            DropdownMenu(
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .background(colorScheme.background),
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                speciesItems.forEach { speciesItem ->
-                    DropdownMenuItem(onClick = {
-                        selectedSpecies = speciesItem.speciesName
-                        expanded = false
-                    }) {
-                        CopyText(speciesItem.speciesName)
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Icon(
-                Icons.Filled.ArrowDropDown,
-                contentDescription = "Dropdown Arrow",
-                modifier = Modifier.padding(start = 10.dp, end = 10.dp)
-            )
-
-        }
-
-        if (selectedSpecies != "Select Species") {
-            Row(
-                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                APIIconItem(
-                    "Location",
-                    "api value",
-                    determineLocationIconFor(plantDetails.sunlight.first()),
-                    "location icon",
-                    modifier = Modifier.weight(1f),
-                )
-                APIIconItem(
-                    "Watering",
-                    "api value",
-                    determineWateringIconFor(plantDetails.watering),
-                    "watering icon",
-                    modifier = Modifier.weight(1f)
-                )
-                APIIconItem(
-                    "Poisinousness",
-                    "api value",
-                    determinePoisonousnessIconFor(plantDetails.poisonousnes.toString()),
-                    "poisonousness icon",
-                    modifier = Modifier.weight(1f)
-                )
-            }
-        }
-
-    }
-    Spacer(modifier = Modifier.height(30.dp))
-
-}
 
 
 @Composable
