@@ -5,7 +5,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.cc221009.ccl3_leafminder.data.PlantDetails
+import com.cc221009.ccl3_leafminder.data.SpeciesDetails
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,7 +37,7 @@ data class AddUIState(
     val wateringFrequency: String,
     val imagePath: String,
     val waterInterval: Int,
-    val plantDetails: PlantDetails?,
+    val speciesDetails: SpeciesDetails?,
     val onSpeciesSelected: (Int) -> Unit,
 )
 
@@ -77,7 +77,7 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
 
             waterInterval = 7,
 
-            plantDetails = null
+            speciesDetails = null
 
 
         )
@@ -102,7 +102,7 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
         viewModelScope.launch {
             try {
                 val plantDetails = plantsRepository.getSpeciesDetails(apiId)
-                _mainViewState.value = _mainViewState.value.copy(plantDetails = plantDetails)
+                _mainViewState.value = _mainViewState.value.copy(speciesDetails = plantDetails)
             } catch (e: Exception) {
                 e.printStackTrace()
             }

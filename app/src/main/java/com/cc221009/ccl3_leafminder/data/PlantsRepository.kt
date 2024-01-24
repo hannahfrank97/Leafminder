@@ -38,11 +38,11 @@ class PlantsRepository(
         }
     }
 
-    suspend fun getSpeciesDetails(Id: Int): PlantDetails {
+    suspend fun getSpeciesDetails(Id: Int): SpeciesDetails {
         return withContext(Dispatchers.IO) {
             val request = apiPlantsService.getPlantDetails(Id, apiKey)
             val response = request.execute().body()
-            response ?: PlantDetails(
+            response ?: SpeciesDetails(
                 sunlight = listOf("Unknown"),
                 watering = "Unknown",
                 poisonousnes = false,

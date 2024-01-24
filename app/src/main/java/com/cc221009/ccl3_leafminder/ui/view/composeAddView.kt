@@ -43,7 +43,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.R
-import com.cc221009.ccl3_leafminder.data.PlantDetails
+import com.cc221009.ccl3_leafminder.data.SpeciesDetails
 import com.cc221009.ccl3_leafminder.data.makePlantRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
@@ -122,7 +122,7 @@ fun AddView(
             state.speciesItems,
             onDropdownTapped = state.onSpeciesListTapped,
             // TODO: Get plant details from ui state
-            plantDetails = PlantDetails(
+            speciesDetails = SpeciesDetails(
                 sunlight = listOf(),
                 watering = "",
                 poisonousnes = false,

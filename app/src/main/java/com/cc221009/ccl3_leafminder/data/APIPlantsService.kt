@@ -13,7 +13,7 @@ data class SpeciesListResponse(
     val data: List<OnlyScientificName>
 )
 
-data class PlantDetails(
+data class SpeciesDetails(
     val sunlight: List<String>,
     val watering: String,
     val poisonousnes: Boolean,
@@ -31,6 +31,6 @@ interface APIPlantsService {
    fun getPlantDetails(
        @Query("id") Id: Int,
        @Query("key") apiKey: String,
-   ): Call <PlantDetails>
+   ): Call <SpeciesDetails>
 }
 

@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.cc221009.ccl3_leafminder.R
-import com.cc221009.ccl3_leafminder.data.PlantDetails
+import com.cc221009.ccl3_leafminder.data.SpeciesDetails
 import com.cc221009.ccl3_leafminder.data.makePlantRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.CameraViewModel
@@ -148,7 +148,7 @@ fun EditView(
         AddPlantSpeciesContainer(
             speciesItems = emptyList(), onDropdownTapped = {},
             // TODO: Get plant details from ui state
-            plantDetails = PlantDetails(
+            speciesDetails = SpeciesDetails(
                 listOf("sunny"),
                 "frequent",
                 false,

@@ -27,7 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.cc221009.ccl3_leafminder.data.PlantDetails
+import com.cc221009.ccl3_leafminder.data.SpeciesDetails
 import com.cc221009.ccl3_leafminder.data.determineLocationIconFor
 import com.cc221009.ccl3_leafminder.data.determinePoisonousnessIconFor
 import com.cc221009.ccl3_leafminder.data.determineWateringIconFor
@@ -36,7 +36,7 @@ import com.cc221009.ccl3_leafminder.ui.view_model.APISpeciesItem
 @Composable
 fun AddPlantSpeciesContainer(
     speciesItems: List<APISpeciesItem>,
-    plantDetails: PlantDetails?,
+    speciesDetails: SpeciesDetails?,
     onDropdownTapped: () -> Unit,
 ) {
 
@@ -105,8 +105,8 @@ fun AddPlantSpeciesContainer(
 
         }
 
-        if (plantDetails != null) {
-            SpeciesDetailsDisplay(plantDetails)
+        if (speciesDetails != null) {
+            SpeciesDetailsDisplay(speciesDetails)
         }
 
     }
@@ -115,28 +115,28 @@ fun AddPlantSpeciesContainer(
 }
 
 @Composable
-private fun SpeciesDetailsDisplay(plantDetails: PlantDetails) {
+private fun SpeciesDetailsDisplay(speciesDetails: SpeciesDetails) {
     Row(
         modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
     ) {
         APIIconItem(
             "Location",
             "api value",
-            determineLocationIconFor(plantDetails.sunlight.first()),
+            determineLocationIconFor(speciesDetails.sunlight.first()),
             "location icon",
             modifier = Modifier.weight(1f),
         )
         APIIconItem(
             "Watering",
             "api value",
-            determineWateringIconFor(plantDetails.watering),
+            determineWateringIconFor(speciesDetails.watering),
             "watering icon",
             modifier = Modifier.weight(1f)
         )
         APIIconItem(
             "Poisinousness",
             "api value",
-            determinePoisonousnessIconFor(plantDetails.poisonousnes.toString()),
+            determinePoisonousnessIconFor(speciesDetails.poisonousnes.toString()),
             "poisonousness icon",
             modifier = Modifier.weight(1f)
         )
