@@ -53,6 +53,7 @@ import com.cc221009.ccl3_leafminder.data.determinePoisonousnessIconFor
 import com.cc221009.ccl3_leafminder.data.determineWateringIconFor
 import com.cc221009.ccl3_leafminder.data.makePlantRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
+import com.cc221009.ccl3_leafminder.ui.view_model.APISpeciesItem
 import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
 import com.cc221009.ccl3_leafminder.ui.view_model.CameraViewModel
 
@@ -126,10 +127,10 @@ fun AddView(
         )
 
         AddPlantSpeciesContainer(
-            state.speciesNames,
+            state.speciesItems,
             onDropdownTapped = state.onSpeciesListTapped,
             plantDetails = PlantDetails(
-              sunlight =   listOf(),
+                sunlight = listOf(),
                 watering = "",
                 poisonousnes = false,
             )
@@ -435,10 +436,9 @@ fun IconButtonsItem(
 
 @Composable
 fun AddPlantSpeciesContainer(
-    speciesNames: List<String>,
+    speciesItems: List<APISpeciesItem>,
     plantDetails: PlantDetails,
     onDropdownTapped: () -> Unit,
-    speciesItem: List<SpeciesItem>
 ) {
 
     Column(
@@ -486,12 +486,12 @@ fun AddPlantSpeciesContainer(
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
-                speciesNames.forEach { speciesName ->
+                speciesItems.forEach { speciesItem ->
                     DropdownMenuItem(onClick = {
-                        selectedSpecies = speciesName
+                        selectedSpecies = speciesItem.speciesName
                         expanded = false
                     }) {
-                        CopyText(speciesName)
+                        CopyText(speciesItem.speciesName)
                     }
                 }
             }

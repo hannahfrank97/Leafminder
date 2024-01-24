@@ -24,7 +24,7 @@ data class AddUIState(
     val setWateringDate: (String) -> Unit,
     val setWateringFrequency: (Int) -> Unit,
     val setwaterInterval: (Int) -> Unit,
-    val speciesNames: List<String>,
+    val speciesItems: List<APISpeciesItem>,
     val onSpeciesListTapped: () -> Unit,
     val tappingtoSavePlant: (Plant) -> Unit,
     val date: String,
@@ -58,7 +58,7 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
             setWateringDate = ::onWateringDateChange,
             setWateringFrequency = ::onWateringFrequencyChange,
             setwaterInterval = ::onWaterIntervalChange,
-            speciesNames = emptyList(),
+            speciesItems = emptyList(),
             onSpeciesListTapped = ::fetchSpeciesNames,
             tappingtoSavePlant = ::saveButtonPlant,
             onSpeciesSelected = ::fetchSpeciesDetails,
@@ -82,15 +82,13 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
         )
     )
 
-    private val _apiSpeciesItems = MutableStateFlow<List<APISpeciesItem>>(emptyList())
-    val apiSpeciesItems: StateFlow<List<APISpeciesItem>> = _apiSpeciesItems.asStateFlow()
     val uiState: StateFlow<AddUIState> = _mainViewState.asStateFlow()
 
     fun fetchSpeciesNames() {
         viewModelScope.launch {
             try {
                 val speciesItems = plantsRepository.getAllSpeciesNames("rubrum")
-                _apiSpeciesItems.value = speciesItems
+                _mainViewState.value = uiState.value.copy(speciesItems = speciesItems)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
