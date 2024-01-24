@@ -32,7 +32,7 @@ class PlantsRepository(
             plants.map {
                 APISpeciesItem(
                     id = it.id,
-                    APIname = it.scientific_name.firstOrNull() ?: "Unknown"
+                    speciesName = it.scientific_name.firstOrNull() ?: "Unknown"
                 )
             }
         }

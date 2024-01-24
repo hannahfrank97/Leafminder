@@ -38,10 +38,10 @@ data class AddUIState(
     val waterInterval: Int,
     val plantDetails: List<String>,
     val onSpeciesSelected: (Int) -> Unit,
-    )
+)
 
 data class APISpeciesItem(
-    val APIname: String,
+    val speciesName: String,
     val id: Int,
 )
 
