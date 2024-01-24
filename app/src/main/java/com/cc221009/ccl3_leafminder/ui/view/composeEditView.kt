@@ -153,7 +153,8 @@ fun EditView(
                 "frequent",
                 false,
 
-                )
+                ),
+            onSpeciesSelected = {}
         )
 
         AddPlantWateringContainer(

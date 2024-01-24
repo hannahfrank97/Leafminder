@@ -126,7 +126,8 @@ fun AddView(
                 sunlight = listOf(),
                 watering = "",
                 poisonousnes = false,
-            )
+            ),
+            onSpeciesSelected = {}
         )
 
         AddPlantWateringContainer(

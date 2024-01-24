@@ -38,6 +38,7 @@ fun SpeciesChooser(
     speciesItems: List<APISpeciesItem>,
     selectedSpeciesDetails: SpeciesDetails?,
     onSpeciesRequested: () -> Unit,
+    onSpeciesSelected: (APISpeciesItem) -> Unit,
 ) {
 
     Column(
@@ -88,6 +89,7 @@ fun SpeciesChooser(
                 speciesItems.forEach { speciesItem ->
                     DropdownMenuItem(onClick = {
                         selectedSpecies = speciesItem.speciesName
+                        onSpeciesSelected(speciesItem)
                         expanded = false
                     }) {
                         CopyText(speciesItem.speciesName)
