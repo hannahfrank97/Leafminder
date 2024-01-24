@@ -486,8 +486,6 @@ fun AddPlantWateringContainer(
     ) {
         //HEADLINE
         H3Text(text = "Watering")
-
-        // TODO: Connect to Viewmodel
         CalendarTextField(
             "Select the date of last watering",
             "Select date",
