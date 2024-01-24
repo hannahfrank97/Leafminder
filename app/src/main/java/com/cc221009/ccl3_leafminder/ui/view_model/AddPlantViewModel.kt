@@ -40,7 +40,7 @@ data class AddUIState(
     val onSpeciesSelected: (Int) -> Unit,
     )
 
-data class SpeciesItem(
+data class APISpeciesItem(
     val APIname: String,
     val id: Int,
 )
@@ -82,15 +82,15 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
         )
     )
 
-    private val _speciesItems = MutableStateFlow<List<SpeciesItem>>(emptyList())
-    val speciesItems: StateFlow<List<SpeciesItem>> = _speciesItems.asStateFlow()
+    private val _apiSpeciesItems = MutableStateFlow<List<APISpeciesItem>>(emptyList())
+    val apiSpeciesItems: StateFlow<List<APISpeciesItem>> = _apiSpeciesItems.asStateFlow()
     val uiState: StateFlow<AddUIState> = _mainViewState.asStateFlow()
 
     fun fetchSpeciesNames() {
         viewModelScope.launch {
             try {
                 val speciesItems = plantsRepository.getAllSpeciesNames("rubrum")
-                _speciesItems.value = speciesItems
+                _apiSpeciesItems.value = speciesItems
             } catch (e: Exception) {
                 e.printStackTrace()
             }
