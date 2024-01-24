@@ -79,7 +79,7 @@ fun EditView(
                                 wateringDate = state.wateringDate,
                                 wateringFrequency = state.wateringFrequency,
                                 imagePath = capturedImageUri.toString(),
-                                apiId = 0, // TODO: Get the actual api id
+                                apiId = state.plant!!.apiId,
                                 id = state.plant?.id ?: 0
                             )
                             state.clickingToDeletePlant(plant)
@@ -146,16 +146,14 @@ fun EditView(
 
 
         SpeciesChooser(
-            speciesItems = emptyList(), onSpeciesRequested = {},
-            // TODO: Get plant details from ui state
-            selectedSpeciesDetails = SpeciesDetails(
-                0,
-                listOf("sunny"),
-                "frequent",
-                0,
-            ),
-            onSpeciesSelected = {}
+            state.speciesItems,
+            onSpeciesRequested = state.onSpeciesListRequested,
+            selectedSpeciesDetails = state.speciesDetails,
+            onSpeciesSelected = {
+                state.onSpeciesSelected(it)
+            }
         )
+        4
 
         AddPlantWateringContainer(
             state.wateringDate,

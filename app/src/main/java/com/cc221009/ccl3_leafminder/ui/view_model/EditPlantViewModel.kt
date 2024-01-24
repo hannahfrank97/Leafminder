@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
+import com.cc221009.ccl3_leafminder.data.SpeciesDetails
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -52,6 +53,10 @@ data class EditUIState(
     val setWateringFrequency: (Int) -> Unit,
     val setWateringDate: (String) -> Unit,
     val waterInterval: Int,
+    val speciesItems: List<APISpeciesItem>,
+    val speciesDetails: SpeciesDetails?,
+    val onSpeciesSelected: (Int) -> Unit,
+    val onSpeciesListRequested: () -> Unit,
 
 )
 
@@ -95,16 +100,45 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
             setWellbeing = ::onWellbeingChange,
             setWateringFrequency = ::onWateringFrequencyChange,
             setWateringDate = ::onWateringDateChange,
+            onSpeciesListRequested = ::fetchSpeciesNames,
+            onSpeciesSelected = ::fetchSpeciesDetails,
 
             waterInterval = 7,
 
             loadPlant = ::getPlantDetails,
             plant = null,
+            speciesItems = emptyList(),
+            speciesDetails = null
 
             )
     )
 
     val uiState: StateFlow<EditUIState> = _mainViewState.asStateFlow()
+
+    fun fetchSpeciesNames() {
+        viewModelScope.launch {
+            try {
+                val speciesItems = plantsRepository.getAllSpeciesNames("rubrum")
+                _mainViewState.value = uiState.value.copy(speciesItems = speciesItems)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+
+    }
+
+    fun fetchSpeciesDetails(apiId: Int) {
+        viewModelScope.launch {
+            try {
+                val plantDetails = plantsRepository.getSpeciesDetails(apiId)
+                _mainViewState.value = _mainViewState.value.copy(speciesDetails = plantDetails)
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 
     fun clickDeletePlant(plant: Plant) {
         viewModelScope.launch {

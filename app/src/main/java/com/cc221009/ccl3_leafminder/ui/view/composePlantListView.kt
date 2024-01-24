@@ -81,7 +81,7 @@ fun PlantListView(
                     PlantListItem(
                         navController,
                         plant = plant,
-                        species = "Species",//API call to get species name
+                        species = state.speciesItems.firstOrNull()
                     )
                 }
             }

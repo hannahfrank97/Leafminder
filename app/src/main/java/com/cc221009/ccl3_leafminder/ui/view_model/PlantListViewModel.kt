@@ -14,6 +14,9 @@ import kotlinx.coroutines.launch
 data class PlantListUIState(
     val plants: List<Plant>,
     val seeAllPlants: () -> Unit,
+    val speciesItems: List<APISpeciesItem>,
+    val onSpeciesListRequested: () -> Unit,
+    val selected
 
     )
 
@@ -22,6 +25,8 @@ class PlantListViewModel(private val plantsRepository: PlantsRepository) : ViewM
         PlantListUIState(
             plants = emptyList(),
             seeAllPlants = ::getPlants,
+            speciesItems = emptyList(),
+            onSpeciesListRequested = ::fetchSpeciesNames,
 
             )
     )
@@ -37,9 +42,21 @@ class PlantListViewModel(private val plantsRepository: PlantsRepository) : ViewM
             try {
                 val plants = plantsRepository.getPlants()
                 _mainViewState.value = _mainViewState.value.copy(plants = plants)
-
             } catch (e: Exception) {
                 Log.e("PlantListViewModel", "Error saving plant", e)
+            }
+        }
+
+
+    }
+
+    fun fetchSpeciesNames() {
+        viewModelScope.launch {
+            try {
+                val speciesItems = plantsRepository.getAllSpeciesNames("rubrum")
+                _mainViewState.value = uiState.value.copy(speciesItems = speciesItems)
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
 

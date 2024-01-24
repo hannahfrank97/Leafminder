@@ -60,8 +60,8 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
             setwaterInterval = ::onWaterIntervalChange,
             speciesItems = emptyList(),
             onSpeciesListRequested = ::fetchSpeciesNames,
-            tappingtoSavePlant = ::saveButtonPlant,
             onSpeciesSelected = ::fetchSpeciesDetails,
+            tappingtoSavePlant = ::saveButtonPlant,
 
             date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
             size = "",
