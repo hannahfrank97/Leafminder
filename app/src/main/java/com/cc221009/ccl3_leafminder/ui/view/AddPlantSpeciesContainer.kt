@@ -106,34 +106,39 @@ fun AddPlantSpeciesContainer(
         }
 
         if (plantDetails != null) {
-            Row(
-                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                APIIconItem(
-                    "Location",
-                    "api value",
-                    determineLocationIconFor(plantDetails.sunlight.first()),
-                    "location icon",
-                    modifier = Modifier.weight(1f),
-                )
-                APIIconItem(
-                    "Watering",
-                    "api value",
-                    determineWateringIconFor(plantDetails.watering),
-                    "watering icon",
-                    modifier = Modifier.weight(1f)
-                )
-                APIIconItem(
-                    "Poisinousness",
-                    "api value",
-                    determinePoisonousnessIconFor(plantDetails.poisonousnes.toString()),
-                    "poisonousness icon",
-                    modifier = Modifier.weight(1f)
-                )
-            }
+            SpeciesDetailsDisplay(plantDetails)
         }
 
     }
     Spacer(modifier = Modifier.height(30.dp))
 
+}
+
+@Composable
+private fun SpeciesDetailsDisplay(plantDetails: PlantDetails) {
+    Row(
+        modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        APIIconItem(
+            "Location",
+            "api value",
+            determineLocationIconFor(plantDetails.sunlight.first()),
+            "location icon",
+            modifier = Modifier.weight(1f),
+        )
+        APIIconItem(
+            "Watering",
+            "api value",
+            determineWateringIconFor(plantDetails.watering),
+            "watering icon",
+            modifier = Modifier.weight(1f)
+        )
+        APIIconItem(
+            "Poisinousness",
+            "api value",
+            determinePoisonousnessIconFor(plantDetails.poisonousnes.toString()),
+            "poisonousness icon",
+            modifier = Modifier.weight(1f)
+        )
+    }
 }
