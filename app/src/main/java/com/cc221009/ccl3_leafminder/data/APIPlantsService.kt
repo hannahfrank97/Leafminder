@@ -27,7 +27,7 @@ interface APIPlantsService {
         @Query("q") query: String
     ): Call<SpeciesListResponse>
 
-   @GET("species-details")
+   @GET("species/details")
    fun getPlantDetails(
        @Query("id") Id: Int,
        @Query("key") apiKey: String,
