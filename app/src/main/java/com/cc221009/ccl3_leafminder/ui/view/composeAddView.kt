@@ -121,13 +121,15 @@ fun AddView(
         SpeciesChooser(
             state.speciesItems,
             onSpeciesRequested = state.onSpeciesListRequested,
-            // TODO: Get plant details from ui state
             selectedSpeciesDetails = SpeciesDetails(
-                sunlight = listOf(),
-                watering = "",
-                poisonousnes = false,
+                sunlight = listOf(state.sunlight.first()),
+                watering = state.watering,
+                poisonous_to_humans = state.poisonous_to_humans
+
             ),
-            onSpeciesSelected = {}
+            onSpeciesSelected = {
+                state.onSpeciesSelected(it)
+            }
         )
 
         AddPlantWateringContainer(

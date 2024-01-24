@@ -16,7 +16,7 @@ data class SpeciesListResponse(
 data class SpeciesDetails(
     val sunlight: List<String>,
     val watering: String,
-    val poisonousnes: Boolean,
+    val poisonous_to_humans: Boolean,
 )
 
 

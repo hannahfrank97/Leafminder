@@ -39,6 +39,12 @@ data class AddUIState(
     val waterInterval: Int,
     val speciesDetails: SpeciesDetails?,
     val onSpeciesSelected: (Int) -> Unit,
+
+    //API Details
+    val sunlight: List<String>,
+    val watering: String,
+    val poisonous_to_humans: Boolean,
+
 )
 
 data class APISpeciesItem(
@@ -77,7 +83,11 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
 
             waterInterval = 7,
 
-            speciesDetails = null
+            speciesDetails = null,
+
+            sunlight = emptyList(),
+            watering = "",
+            poisonous_to_humans = false,
 
 
         )
