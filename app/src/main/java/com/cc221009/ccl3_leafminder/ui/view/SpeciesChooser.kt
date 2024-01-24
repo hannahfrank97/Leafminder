@@ -37,7 +37,7 @@ import com.cc221009.ccl3_leafminder.ui.view_model.APISpeciesItem
 fun SpeciesChooser(
     speciesItems: List<APISpeciesItem>,
     selectedSpeciesDetails: SpeciesDetails?,
-    onDropdownTapped: () -> Unit,
+    onSpeciesRequested: () -> Unit,
 ) {
 
     Column(
@@ -57,7 +57,7 @@ fun SpeciesChooser(
             modifier = Modifier
                 .clickable {
                     expanded = true
-                    onDropdownTapped()
+                    onSpeciesRequested()
                 }
                 .fillMaxWidth()
                 .height(45.dp)

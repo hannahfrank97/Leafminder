@@ -5,8 +5,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.cc221009.ccl3_leafminder.data.SpeciesDetails
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
+import com.cc221009.ccl3_leafminder.data.SpeciesDetails
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,7 +26,7 @@ data class AddUIState(
     val setWateringFrequency: (Int) -> Unit,
     val setwaterInterval: (Int) -> Unit,
     val speciesItems: List<APISpeciesItem>,
-    val onSpeciesListTapped: () -> Unit,
+    val onSpeciesListRequested: () -> Unit,
     val tappingtoSavePlant: (Plant) -> Unit,
     val date: String,
     val size: String,
@@ -60,7 +60,7 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
             setWateringFrequency = ::onWateringFrequencyChange,
             setwaterInterval = ::onWaterIntervalChange,
             speciesItems = emptyList(),
-            onSpeciesListTapped = ::fetchSpeciesNames,
+            onSpeciesListRequested = ::fetchSpeciesNames,
             tappingtoSavePlant = ::saveButtonPlant,
             onSpeciesSelected = ::fetchSpeciesDetails,
 

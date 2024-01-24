@@ -120,7 +120,7 @@ fun AddView(
 
         SpeciesChooser(
             state.speciesItems,
-            onDropdownTapped = state.onSpeciesListTapped,
+            onSpeciesRequested = state.onSpeciesListRequested,
             // TODO: Get plant details from ui state
             selectedSpeciesDetails = SpeciesDetails(
                 sunlight = listOf(),
