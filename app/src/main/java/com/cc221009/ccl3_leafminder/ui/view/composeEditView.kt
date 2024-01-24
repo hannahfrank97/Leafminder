@@ -149,11 +149,11 @@ fun EditView(
             speciesItems = emptyList(), onSpeciesRequested = {},
             // TODO: Get plant details from ui state
             selectedSpeciesDetails = SpeciesDetails(
+                0,
                 listOf("sunny"),
                 "frequent",
                 0,
-
-                ),
+            ),
             onSpeciesSelected = {}
         )
 

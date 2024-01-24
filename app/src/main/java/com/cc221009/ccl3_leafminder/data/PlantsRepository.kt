@@ -18,6 +18,13 @@ fun makePlantRepository(context: Context): PlantsRepository {
     )
 }
 
+private val unknownSpecies = SpeciesDetails(
+    id = 0,
+    sunlight = listOf("Unknown"),
+    watering = "Unknown",
+    poisonous_to_humans = 0
+)
+
 class PlantsRepository(
     val dao: PlantsDao,
     val apiPlantsService: APIPlantsService,
@@ -46,14 +53,9 @@ class PlantsRepository(
         return withContext(Dispatchers.IO) {
             val request = apiPlantsService.getPlantDetails(Id, apiKey)
             val response = request.execute()
-            response.body() ?: SpeciesDetails(
-                sunlight = listOf("Unknown"),
-                watering = "Unknown",
-                poisonous_to_humans = 0
-            )
+            response.body() ?: unknownSpecies
         }
     }
-
 
     suspend fun addPlant(plant: Plant) {
         dao.insertPlant(plant)

@@ -145,7 +145,7 @@ fun AddView(
                     wateringDate = state.wateringDate,
                     wateringFrequency = state.waterInterval.toString(),
                     imagePath = capturedImageUri?.toString() ?: "",
-                    apiId = state.apiId
+                    apiId = state.speciesDetails?.id,
                 )
                 state.tappingtoSavePlant(plant)
                 println("Button was clicked")
