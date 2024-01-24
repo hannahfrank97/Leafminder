@@ -37,7 +37,7 @@ data class AddUIState(
     val imagePath: String,
     val waterInterval: Int,
     val plantDetails: List<String>,
-    val tappingOnSpeciesToShowDetails: (Int) -> Unit,
+    val onSpeciesSelected: (Int) -> Unit,
     )
 
 data class SpeciesItem(
@@ -61,7 +61,7 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
             speciesNames = emptyList(),
             onSpeciesListTapped = ::fetchSpeciesNames,
             tappingtoSavePlant = ::saveButtonPlant,
-            tappingOnSpeciesToShowDetails = ::fetchSpeciesDetails,
+            onSpeciesSelected = ::fetchSpeciesDetails,
 
             date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
             size = "",
