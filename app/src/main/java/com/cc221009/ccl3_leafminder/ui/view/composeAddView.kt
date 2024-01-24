@@ -121,12 +121,7 @@ fun AddView(
         SpeciesChooser(
             state.speciesItems,
             onSpeciesRequested = state.onSpeciesListRequested,
-            selectedSpeciesDetails = SpeciesDetails(
-                sunlight = listOf(state.sunlight.first()),
-                watering = state.watering,
-                poisonous_to_humans = state.poisonous_to_humans
-
-            ),
+            selectedSpeciesDetails = state.speciesDetails,
             onSpeciesSelected = {
                 state.onSpeciesSelected(it)
             }
