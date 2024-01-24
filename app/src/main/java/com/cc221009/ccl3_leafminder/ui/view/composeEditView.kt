@@ -148,7 +148,7 @@ fun EditView(
         SpeciesChooser(
             speciesItems = emptyList(), onDropdownTapped = {},
             // TODO: Get plant details from ui state
-            speciesDetails = SpeciesDetails(
+            selectedSpeciesDetails = SpeciesDetails(
                 listOf("sunny"),
                 "frequent",
                 false,

@@ -122,7 +122,7 @@ fun AddView(
             state.speciesItems,
             onDropdownTapped = state.onSpeciesListTapped,
             // TODO: Get plant details from ui state
-            speciesDetails = SpeciesDetails(
+            selectedSpeciesDetails = SpeciesDetails(
                 sunlight = listOf(),
                 watering = "",
                 poisonousnes = false,

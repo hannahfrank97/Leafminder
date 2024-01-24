@@ -36,7 +36,7 @@ import com.cc221009.ccl3_leafminder.ui.view_model.APISpeciesItem
 @Composable
 fun SpeciesChooser(
     speciesItems: List<APISpeciesItem>,
-    speciesDetails: SpeciesDetails?,
+    selectedSpeciesDetails: SpeciesDetails?,
     onDropdownTapped: () -> Unit,
 ) {
 
@@ -105,8 +105,8 @@ fun SpeciesChooser(
 
         }
 
-        if (speciesDetails != null) {
-            SpeciesDetailsDisplay(speciesDetails)
+        if (selectedSpeciesDetails != null) {
+            SpeciesDetailsDisplay(selectedSpeciesDetails)
         }
 
     }
