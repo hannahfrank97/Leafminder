@@ -145,7 +145,7 @@ fun EditView(
             )
 
 
-        AddPlantSpeciesContainer(
+        SpeciesChooser(
             speciesItems = emptyList(), onDropdownTapped = {},
             // TODO: Get plant details from ui state
             speciesDetails = SpeciesDetails(

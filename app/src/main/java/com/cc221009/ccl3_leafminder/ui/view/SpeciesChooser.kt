@@ -34,7 +34,7 @@ import com.cc221009.ccl3_leafminder.data.determineWateringIconFor
 import com.cc221009.ccl3_leafminder.ui.view_model.APISpeciesItem
 
 @Composable
-fun AddPlantSpeciesContainer(
+fun SpeciesChooser(
     speciesItems: List<APISpeciesItem>,
     speciesDetails: SpeciesDetails?,
     onDropdownTapped: () -> Unit,

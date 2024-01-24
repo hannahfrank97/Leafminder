@@ -118,7 +118,7 @@ fun AddView(
             state.setWellbeing
         )
 
-        AddPlantSpeciesContainer(
+        SpeciesChooser(
             state.speciesItems,
             onDropdownTapped = state.onSpeciesListTapped,
             // TODO: Get plant details from ui state
