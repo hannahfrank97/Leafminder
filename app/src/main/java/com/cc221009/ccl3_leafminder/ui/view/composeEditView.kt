@@ -146,7 +146,9 @@ fun EditView(
 
 
         AddPlantSpeciesContainer(
-            speciesItems = emptyList(), onDropdownTapped = {}, plantDetails = PlantDetails(
+            speciesItems = emptyList(), onDropdownTapped = {},
+            // TODO: Get plant details from ui state
+            plantDetails = PlantDetails(
                 listOf("sunny"),
                 "frequent",
                 false,

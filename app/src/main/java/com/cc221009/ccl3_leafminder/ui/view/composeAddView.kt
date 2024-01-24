@@ -121,6 +121,7 @@ fun AddView(
         AddPlantSpeciesContainer(
             state.speciesItems,
             onDropdownTapped = state.onSpeciesListTapped,
+            // TODO: Get plant details from ui state
             plantDetails = PlantDetails(
                 sunlight = listOf(),
                 watering = "",
