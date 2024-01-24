@@ -138,7 +138,7 @@ private fun SpeciesDetailsDisplay(speciesDetails: SpeciesDetails) {
         APIIconItem(
             "Poisinousness",
             "api value",
-            determinePoisonousnessIconFor(speciesDetails.poisonous_to_humans.toString()),
+            determinePoisonousnessIconFor(speciesDetails.poisonous_to_humans),
             "poisonousness icon",
             modifier = Modifier.weight(1f)
         )

@@ -3,7 +3,7 @@ package com.cc221009.ccl3_leafminder.data
 import com.cc221009.ccl3_leafminder.R
 import java.util.Locale
 
-fun determineLocationIconFor(locationDescription:String): Int {
+fun determineLocationIconFor(locationDescription: String): Int {
     val normalized = locationDescription.lowercase(Locale.ROOT)
     return when (normalized) {
         "full sun" -> R.drawable.location_light
@@ -13,7 +13,7 @@ fun determineLocationIconFor(locationDescription:String): Int {
     }
 }
 
-fun determineWateringIconFor(wateringDescription:String): Int {
+fun determineWateringIconFor(wateringDescription: String): Int {
     val normalized = wateringDescription.lowercase(Locale.ROOT)
     return when (normalized) {
         "minimum" -> R.drawable.watering_frequent
@@ -23,11 +23,10 @@ fun determineWateringIconFor(wateringDescription:String): Int {
     }
 }
 
-fun determinePoisonousnessIconFor(poisonousnessDescription:String): Int {
-    val normalized = poisonousnessDescription.lowercase(Locale.ROOT)
-    return when (normalized) {
-        "true" -> R.drawable.poisonous_true
-        "false" -> R.drawable.poisonous_false
+fun determinePoisonousnessIconFor(poisonousFlag: Int): Int {
+    return when (poisonousFlag) {
+        1 -> R.drawable.poisonous_true
+        0 -> R.drawable.poisonous_false
         else -> R.drawable.placeholder
     }
 }

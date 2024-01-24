@@ -45,7 +45,7 @@ class PlantsRepository(
             response ?: SpeciesDetails(
                 sunlight = listOf("Unknown"),
                 watering = "Unknown",
-                poisonous_to_humans = false
+                poisonous_to_humans = 0
             )
         }
     }

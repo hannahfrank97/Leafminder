@@ -17,7 +17,10 @@ data class SpeciesListResponse(
 data class SpeciesDetails(
     val sunlight: List<String>,
     val watering: String,
-    val poisonous_to_humans: Boolean,
+    /**
+     * 0 = non-poisonous, 1 = poisonous
+     */
+    val poisonous_to_humans: Int,
 )
 
 

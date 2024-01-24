@@ -151,7 +151,7 @@ fun EditView(
             selectedSpeciesDetails = SpeciesDetails(
                 listOf("sunny"),
                 "frequent",
-                false,
+                0,
 
                 ),
             onSpeciesSelected = {}
