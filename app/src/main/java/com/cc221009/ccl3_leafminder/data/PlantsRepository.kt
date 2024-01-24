@@ -29,20 +29,24 @@ class PlantsRepository(
             val request = apiPlantsService.getSpeciesList(apiKey, searchFilter)
             val response = request.execute().body()
             val plants = response?.data ?: emptyList()
-            plants.map {
-                APISpeciesItem(
-                    id = it.id,
-                    speciesName = it.scientific_name.firstOrNull() ?: "Unknown"
-                )
-            }
+            plants
+                // NOTE: Holy shit, free plan only allows first 3000 ids for free.
+                // So we just filter to only use plants with ids with less than 3000.
+                .filter { it.id < 3000 }
+                .map {
+                    APISpeciesItem(
+                        id = it.id,
+                        speciesName = it.scientific_name.firstOrNull() ?: "Unknown"
+                    )
+                }
         }
     }
 
     suspend fun getSpeciesDetails(Id: Int): SpeciesDetails {
         return withContext(Dispatchers.IO) {
             val request = apiPlantsService.getPlantDetails(Id, apiKey)
-            val response = request.execute().body()
-            response ?: SpeciesDetails(
+            val response = request.execute()
+            response.body() ?: SpeciesDetails(
                 sunlight = listOf("Unknown"),
                 watering = "Unknown",
                 poisonous_to_humans = 0
