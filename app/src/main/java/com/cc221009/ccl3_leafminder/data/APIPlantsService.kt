@@ -2,6 +2,7 @@ package com.cc221009.ccl3_leafminder.data
 
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 data class OnlyScientificName(
@@ -27,9 +28,9 @@ interface APIPlantsService {
         @Query("q") query: String
     ): Call<SpeciesListResponse>
 
-   @GET("species/details")
+   @GET("species/details/{id}")
    fun getPlantDetails(
-       @Query("id") Id: Int,
+       @Path("id") Id: Int,
        @Query("key") apiKey: String,
    ): Call <SpeciesDetails>
 }
