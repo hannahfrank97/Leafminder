@@ -36,7 +36,7 @@ import com.cc221009.ccl3_leafminder.ui.view_model.APISpeciesItem
 @Composable
 fun AddPlantSpeciesContainer(
     speciesItems: List<APISpeciesItem>,
-    plantDetails: PlantDetails,
+    plantDetails: PlantDetails?,
     onDropdownTapped: () -> Unit,
 ) {
 
@@ -105,7 +105,7 @@ fun AddPlantSpeciesContainer(
 
         }
 
-        if (selectedSpecies != "Select Species") {
+        if (plantDetails != null) {
             Row(
                 modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
             ) {
