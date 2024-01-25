@@ -58,7 +58,7 @@ data class EditUIState(
     val onSpeciesSelected: (Int) -> Unit,
     val onSpeciesListRequested: () -> Unit,
 
-)
+    )
 
 class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {
 
@@ -75,7 +75,7 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
             wateringFrequency = "",
             imagePath = "",
 
-            onNameChange = {    newName: TextFieldValue -> updateName(newName) },
+            onNameChange = { newName: TextFieldValue -> updateName(newName) },
             onDateChange = { newDate: String -> updateDate(newDate) },
             onSizeChange = { newSize: String -> updateSize(newSize) },
             onWellbeingChange = { newWellbeing: String -> updateWellbeing(newWellbeing) },
@@ -110,7 +110,7 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
             speciesItems = emptyList(),
             speciesDetails = null
 
-            )
+        )
     )
 
     val uiState: StateFlow<EditUIState> = _mainViewState.asStateFlow()
@@ -118,7 +118,7 @@ class EditPlantViewModel(private val plantsRepository: PlantsRepository) : ViewM
     fun fetchSpeciesNames() {
         viewModelScope.launch {
             try {
-                val speciesItems = plantsRepository.getAllSpeciesNames("rubrum")
+                val speciesItems = plantsRepository.getAllSpeciesNames("")
                 _mainViewState.value = uiState.value.copy(speciesItems = speciesItems)
             } catch (e: Exception) {
                 e.printStackTrace()

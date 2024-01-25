@@ -87,7 +87,7 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
     fun fetchSpeciesNames() {
         viewModelScope.launch {
             try {
-                val speciesItems = plantsRepository.getAllSpeciesNames("rubrum")
+                val speciesItems = plantsRepository.getAllSpeciesNames("")
                 _mainViewState.value = uiState.value.copy(speciesItems = speciesItems)
             } catch (e: Exception) {
                 e.printStackTrace()

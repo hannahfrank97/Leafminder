@@ -27,6 +27,7 @@ private val unknownSpecies = SpeciesDetails(
     poisonous_to_humans = 0
 )
 
+
 class PlantsRepository(
     val dao: PlantsDao,
     val apiPlantsService: APIPlantsService,
@@ -35,9 +36,16 @@ class PlantsRepository(
 
     suspend fun getAllSpeciesNames(searchFilter: String): List<APISpeciesItem> {
         return withContext(Dispatchers.IO) {
-            val request = apiPlantsService.getSpeciesList(apiKey, searchFilter)
-            val response = request.execute()
-            val plants = response.body()?.data ?: emptyList()
+//            val request = apiPlantsService.getSpeciesList(apiKey, searchFilter)
+//            val response = request.execute()
+//            val plants = response.body()?.data ?: emptyList()
+            val plants = fakePlantApi.filter { apiPlant ->
+                apiPlant.scientific_name.any { name ->
+                    name.contains(
+                        searchFilter
+                    )
+                }
+            }
             plants
                 // NOTE: Holy shit, free plan only allows first 3000 ids for free.
                 // So we just filter to only use plants with ids with less than 3000.
@@ -53,9 +61,11 @@ class PlantsRepository(
 
     suspend fun getSpeciesDetails(Id: Int): SpeciesDetails {
         return withContext(Dispatchers.IO) {
-            val request = apiPlantsService.getPlantDetails(Id, apiKey)
-            val response = request.execute()
-            response.body() ?: unknownSpecies
+//            val request = apiPlantsService.getPlantDetails(Id, apiKey)
+//            val response = request.execute()
+//            response.body() ?: unknownSpecies
+
+            fakePlantApi.getOrNull(Id) ?: unknownSpecies
         }
     }
 
