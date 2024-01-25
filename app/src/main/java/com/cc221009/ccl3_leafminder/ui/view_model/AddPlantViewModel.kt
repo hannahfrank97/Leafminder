@@ -38,6 +38,16 @@ data class AddUIState(
     val waterInterval: Int,
     val speciesDetails: SpeciesDetails?,
     val onSpeciesSelected: (Int) -> Unit,
+
+    val stupidFunction: (Int) -> Unit,
+
+    val speciesNamePass: String,
+
+    val stupidFunctionUpdate: (Int, String) -> Unit,
+    val speciesNamesMap: Map<Int, String> = mapOf(),
+
+    val currentPlantId: Int? = null,
+
 )
 
 data class APISpeciesItem(
@@ -75,12 +85,26 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
 
             waterInterval = 7,
 
-            speciesDetails = null
+            speciesDetails = null,
+
+            speciesNamePass = "",
+
+            stupidFunction = ::onSpeciesSelected,
+
+            stupidFunctionUpdate = ::updateSpeciesNameForPlant,
+
+            speciesNamesMap = mapOf(),
+
+            currentPlantId = null,
 
         )
     )
 
     val uiState: StateFlow<AddUIState> = _mainViewState.asStateFlow()
+    private val _speciesNamesMap = MutableStateFlow<Map<Int, String>>(mapOf())
+    val speciesNamesMap: StateFlow<Map<Int, String>> = _speciesNamesMap
+
+
 
     fun fetchSpeciesNames() {
         viewModelScope.launch {
@@ -92,8 +116,24 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
             }
         }
 
-
     }
+
+    fun onSpeciesSelected(speciesId: Int) {
+        val selectedSpecies = _mainViewState.value.speciesItems.find { it.id == speciesId }
+        _mainViewState.value = _mainViewState.value.copy(
+            speciesNamePass = selectedSpecies?.speciesName ?: ""
+        )
+    }
+
+    fun updateSpeciesNameForPlant(plantId: Int, speciesName: String) {
+        _speciesNamesMap.value = _speciesNamesMap.value.toMutableMap().apply {
+            put(plantId, speciesName)
+        }
+        _mainViewState.value = _mainViewState.value.copy(
+            speciesNamesMap = _speciesNamesMap.value
+        )
+    }
+
 
     fun fetchSpeciesDetails(apiId: Int) {
         viewModelScope.launch {

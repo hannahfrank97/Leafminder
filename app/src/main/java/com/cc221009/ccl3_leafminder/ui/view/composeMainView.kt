@@ -53,7 +53,8 @@ fun MainView(
     Scaffold(
         bottomBar = {
             if (navController.currentBackStackEntryAsState().value?.destination?.route != Screen.SplashScreen.route
-                && navController.currentBackStackEntryAsState().value?.destination?.route != Screen.CameraView.route) {
+                && navController.currentBackStackEntryAsState().value?.destination?.route != Screen.CameraView.route
+            ) {
                 BottomNavigationBar(navController)
             }
         }
@@ -64,7 +65,7 @@ fun MainView(
             startDestination = Screen.SplashScreen.route
         ) {
             composable(Screen.HomeView.route) {
-                HomeView(navController= navController)
+                HomeView(navController = navController)
             }
 
             composable(Screen.AddView.route) {
@@ -87,8 +88,13 @@ fun MainView(
                 EditView(plantId, navController = navController, cameraViewModel = cameraViewModel)
             }
 
-            composable(Screen.PlantListView.route) {
-                PlantListView(navController = navController)
+            composable(
+                "PlantListView/{speciesName}",
+                arguments = listOf(navArgument("speciesName") { type = NavType.StringType })
+            ) { backStackEntry ->
+                // Extract the speciesName argument
+                val speciesName = backStackEntry.arguments?.getString("speciesName") ?: ""
+                PlantListView(navController = navController, speciesName = speciesName)
             }
 
             composable(Screen.SplashScreen.route) {
@@ -103,7 +109,8 @@ fun MainView(
                     imageCapture,
                     cameraExecutor,
                     directory,
-                    context)
+                    context
+                )
             }
         }
     }

@@ -16,7 +16,8 @@ data class PlantListUIState(
     val seeAllPlants: () -> Unit,
     val speciesItems: List<APISpeciesItem>,
     val onSpeciesListRequested: () -> Unit,
-    val selected
+    val stupidFunctionUpdate: (Int, String) -> Unit,
+    val speciesNamesMap: Map<Int, String> = mapOf(),
 
     )
 
@@ -27,15 +28,32 @@ class PlantListViewModel(private val plantsRepository: PlantsRepository) : ViewM
             seeAllPlants = ::getPlants,
             speciesItems = emptyList(),
             onSpeciesListRequested = ::fetchSpeciesNames,
-
-            )
+            stupidFunctionUpdate = ::updateSpeciesNameForPlant,
+            speciesNamesMap = mapOf(),
     )
 
+            )
+
+
     val uiState: StateFlow<PlantListUIState> = _mainViewState.asStateFlow()
+
+    private val _speciesNamesMap = MutableStateFlow<Map<Int, String>>(mapOf())
+    val speciesNamesMap: StateFlow<Map<Int, String>> = _speciesNamesMap
 
     init {
         getPlants()
     }
+
+    fun updateSpeciesNameForPlant(plantId: Int, speciesName: String) {
+        _speciesNamesMap.value = _speciesNamesMap.value.toMutableMap().apply {
+            put(plantId, speciesName)
+        }
+        _mainViewState.value = _mainViewState.value.copy(
+            speciesNamesMap = _speciesNamesMap.value
+        )
+    }
+
+
 
     fun getPlants() {
         viewModelScope.launch {

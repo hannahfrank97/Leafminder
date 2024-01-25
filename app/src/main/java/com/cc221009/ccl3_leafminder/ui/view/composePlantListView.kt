@@ -48,7 +48,9 @@ fun PlantListView(
             makePlantRepository(LocalContext.current)
         )
     ),
-    navController: NavController
+    navController: NavController,
+    speciesName: String,
+
 ) {
     val state by vm.uiState.collectAsState()
 
@@ -81,7 +83,7 @@ fun PlantListView(
                     PlantListItem(
                         navController,
                         plant = plant,
-                        species = state.speciesItems.firstOrNull()
+                        species = speciesName,
                     )
                 }
             }

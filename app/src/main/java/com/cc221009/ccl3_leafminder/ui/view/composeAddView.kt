@@ -46,6 +46,7 @@ import com.cc221009.ccl3_leafminder.R
 import com.cc221009.ccl3_leafminder.data.SpeciesDetails
 import com.cc221009.ccl3_leafminder.data.makePlantRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
+import com.cc221009.ccl3_leafminder.ui.view_model.APISpeciesItem
 import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
 import com.cc221009.ccl3_leafminder.ui.view_model.CameraViewModel
 
@@ -124,6 +125,8 @@ fun AddView(
             selectedSpeciesDetails = state.speciesDetails,
             onSpeciesSelected = {
                 state.onSpeciesSelected(it)
+                state.stupidFunction(it)
+                state.stupidFunctionUpdate(it, state.speciesNamePass)
             }
         )
 
@@ -147,10 +150,14 @@ fun AddView(
                     imagePath = capturedImageUri?.toString() ?: "",
                     apiId = state.speciesDetails?.id,
                 )
+
                 state.tappingtoSavePlant(plant)
                 println("Button was clicked")
                 cameraViewModel.resetCapturedImageUri()
-                navController.navigate(Screen.PlantListView.route) {
+
+               val speciesNamePass = state.speciesNamePass
+
+                navController.navigate("PlantListView/$speciesNamePass") {
                     popUpTo(Screen.PlantListView.route) {
                         inclusive = true
                     }
