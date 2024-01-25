@@ -3,10 +3,8 @@ package com.cc221009.ccl3_leafminder.ui.view
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,9 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.cc221009.ccl3_leafminder.data.SpeciesDetails
-import com.cc221009.ccl3_leafminder.data.determineLocationIconFor
-import com.cc221009.ccl3_leafminder.data.determinePoisonousnessIconFor
-import com.cc221009.ccl3_leafminder.data.determineWateringIconFor
 import com.cc221009.ccl3_leafminder.ui.view_model.APISpeciesItem
 
 @Composable
@@ -116,31 +111,3 @@ fun SpeciesChooser(
 
 }
 
-@Composable
-private fun SpeciesDetailsDisplay(speciesDetails: SpeciesDetails) {
-    Row(
-        modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        APIIconItem(
-            "Location",
-            "api value",
-            determineLocationIconFor(speciesDetails.sunlight.first()),
-            "location icon",
-            modifier = Modifier.weight(1f),
-        )
-        APIIconItem(
-            "Watering",
-            "api value",
-            determineWateringIconFor(speciesDetails.watering),
-            "watering icon",
-            modifier = Modifier.weight(1f)
-        )
-        APIIconItem(
-            "Poisinousness",
-            "api value",
-            determinePoisonousnessIconFor(speciesDetails.poisonous_to_humans),
-            "poisonousness icon",
-            modifier = Modifier.weight(1f)
-        )
-    }
-}

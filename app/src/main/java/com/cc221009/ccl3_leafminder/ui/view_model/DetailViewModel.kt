@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
-import com.cc221009.ccl3_leafminder.data.model.Plant
+import com.cc221009.ccl3_leafminder.data.model.FullPlant
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 data class DetailUIState(
     val loadPlant: (Int) -> Unit,
-    val plant: Plant? = null,
+    val fullPlant: FullPlant?,
 )
 
 class DetailViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {
@@ -20,7 +20,7 @@ class DetailViewModel(private val plantsRepository: PlantsRepository) : ViewMode
     private val _mainViewState = MutableStateFlow(
         DetailUIState(
             loadPlant = ::getPlantDetails,
-            plant = null
+            fullPlant = null
         )
     )
 
@@ -29,8 +29,10 @@ class DetailViewModel(private val plantsRepository: PlantsRepository) : ViewMode
 
     fun getPlantDetails(plantId: Int) {
         viewModelScope.launch {
-            val plantDetails = plantsRepository.getPlantById(plantId)
-            _mainViewState.value = _mainViewState.value.copy(plant = plantDetails)
+            val plant = plantsRepository.getPlantById(plantId)
+            val fullPlant = plantsRepository.makeFullPlant(plant)
+            _mainViewState.value =
+                _mainViewState.value.copy(fullPlant = fullPlant)
         }
     }
 

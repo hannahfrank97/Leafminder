@@ -44,10 +44,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.R
-import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.calculateDaysUntilNextWatering
 import com.cc221009.ccl3_leafminder.data.checkIfNeedsWater
-import com.cc221009.ccl3_leafminder.data.getDatabase
 import com.cc221009.ccl3_leafminder.data.makePlantRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.DetailViewModel
@@ -69,8 +67,9 @@ fun DetailView(
     navController: NavController
 ) {
     val state by vm.uiState.collectAsState()
+    val plantToDisplay = state.fullPlant
 
-    if (state.plant == null) {
+    if (plantToDisplay == null) {
 
         LaunchedEffect(key1 = plantId) {
             state.loadPlant(plantId)
@@ -85,17 +84,17 @@ fun DetailView(
     var nextWateringIn = 0
 
     try {
-        val acquisitionDate = LocalDate.parse(state.plant!!.date, formatter)
+        val acquisitionDate = LocalDate.parse(plantToDisplay.plant.date, formatter)
         daysSurvived = ChronoUnit.DAYS.between(acquisitionDate, currentDate).toInt()
     } catch (e: Exception) {
         Log.e("DetailView", "Error calculating days survived: ${e.message}")
     }
 
     try {
-        val lastWateringDate = LocalDate.parse(state.plant!!.wateringDate, formatter)
+        val lastWateringDate = LocalDate.parse(plantToDisplay.plant.wateringDate, formatter)
         nextWateringIn = calculateDaysUntilNextWatering(
             lastWateringDate,
-            state.plant!!.wateringFrequency.toInt()
+            plantToDisplay.plant.wateringFrequency.toInt()
         )
     } catch (e: Exception) {
         Log.e("DetailView", "Error calculating next watering: ${e.message}")
@@ -122,18 +121,22 @@ fun DetailView(
                 navController.navigate("EditView/${plantId}")
             })
 
-        PlantDetailImage(state.plant!!, "R..placeholder", "plant species")
+        PlantDetailImage(plantToDisplay.plant, "R..placeholder", "plant species")
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        val needsWater = checkIfNeedsWater(state.plant!!.wateringFrequency, state.plant!!.wateringDate)
+        val needsWater =
+            checkIfNeedsWater(
+                plantToDisplay.plant.wateringFrequency,
+                plantToDisplay.plant.wateringDate
+            )
         if (needsWater) {
-            PlantDetail_WateringNotification(state.plant!!.name)
+            PlantDetail_WateringNotification(plantToDisplay.plant.name)
         }
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        PlantDetailGeneralContainer(state.plant!!)
+        PlantDetailGeneralContainer(plantToDisplay.plant)
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -143,7 +146,7 @@ fun DetailView(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             SpecificInfoContainer(
-                state.plant!!.wateringFrequency,
+                plantToDisplay.plant.wateringFrequency,
                 "Water Interval",
                 R.drawable.graphics_blur_calendar,
                 colorScheme.secondaryContainer,
@@ -179,35 +182,8 @@ fun DetailView(
         H2Text("Plant specific information")
         Spacer(modifier = Modifier.height(20.dp))
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            ApiInfoItem(
-                "watering",
-                "specific info",
-                R.drawable.watering_normal,
-                colorScheme.surface,
-                modifier = Modifier.weight(1f)
-            )
-            Spacer(modifier = Modifier.width(10.dp))
-            ApiInfoItem(
-                "location",
-                "specific info",
-                R.drawable.location_light,
-                colorScheme.surface,
-                modifier = Modifier.weight(1f)
-            )
-            Spacer(modifier = Modifier.width(10.dp))
-            ApiInfoItem(
-                "poisonous",
-                "specific info",
-                R.drawable.poisonous_true,
-                colorScheme.surface,
-                modifier = Modifier.weight(1f)
-            )
-        }
+        if (plantToDisplay.speciesDetails != null)
+            SpeciesDetailsDisplay(speciesDetails = plantToDisplay.speciesDetails)
     }
 }
 
@@ -245,7 +221,6 @@ fun PlantDetailImage(
                 contentScale = ContentScale.Crop
             )
         }
-
 
 
     }
@@ -351,11 +326,11 @@ fun SpecificInfoContainer(
         ) {
 
             if (imgPath != null) {
-            Image(
-                painter = painterResource(id = imgPath),
-                contentDescription = "Profile Picture",
-                contentScale = ContentScale.Fit
-            )
+                Image(
+                    painter = painterResource(id = imgPath),
+                    contentDescription = "Profile Picture",
+                    contentScale = ContentScale.Fit
+                )
             }
 
             Column(
@@ -429,7 +404,7 @@ fun PlantDetail_WateringNotification(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
 
-        ) {
+    ) {
         Image(
             painter = painterResource(id = R.drawable.icon_waterdrop_large_blur),
             contentDescription = "Waterdrop",
