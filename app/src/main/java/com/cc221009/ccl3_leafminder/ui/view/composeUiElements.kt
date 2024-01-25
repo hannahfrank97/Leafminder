@@ -150,7 +150,7 @@ fun DefaultTextField(
                     if (placeholderText != null) {
                         CopyText(text = placeholderText)
                     }
-                              },
+                },
                 colors = TextFieldDefaults.textFieldColors(
                     textColor = MaterialTheme.colorScheme.primary,
                     cursorColor = MaterialTheme.colorScheme.primary,
@@ -176,7 +176,7 @@ fun CalendarTextField(
     placeholderText: String,
     selectedDate: String,
     onDateChange: (String) -> Unit
-    ) {
+) {
 
     val borderBottomWidth = 2.dp
     val borderBottomColor = colorScheme.outline // Change as needed
@@ -184,7 +184,7 @@ fun CalendarTextField(
 
     Column(
         modifier = Modifier.clickable {
-           showDatePicker(context, onDateChange)
+            showDatePicker(context, onDateChange)
         }
     ) {
 
@@ -223,7 +223,8 @@ fun CalendarTextField(
                 modifier = Modifier.weight(1f),
                 style = TextStyle(
                     fontFamily = FontFamily(Font(R.font.opensans_semibold)),
-                    fontSize = 13.sp)
+                    fontSize = 13.sp
+                )
 
             )
         }
@@ -281,8 +282,7 @@ fun SecondaryButton(
         modifier = Modifier
             .height(80.dp)
             .padding(bottom = 20.dp)
-            .border(color = colorScheme.primary, width = 2.dp, shape = RoundedCornerShape(15.dp))
-        ,
+            .border(color = colorScheme.primary, width = 2.dp, shape = RoundedCornerShape(15.dp)),
         shape = RoundedCornerShape(15.dp),
         onClick = { onClickLogic() },
         colors = ButtonDefaults.buttonColors(
@@ -292,7 +292,6 @@ fun SecondaryButton(
         CopyBoldText(text = text, colorScheme.primary)
     }
 }
-
 
 
 // ––––––––––––––––––––– TYPO –––––––––––––––––––––––

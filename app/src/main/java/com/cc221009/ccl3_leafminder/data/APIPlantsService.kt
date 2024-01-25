@@ -33,10 +33,10 @@ interface APIPlantsService {
         @Query("q") query: String
     ): Call<SpeciesListResponse>
 
-   @GET("species/details/{id}")
-   fun getPlantDetails(
-       @Path("id") Id: Int,
-       @Query("key") apiKey: String,
-   ): Call <SpeciesDetails>
+    @GET("species/details/{id}")
+    fun getPlantDetails(
+        @Path("id") Id: Int,
+        @Query("key") apiKey: String,
+    ): Call<SpeciesDetails>
 }
 

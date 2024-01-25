@@ -43,10 +43,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.R
-import com.cc221009.ccl3_leafminder.data.SpeciesDetails
 import com.cc221009.ccl3_leafminder.data.makePlantRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
-import com.cc221009.ccl3_leafminder.ui.view_model.APISpeciesItem
 import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
 import com.cc221009.ccl3_leafminder.ui.view_model.CameraViewModel
 
@@ -144,35 +142,36 @@ fun AddView(
         PrimaryButton("Add Plant",
             onClickLogic = {
                 if (state.name.text.isNotBlank() && state.size.isNotBlank() &&
-                    state.location.isNotBlank() && state.wellbeing.isNotBlank()) {
+                    state.location.isNotBlank() && state.wellbeing.isNotBlank()
+                ) {
                     val plant = Plant(
-                    name = state.name.text,
-                    date = state.date,
-                    size = state.size,
-                    location = state.location,
-                    wellbeing = state.wellbeing,
-                    wateringDate = state.wateringDate,
-                    wateringFrequency = state.waterInterval.toString(),
-                    imagePath = capturedImageUri?.toString() ?: "",
-                    apiId = state.speciesDetails?.id,
-                )
+                        name = state.name.text,
+                        date = state.date,
+                        size = state.size,
+                        location = state.location,
+                        wellbeing = state.wellbeing,
+                        wateringDate = state.wateringDate,
+                        wateringFrequency = state.waterInterval.toString(),
+                        imagePath = capturedImageUri?.toString() ?: "",
+                        apiId = state.speciesDetails?.id,
+                    )
 
-                state.tappingtoSavePlant(plant)
-                cameraViewModel.resetCapturedImageUri()
+                    state.tappingtoSavePlant(plant)
+                    cameraViewModel.resetCapturedImageUri()
 
-                navController.navigate(Screen.PlantListView.route) {
-                    popUpTo(Screen.PlantListView.route) {
-                        inclusive = true
+                    navController.navigate(Screen.PlantListView.route) {
+                        popUpTo(Screen.PlantListView.route) {
+                            inclusive = true
+                        }
                     }
-                }
                 } else {
                     errorMessage = "Please fill in all the blank fields."
                 }
             })
 
-            }
-    
     }
+
+}
 
 // INFO COMPONENTS
 

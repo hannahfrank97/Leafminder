@@ -39,7 +39,7 @@ data class AddUIState(
     val speciesDetails: SpeciesDetails?,
     val onSpeciesSelected: (Int) -> Unit,
 
-)
+    )
 
 data class APISpeciesItem(
     val speciesName: String,
@@ -78,7 +78,7 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
 
             speciesDetails = null,
 
-        )
+            )
     )
 
     val uiState: StateFlow<AddUIState> = _mainViewState.asStateFlow()

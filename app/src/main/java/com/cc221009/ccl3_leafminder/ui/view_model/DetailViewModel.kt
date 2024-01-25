@@ -15,7 +15,7 @@ import java.time.LocalDate
 data class DetailUIState(
     val loadPlant: (Int) -> Unit,
     val fullPlant: FullPlant?,
-val updateWateringDate: (Int) -> Unit,
+    val updateWateringDate: (Int) -> Unit,
 )
 
 class DetailViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {
@@ -29,7 +29,7 @@ class DetailViewModel(private val plantsRepository: PlantsRepository) : ViewMode
     )
 
     val uiState: StateFlow<DetailUIState> = _mainViewState.asStateFlow()
-    
+
 
     fun getPlantDetails(plantId: Int) {
         viewModelScope.launch {
@@ -40,7 +40,7 @@ class DetailViewModel(private val plantsRepository: PlantsRepository) : ViewMode
         }
     }
 
-    fun updatePlantWateringDate(plantId:Int) {
+    fun updatePlantWateringDate(plantId: Int) {
         Log.d("Debug", "Updating watering date for plant ID: $plantId")
         viewModelScope.launch {
             try {

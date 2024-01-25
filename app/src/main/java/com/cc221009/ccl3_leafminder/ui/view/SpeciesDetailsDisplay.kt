@@ -5,14 +5,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.capitalize
 import com.cc221009.ccl3_leafminder.data.SpeciesDetails
 import com.cc221009.ccl3_leafminder.data.determineLocationIconFor
 import com.cc221009.ccl3_leafminder.data.determinePoisonousnessIconFor
 import com.cc221009.ccl3_leafminder.data.determineWateringIconFor
 import com.cc221009.ccl3_leafminder.data.textForPoisonunosnessFlag
 import com.cc221009.ccl3_leafminder.data.toNormalCase
-import java.util.Locale
 
 @Composable
 fun SpeciesDetailsDisplay(speciesDetails: SpeciesDetails) {

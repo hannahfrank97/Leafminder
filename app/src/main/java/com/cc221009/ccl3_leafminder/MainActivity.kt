@@ -34,17 +34,17 @@ class MainActivity : ComponentActivity() {
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
-    ){
+    ) {
         cameraViewModel.setCameraPermission(it)
     }
 
-    private lateinit var cameraProviderFuture : ListenableFuture<ProcessCameraProvider>
+    private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var previewView: PreviewView
-    private val imageCapture : ImageCapture = ImageCapture.Builder().build()
-    private val preview : Preview = Preview.Builder().build()
+    private val imageCapture: ImageCapture = ImageCapture.Builder().build()
+    private val preview: Preview = Preview.Builder().build()
 
-    private fun setupCamera(){
+    private fun setupCamera() {
         previewView = PreviewView(this)
 
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
@@ -56,14 +56,15 @@ class MainActivity : ComponentActivity() {
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
 
-    private fun bindPreview(cameraProvider : ProcessCameraProvider) {
+    private fun bindPreview(cameraProvider: ProcessCameraProvider) {
         cameraProvider.unbindAll()
         cameraProvider.bindToLifecycle(
             this as LifecycleOwner,
             CameraSelector.Builder()
                 .requireLensFacing(CameraSelector.LENS_FACING_BACK)
                 .build(),
-            preview, imageCapture)
+            preview, imageCapture
+        )
 
         preview.setSurfaceProvider(previewView.surfaceProvider)
     }
@@ -73,7 +74,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setupCamera()
-       requestPermission()
+        requestPermission()
 
         setContent {
             CCL3_LeafminderTheme {
@@ -111,9 +112,9 @@ class MainActivity : ComponentActivity() {
         return if (mediaDir != null && mediaDir.exists()) mediaDir else filesDir
     }
 
-    private fun requestPermission(){
-        ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA).let{ result ->
-            if(result != PackageManager.PERMISSION_GRANTED){
+    private fun requestPermission() {
+        ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA).let { result ->
+            if (result != PackageManager.PERMISSION_GRANTED) {
                 requestPermissionLauncher.launch(Manifest.permission.CAMERA)
             } else {
                 cameraViewModel.setCameraPermission(true)

@@ -129,10 +129,13 @@ fun DetailView(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        var isClicked:Boolean by remember { mutableStateOf(false) }
-        var needsWater:Boolean by remember { mutableStateOf(false) }
+        var isClicked: Boolean by remember { mutableStateOf(false) }
+        var needsWater: Boolean by remember { mutableStateOf(false) }
 
-        needsWater = checkIfNeedsWater(state.fullPlant?.plant!!.wateringFrequency, state.fullPlant?.plant!!.wateringDate)
+        needsWater = checkIfNeedsWater(
+            state.fullPlant?.plant!!.wateringFrequency,
+            state.fullPlant?.plant!!.wateringDate
+        )
 
         if (needsWater) {
             PlantDetail_WateringNotification(
@@ -413,10 +416,10 @@ fun PlantDetail_WateringNotification(
     clickLogic: () -> Unit,
     updateWateringDate: () -> Unit,
 ) {
-    Row (
+    Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
-    ){
+    ) {
 
         LaunchedEffect(isClicked) {
             if (isClicked) {
@@ -425,61 +428,63 @@ fun PlantDetail_WateringNotification(
             }
         }
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(15.dp))
-            .background(colorScheme.secondaryContainer)
-            .border(width = 3.dp, color = colorScheme.secondary, RoundedCornerShape(15.dp))
-            .padding(start = 20.dp, top = 10.dp, end = 20.dp, bottom = 10.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.icon_waterdrop_large_blur),
-            contentDescription = "Waterdrop",
+        Row(
             modifier = Modifier
-                .height(50.dp)
-                .width(50.dp)
-                .padding(end = 15.dp),
-            contentScale = ContentScale.Fit
-        )
-
-        Column(
-            modifier = Modifier.weight(1f),
-            horizontalAlignment = Alignment.Start,
-        ) {
-            Text(
-                text = "Have you already watered ${text}?",
-                style = TextStyle(
-                    fontFamily = FontFamily(Font(R.font.opensans_bold)),
-                    fontSize = 13.sp,
-                    textAlign = TextAlign.Left
-                )
-            )
-            CopyText(text = "Your plant needs water!")
-        }
-
-        Box(
-            modifier = Modifier
-                .padding(20.dp)
-                .clickable {
-                    clickLogic()
-                }
-                .border(3.dp, MaterialTheme.colorScheme.secondary, RoundedCornerShape(10.dp))
+                .fillMaxWidth()
                 .clip(RoundedCornerShape(15.dp))
-                .background(if (isClicked) MaterialTheme.colorScheme.secondary else Color.Transparent)
-                .size(30.dp)
-                .padding(5.dp)
+                .background(colorScheme.secondaryContainer)
+                .border(width = 3.dp, color = colorScheme.secondary, RoundedCornerShape(15.dp))
+                .padding(start = 20.dp, top = 10.dp, end = 20.dp, bottom = 10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
 
         ) {
-            if (isClicked) {
-                Image(
-                    painter = painterResource(id = R.drawable.icon_tick),
-                    contentDescription = "tick",
-                    contentScale = ContentScale.Fit)
+            Image(
+                painter = painterResource(id = R.drawable.icon_waterdrop_large_blur),
+                contentDescription = "Waterdrop",
+                modifier = Modifier
+                    .height(50.dp)
+                    .width(50.dp)
+                    .padding(end = 15.dp),
+                contentScale = ContentScale.Fit
+            )
+
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.Start,
+            ) {
+                Text(
+                    text = "Have you already watered ${text}?",
+                    style = TextStyle(
+                        fontFamily = FontFamily(Font(R.font.opensans_bold)),
+                        fontSize = 13.sp,
+                        textAlign = TextAlign.Left
+                    )
+                )
+                CopyText(text = "Your plant needs water!")
+            }
+
+            Box(
+                modifier = Modifier
+                    .padding(20.dp)
+                    .clickable {
+                        clickLogic()
+                    }
+                    .border(3.dp, MaterialTheme.colorScheme.secondary, RoundedCornerShape(10.dp))
+                    .clip(RoundedCornerShape(15.dp))
+                    .background(if (isClicked) MaterialTheme.colorScheme.secondary else Color.Transparent)
+                    .size(30.dp)
+                    .padding(5.dp)
+
+            ) {
+                if (isClicked) {
+                    Image(
+                        painter = painterResource(id = R.drawable.icon_tick),
+                        contentDescription = "tick",
+                        contentScale = ContentScale.Fit
+                    )
+                }
             }
         }
-    }}
+    }
 }

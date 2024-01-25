@@ -44,8 +44,8 @@ fun CameraView(
     context: Context
 ) {
 
-    Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.fillMaxSize()){
-        AndroidView({previewView}, modifier = Modifier.fillMaxSize())
+    Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.fillMaxSize()) {
+        AndroidView({ previewView }, modifier = Modifier.fillMaxSize())
         Box(
             modifier = Modifier
                 .padding(20.dp)
@@ -72,7 +72,10 @@ fun CameraView(
             onClick = {
                 val photoFile = File(
                     directory,
-                    SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.US).format(System.currentTimeMillis()) + ".jpg"
+                    SimpleDateFormat(
+                        "yyyy-MM-dd-HH-mm-ss-SSS",
+                        Locale.US
+                    ).format(System.currentTimeMillis()) + ".jpg"
                 )
 
                 cameraViewModel.takePicture(
@@ -80,7 +83,7 @@ fun CameraView(
                     context = context,
                     onSuccess = { uri ->
                         cameraViewModel.updateCapturedImageUri(uri) // Update the URI of the captured image
-                            navController.popBackStack()
+                        navController.popBackStack()
                     },
                     onError = { exception ->
                         Log.e("camApp", "Error when capturing image", exception)
@@ -95,4 +98,4 @@ fun CameraView(
             )
         }
     }
-    }
+}

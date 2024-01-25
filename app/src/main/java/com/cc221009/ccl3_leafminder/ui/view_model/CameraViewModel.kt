@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.Executors
 
-data class CameraState (
+data class CameraState(
     val photosListState: List<Uri> = emptyList(),
     val enableCameraPreview: Boolean = false,
     val cameraPermissionGranted: Boolean = false,
@@ -40,11 +40,11 @@ class CameraViewModel() : ViewModel() {
         Log.e("capturedImageUri", capturedImageUri.toString())
     }
 
-    fun setCameraPermission(value: Boolean){
+    fun setCameraPermission(value: Boolean) {
         _cameraState.update { it.copy(cameraPermissionGranted = value) }
     }
 
-    fun enableCameraPreview(value: Boolean){
+    fun enableCameraPreview(value: Boolean) {
         _cameraState.update { it.copy(enableCameraPreview = value) }
     }
 
@@ -52,17 +52,28 @@ class CameraViewModel() : ViewModel() {
         _capturedImageUri.value = null
     }
 
-    fun setNewUri(value: Uri){
+    fun setNewUri(value: Uri) {
         _cameraState.update { it.copy(photosListState = it.photosListState + value) }
         enableCameraPreview(false)
     }
 
-    fun takePicture(imageCapture: ImageCapture, context: Context, onSuccess: (Uri) -> Unit, onError: (ImageCaptureException) -> Unit) {
+    fun takePicture(
+        imageCapture: ImageCapture,
+        context: Context,
+        onSuccess: (Uri) -> Unit,
+        onError: (ImageCaptureException) -> Unit
+    ) {
         // Get or create the directory where images will be stored
         val directory = context.filesDir.resolve("plantimages").apply { mkdirs() }
 
         // Create a file to save the image
-        val photoFile = File(directory, SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.US).format(System.currentTimeMillis()) + ".jpg")
+        val photoFile = File(
+            directory,
+            SimpleDateFormat(
+                "yyyy-MM-dd-HH-mm-ss-SSS",
+                Locale.US
+            ).format(System.currentTimeMillis()) + ".jpg"
+        )
 
         // Create output options object which contains file + metadata
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
@@ -78,6 +89,7 @@ class CameraViewModel() : ViewModel() {
                         onError(exc)
                     }
                 }
+
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     // Update the UI on the main thread
                     CoroutineScope(Dispatchers.Main).launch {

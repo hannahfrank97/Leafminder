@@ -300,7 +300,7 @@ fun HomeViewWateringNotification(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        var isClicked:Boolean by remember { mutableStateOf(false) }
+        var isClicked: Boolean by remember { mutableStateOf(false) }
 
         LaunchedEffect(isClicked) {
             if (isClicked) {
@@ -328,7 +328,8 @@ fun HomeViewWateringNotification(
                 Image(
                     painter = painterResource(id = R.drawable.icon_tick),
                     contentDescription = "tick",
-                    contentScale = ContentScale.Fit)
+                    contentScale = ContentScale.Fit
+                )
             }
         }
 

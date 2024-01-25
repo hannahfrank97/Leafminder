@@ -11,16 +11,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 
-data class HomeUIState (
+data class HomeUIState(
     val plants: List<Plant>,
     val plant: Plant? = null,
     val seeAllPlants: () -> Unit,
     val updateWateringDate: (Int) -> Unit,
 
     )
+
 class HomeViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {
     private val _mainViewState = MutableStateFlow(
         HomeUIState(
@@ -29,7 +29,7 @@ class HomeViewModel(private val plantsRepository: PlantsRepository) : ViewModel(
             updateWateringDate = ::updatePlantWateringDate,
             plant = null,
 
-        )
+            )
     )
 
     val uiState: StateFlow<HomeUIState> = _mainViewState.asStateFlow()
@@ -51,7 +51,7 @@ class HomeViewModel(private val plantsRepository: PlantsRepository) : ViewModel(
 
     }
 
-    fun updatePlantWateringDate(plantId:Int) {
+    fun updatePlantWateringDate(plantId: Int) {
         Log.d("Debug", "Updating watering date for plant ID: $plantId")
         viewModelScope.launch {
             try {
@@ -74,7 +74,6 @@ class HomeViewModel(private val plantsRepository: PlantsRepository) : ViewModel(
             }
         }
     }
-
 
 
 }
