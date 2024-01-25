@@ -7,9 +7,9 @@ fun determineLocationIconFor(locationDescription: String): Int {
     val normalized = locationDescription.lowercase(Locale.ROOT)
     return when (normalized) {
         "full sun" -> R.drawable.location_light
-        "part shade" -> R.drawable.location_light
-        "part sun" -> R.drawable.location_light
-        else -> R.drawable.placeholder
+        "part shade" -> R.drawable.location_half_shadow
+        "part sun" -> R.drawable.location_half_light
+        else -> R.drawable.location_half_light
     }
 }
 
@@ -19,7 +19,7 @@ fun determineWateringIconFor(wateringDescription: String): Int {
         "minimum" -> R.drawable.watering_frequent
         "average" -> R.drawable.watering_normal
         "frequent" -> R.drawable.watering_frequent
-        else -> R.drawable.placeholder
+        else -> R.drawable.watering_normal
     }
 }
 
@@ -27,7 +27,7 @@ fun determinePoisonousnessIconFor(poisonousFlag: Int): Int {
     return when (poisonousFlag) {
         1 -> R.drawable.poisonous_true
         0 -> R.drawable.poisonous_false
-        else -> R.drawable.placeholder
+        else -> R.drawable.poisonous_true
     }
 }
 
