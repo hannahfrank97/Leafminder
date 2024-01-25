@@ -88,13 +88,8 @@ fun MainView(
                 EditView(plantId, navController = navController, cameraViewModel = cameraViewModel)
             }
 
-            composable(
-                "PlantListView/{speciesName}",
-                arguments = listOf(navArgument("speciesName") { type = NavType.StringType })
-            ) { backStackEntry ->
-                // Extract the speciesName argument
-                val speciesName = backStackEntry.arguments?.getString("speciesName") ?: ""
-                PlantListView(navController = navController, speciesName = speciesName)
+            composable(Screen.PlantListView.route) {
+                PlantListView(navController = navController)
             }
 
             composable(Screen.SplashScreen.route) {
