@@ -3,6 +3,7 @@ package com.cc221009.ccl3_leafminder.ui.view
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -26,6 +28,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,6 +49,7 @@ import com.cc221009.ccl3_leafminder.data.makePlantRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.HomeUIState
 import com.cc221009.ccl3_leafminder.ui.view_model.HomeViewModel
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,7 +82,7 @@ fun HomeView(
 
         PlantListOverview(state, navController)
 
-        PlantDashboard( state = state, navController = navController)
+        PlantDashboard(state = state, navController = navController)
 
     }
 
@@ -85,12 +91,15 @@ fun HomeView(
 
 @Composable
 fun HomeHeaderContainer(
-    plantsList: List<Plant>
+    plantsList: List<Plant>,
 ) {
+    fun List<Plant>.speciesCount(): Int {
+        val uniqueSpecies = this.map { it.apiId }.toSet()
+        return uniqueSpecies.size
+    }
 
     val listCount: String = plantsList.count().toString()
-    // TODO Code Logic for Species Count
-    var listSpeciesCount: String = "3"
+    var listSpeciesCount: String = plantsList.speciesCount().toString()
     val plantsNeedingWater: String = checkAllIfNeedsWater(plantsList).count().toString()
 
 
@@ -101,7 +110,7 @@ fun HomeHeaderContainer(
     ) {
         HomeHeaderContainerItem(
             "Current Plants",
-            listCount.toString(),
+            listCount,
             R.drawable.graphics_blur_pot,
             MaterialTheme.colorScheme.tertiaryContainer,
             modifier = Modifier.weight(1f)
@@ -111,7 +120,7 @@ fun HomeHeaderContainer(
 
         HomeHeaderContainerItem(
             "Species",
-            plantsNeedingWater,
+            listSpeciesCount,
             R.drawable.graphics_blur_leaf,
             MaterialTheme.colorScheme.surface,
             modifier = Modifier.weight(1f)
@@ -141,7 +150,6 @@ fun HomeHeaderContainerItem(
     backgroundColor: Color,
     modifier: Modifier = Modifier
 ) {
-
 
 
     Column(
@@ -176,7 +184,8 @@ fun HomeHeaderContainerItem(
 @Composable
 fun PlantListOverview(
     state: HomeUIState,
-    navController: NavController) {
+    navController: NavController
+) {
     val scrollState = rememberScrollState()
 
     Column() {
@@ -189,7 +198,7 @@ fun PlantListOverview(
                 .fillMaxWidth()
                 .horizontalScroll(scrollState),
 
-        ) {
+            ) {
             AddPlantItem(navController)
 
             state.plants.take(10).forEach { plant ->
@@ -197,7 +206,7 @@ fun PlantListOverview(
                     navController,
                     plantId = plant.id,
                     plantName = plant.name,
-                    species = "" ,
+                    species = "",
                     imgPath = plant.imagePath,
                     wateringDate = plant.wateringDate,
                     wateringFrequency = plant.wateringFrequency
@@ -220,13 +229,40 @@ fun PlantDashboard(
     state: HomeUIState,
     navController: NavController,
 ) {
+    val plantNeedsWater = checkAllIfNeedsWater(state.plants)
+    val plantNeedsWaterCount = plantNeedsWater.count()
 
     Column() {
-        H2Text(text = "Plants in need")
+        H2Text(text = "Plants in need (${plantNeedsWaterCount})")
 
         Spacer(modifier = Modifier.height(15.dp))
 
-        val plantNeedsWater = checkAllIfNeedsWater(state.plants)
+
+
+        if (plantNeedsWater.isEmpty()) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Spacer(modifier = Modifier.height(30.dp))
+                Image(
+                    painter = painterResource(id = R.drawable.graphics_plant_arrangment),
+                    contentDescription = "Graphic of Plants",
+                    modifier = Modifier
+                        .size(150.dp)
+                        .align(Alignment.CenterHorizontally),
+                    contentScale = ContentScale.Fit
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+
+                CopyBoldText(
+                    text = "No plants in need right now",
+                    color = MaterialTheme.colorScheme.outline
+                )
+
+            }
+        }
 
         Column(
             modifier = Modifier
@@ -261,114 +297,128 @@ fun HomeViewWateringNotification(
     state: HomeUIState,
 ) {
     Row(
-        modifier = Modifier
-            .clickable {
-                navController.navigate("DetailView/${plantId}")
-            }
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(15.dp))
-            .background(MaterialTheme.colorScheme.secondaryContainer)
-            .padding(10.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(65.dp) // Set the size including the border
-                    .background(color = MaterialTheme.colorScheme.secondary, shape = CircleShape),
-            ) {
-                if (imgPath != "") {
-                    Image(
-                        painter = rememberImagePainter(imgPath),
-                        contentDescription = "Profile Picture",
-                        modifier = Modifier
-                            .size(60.dp) // Image size, smaller than the Box to create a border effect
-                            .align(Alignment.Center) // Center the image inside the Box
-                            .clip(CircleShape), // Clip the image to a circle shape
-                        contentScale = ContentScale.Crop,
-                    )
-                } else {
-                    Image(
-                        painter = painterResource(id = R.drawable.graphics_placeholder_plant),
-                        contentDescription = "Profile Picture",
-                        modifier = Modifier
-                            .size(60.dp)
-                            .align(Alignment.Center) // Center the image inside the Box
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.surface), // Clip the image to a circle shape
-                        contentScale = ContentScale.Crop,
-                    )
-                }
+        var isClicked:Boolean by remember { mutableStateOf(false) }
 
-                Box(
-                    modifier = Modifier
-                        .clickable {
-
-                        }
-                        .clip(CircleShape)
-                        .size(30.dp)
-                        .align(Alignment.TopEnd) // Center the image inside the Box
-                        .background(MaterialTheme.colorScheme.secondary),
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.icon_waterdrop_small),
-                        contentDescription = "Waterdrop",
-                        modifier = Modifier
-                            .size(20.dp)
-                            .align(Alignment.Center)
-                    )
-                }
+        LaunchedEffect(isClicked) {
+            if (isClicked) {
+                Log.d("Debug", "Waterdrop clicked for plant ID: $plantId")
+                delay(500L) // Delay for 1 second
+                state.updateWateringDate(plantId)
+                isClicked = false // Reset the click state
             }
-
-
-            Column(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(start = 10.dp),
-
-            ) {
-                Row {
-                    CopyBoldText(text = name, MaterialTheme.colorScheme.primary)
-                    Spacer(modifier = Modifier.width(5.dp))
-                    CopyItalicText(text = plantSpecies, MaterialTheme.colorScheme.primary)
-                }
-                Spacer(modifier = Modifier.height(5.dp))
-                CopyText(text = "Your plant needs water!")
-
-            }
-
         }
 
         Box(
             modifier = Modifier
-                .padding(end = 5.dp)
-                .clip(CircleShape)
-                .size(45.dp)
-                .background(MaterialTheme.colorScheme.secondary)
+                .padding(end = 15.dp)
                 .clickable {
-                    Log.d("Debug", "Waterdrop clicked for plant ID: $plantId")
-                    state.updateWateringDate(plantId)
-            }
+                    isClicked = true
+                }
+                .border(3.dp, MaterialTheme.colorScheme.secondary, RoundedCornerShape(10.dp))
+                .clip(RoundedCornerShape(15.dp))
+                .background(if (isClicked) MaterialTheme.colorScheme.secondary else Color.Transparent)
+                .size(30.dp)
+                .padding(5.dp)
+
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.icon_tick),
-                contentDescription = "Waterdrop",
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(25.dp)
-            )
+            if (isClicked) {
+                Image(
+                    painter = painterResource(id = R.drawable.icon_tick),
+                    contentDescription = "tick",
+                    contentScale = ContentScale.Fit)
+            }
         }
 
+        Row(
+            modifier = Modifier
+                .clickable {
+                    navController.navigate("DetailView/${plantId}")
+                }
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(15.dp))
+                .background(MaterialTheme.colorScheme.secondaryContainer)
+                .padding(10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(65.dp) // Set the size including the border
+                        .background(
+                            color = MaterialTheme.colorScheme.secondary,
+                            shape = CircleShape
+                        ),
+                ) {
+                    if (imgPath != "") {
+                        Image(
+                            painter = rememberImagePainter(imgPath),
+                            contentDescription = "Profile Picture",
+                            modifier = Modifier
+                                .size(60.dp) // Image size, smaller than the Box to create a border effect
+                                .align(Alignment.Center) // Center the image inside the Box
+                                .clip(CircleShape), // Clip the image to a circle shape
+                            contentScale = ContentScale.Crop,
+                        )
+                    } else {
+                        Image(
+                            painter = painterResource(id = R.drawable.graphics_placeholder_plant),
+                            contentDescription = "Profile Picture",
+                            modifier = Modifier
+                                .size(60.dp)
+                                .align(Alignment.Center) // Center the image inside the Box
+                                .clip(CircleShape)
+                                .background(MaterialTheme.colorScheme.surface), // Clip the image to a circle shape
+                            contentScale = ContentScale.Crop,
+                        )
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .clickable {
+
+                            }
+                            .clip(CircleShape)
+                            .size(25.dp)
+                            .align(Alignment.TopEnd) // Center the image inside the Box
+                            .background(MaterialTheme.colorScheme.secondary),
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.icon_exclamation_mark),
+                            contentDescription = "Waterdrop",
+                            modifier = Modifier
+                                .size(18.dp)
+                                .align(Alignment.Center)
+                        )
+                    }
+                }
+
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(start = 10.dp),
+
+                    ) {
+
+                    CopyBoldText(text = "${name} needs water!", MaterialTheme.colorScheme.primary)
+
+                    Spacer(modifier = Modifier.height(5.dp))
+                    CopyText(text = "Have you watered your plant?")
+
+                }
+
+            }
+        }
     }
 
     Spacer(modifier = Modifier.height(10.dp))
 }
-
-
-
 
 
 @Composable
@@ -429,15 +479,16 @@ fun PlantItem(
                 Box(
                     modifier = Modifier
                         .clip(CircleShape)
-                        .size(35.dp)
+                        .size(25.dp)
                         .align(Alignment.TopEnd) // Center the image inside the Box
                         .background(MaterialTheme.colorScheme.secondary),
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.icon_waterdrop_small),
+                        painter = painterResource(id = R.drawable.icon_exclamation_mark),
                         contentDescription = "Waterdrop",
                         modifier = Modifier
                             .align(Alignment.Center)
+                            .size(18.dp)
                     )
                 }
             }

@@ -152,10 +152,11 @@ fun PlantListItem(
                         .background(MaterialTheme.colorScheme.secondary),
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.icon_waterdrop_small),
+                        painter = painterResource(id = R.drawable.icon_exclamation_mark),
                         contentDescription = "Waterdrop",
                         modifier = Modifier
                             .align(Alignment.Center)
+                            .size(20.dp)
                     )
                 }
             }

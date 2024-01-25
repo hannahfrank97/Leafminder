@@ -1,5 +1,6 @@
 package com.cc221009.ccl3_leafminder.ui.view_model
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -9,10 +10,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 data class DetailUIState(
     val loadPlant: (Int) -> Unit,
     val fullPlant: FullPlant?,
+val updateWateringDate: (Int) -> Unit,
 )
 
 class DetailViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {
@@ -20,12 +23,29 @@ class DetailViewModel(private val plantsRepository: PlantsRepository) : ViewMode
     private val _mainViewState = MutableStateFlow(
         DetailUIState(
             loadPlant = ::getPlantDetails,
-            fullPlant = null
+            fullPlant = null,
+            updateWateringDate = ::updatePlantWateringDate,
         )
     )
 
     val uiState: StateFlow<DetailUIState> = _mainViewState.asStateFlow()
 
+    init {
+        getPlants()
+    }
+
+    fun getPlants() {
+        viewModelScope.launch {
+            try {
+                val plants = plantsRepository.getPlants()
+                _mainViewState.value = _mainViewState.value.copy(fullPlant)
+
+            } catch (e: Exception) {
+                Log.e("PlantListViewModel", "Error saving plant", e)
+            }
+        }
+
+    }
 
     fun getPlantDetails(plantId: Int) {
         viewModelScope.launch {
@@ -33,6 +53,19 @@ class DetailViewModel(private val plantsRepository: PlantsRepository) : ViewMode
             val fullPlant = plantsRepository.makeFullPlant(plant)
             _mainViewState.value =
                 _mainViewState.value.copy(fullPlant = fullPlant)
+        }
+    }
+
+    fun updatePlantWateringDate(plantId:Int) {
+        Log.d("Debug", "Updating watering date for plant ID: $plantId")
+        viewModelScope.launch {
+            try {
+                val currentDate = LocalDate.now()
+                plantsRepository.upDateWateringDate(plantId, currentDate)
+                getPlants()
+            } catch (e: Exception) {
+                Log.e("HomeViewModel", "Error updating watering date", e)
+            }
         }
     }
 
