@@ -30,3 +30,11 @@ fun determinePoisonousnessIconFor(poisonousFlag: Int): Int {
         else -> R.drawable.placeholder
     }
 }
+
+fun textForPoisonunosnessFlag(poisonousFlag: Int): String {
+    return when (poisonousFlag) {
+        1 -> "Poisonous"
+        0 -> "Non-poisonous"
+        else -> "Unknown"
+    }
+}
