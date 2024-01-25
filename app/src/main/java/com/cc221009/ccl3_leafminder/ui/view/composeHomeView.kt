@@ -91,12 +91,15 @@ fun HomeView(
 
 @Composable
 fun HomeHeaderContainer(
-    plantsList: List<Plant>
+    plantsList: List<Plant>,
 ) {
+    fun List<Plant>.speciesCount(): Int {
+        val uniqueSpecies = this.map { it.apiId }.toSet()
+        return uniqueSpecies.size
+    }
 
     val listCount: String = plantsList.count().toString()
-    // TODO Code Logic for Species Count
-    var listSpeciesCount: String = "3"
+    var listSpeciesCount: String = plantsList.speciesCount().toString()
     val plantsNeedingWater: String = checkAllIfNeedsWater(plantsList).count().toString()
 
 
@@ -107,7 +110,7 @@ fun HomeHeaderContainer(
     ) {
         HomeHeaderContainerItem(
             "Current Plants",
-            listCount.toString(),
+            listCount,
             R.drawable.graphics_blur_pot,
             MaterialTheme.colorScheme.tertiaryContainer,
             modifier = Modifier.weight(1f)
@@ -117,7 +120,7 @@ fun HomeHeaderContainer(
 
         HomeHeaderContainerItem(
             "Species",
-            plantsNeedingWater,
+            listSpeciesCount,
             R.drawable.graphics_blur_leaf,
             MaterialTheme.colorScheme.surface,
             modifier = Modifier.weight(1f)
