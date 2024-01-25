@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.data.model.plantAPIService
+import com.cc221009.ccl3_leafminder.ui.view_model.APISpeciesItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
@@ -17,21 +18,44 @@ fun makePlantRepository(context: Context): PlantsRepository {
     )
 }
 
+private val unknownSpecies = SpeciesDetails(
+    id = 0,
+    sunlight = listOf("Unknown"),
+    watering = "Unknown",
+    poisonous_to_humans = 0
+)
+
 class PlantsRepository(
     val dao: PlantsDao,
     val apiPlantsService: APIPlantsService,
     val apiKey: String
 ) {
 
-    suspend fun getAllSpeciesNames(searchFilter: String): List<String> {
+    suspend fun getAllSpeciesNames(searchFilter: String): List<APISpeciesItem> {
         return withContext(Dispatchers.IO) {
             val request = apiPlantsService.getSpeciesList(apiKey, searchFilter)
             val response = request.execute().body()
             val plants = response?.data ?: emptyList()
-            plants.map { it.scientific_name.firstOrNull() ?: "Unknown" }
+            plants
+                // NOTE: Holy shit, free plan only allows first 3000 ids for free.
+                // So we just filter to only use plants with ids with less than 3000.
+                .filter { it.id < 3000 }
+                .map {
+                    APISpeciesItem(
+                        id = it.id,
+                        speciesName = it.scientific_name.firstOrNull() ?: "Unknown"
+                    )
+                }
         }
     }
 
+    suspend fun getSpeciesDetails(Id: Int): SpeciesDetails {
+        return withContext(Dispatchers.IO) {
+            val request = apiPlantsService.getPlantDetails(Id, apiKey)
+            val response = request.execute()
+            response.body() ?: unknownSpecies
+        }
+    }
 
     suspend fun addPlant(plant: Plant) {
         dao.insertPlant(plant)

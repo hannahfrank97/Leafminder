@@ -22,11 +22,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.IconButton
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
@@ -47,9 +43,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.R
-import com.cc221009.ccl3_leafminder.data.determineLocationIconFor
-import com.cc221009.ccl3_leafminder.data.determinePoisonousnessIconFor
-import com.cc221009.ccl3_leafminder.data.determineWateringIconFor
+import com.cc221009.ccl3_leafminder.data.SpeciesDetails
 import com.cc221009.ccl3_leafminder.data.makePlantRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.AddPlantViewModel
@@ -125,7 +119,14 @@ fun AddView(
             state.setWellbeing
         )
 
-        AddPlantSpeciesContainer(state.speciesNames, onDropdownTapped = state.onSpeciesListTapped)
+        SpeciesChooser(
+            state.speciesItems,
+            onSpeciesRequested = state.onSpeciesListRequested,
+            selectedSpeciesDetails = state.speciesDetails,
+            onSpeciesSelected = {
+                state.onSpeciesSelected(it)
+            }
+        )
 
         AddPlantWateringContainer(
             state.wateringDate,
@@ -151,7 +152,8 @@ fun AddView(
                     wellbeing = state.wellbeing,
                     wateringDate = state.wateringDate,
                     wateringFrequency = state.waterInterval.toString(),
-                    imagePath = capturedImageUri?.toString() ?: ""
+                    imagePath = capturedImageUri?.toString() ?: "",
+                    apiId = state.speciesDetails?.id,
                 )
                 state.tappingtoSavePlant(plant)
                 cameraViewModel.resetCapturedImageUri()
@@ -359,16 +361,16 @@ fun AddParameterContainer(
     headline: String,
     parameterState: String,
     content: @Composable (Int, (Int) -> Unit) -> Unit
-    //Hannah: content: @Composable () -> Unit
+
 ) {
     val newSizeState: Int
     if (parameterState == "small" || parameterState == "light" || parameterState == "great") {
         newSizeState = 1
-    } else if (parameterState == "medium" || parameterState == "half-light" || parameterState == "okay"){
+    } else if (parameterState == "medium" || parameterState == "half-light" || parameterState == "okay") {
         newSizeState = 2
     } else if (parameterState == "large" || parameterState == "half-shadow" || parameterState == "bad") {
         newSizeState = 3
-    } else if ( parameterState == "shadow" ) {
+    } else if (parameterState == "shadow") {
         newSizeState = 4
     } else {
         newSizeState = -1
@@ -434,110 +436,6 @@ fun IconButtonsItem(
 
 // API COMPONENTS
 
-@Composable
-fun AddPlantSpeciesContainer(
-    speciesNames: List<String>,
-    onDropdownTapped: () -> Unit,
-) {
-
-    Column(
-        modifier = Modifier
-            .clip(RoundedCornerShape(15.dp))
-            .background(colorScheme.surface)
-            .padding(20.dp)
-            .fillMaxWidth()
-    ) {
-        //HEADLINE
-        H3Text(text = "Species")
-
-        var expanded by remember { mutableStateOf(false) }
-        var selectedSpecies by remember { mutableStateOf("Select Species") }
-
-        Box(
-            modifier = Modifier
-                .clickable {
-                    expanded = true
-                    onDropdownTapped()
-                }
-                .fillMaxWidth()
-                .height(45.dp)
-                .border(
-                    width = 2.dp,
-                    color = colorScheme.outline,
-                    shape = RoundedCornerShape(12.dp)
-                ) // Apply border
-                .clip(RoundedCornerShape(12.dp)), // Then clip to the same shape
-
-            contentAlignment = Alignment.CenterStart,
-        ) {
-            Box(
-                modifier = Modifier
-                    .padding(start = 40.dp)
-
-            ) {
-
-                CopyText(selectedSpecies)
-            }
-            DropdownMenu(
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .background(colorScheme.background),
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                speciesNames.forEach { speciesName ->
-                    DropdownMenuItem(onClick = {
-                        selectedSpecies = speciesName
-                        expanded = false
-                    }) {
-                        CopyText(speciesName)
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Icon(
-                Icons.Filled.ArrowDropDown,
-                contentDescription = "Dropdown Arrow",
-                modifier = Modifier.padding(start = 10.dp, end = 10.dp)
-            )
-
-        }
-
-        if (selectedSpecies != "Select Species") {
-            Row(
-                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                APIIconItem(
-                    "Location",
-                    "api value",
-                    determineLocationIconFor("full sun"),
-                    "location icon",
-                    modifier = Modifier.weight(1f),
-                    )
-                APIIconItem(
-                    "Watering",
-                    "api value",
-                    determineWateringIconFor("frequent"),
-                    "watering icon",
-                    modifier = Modifier.weight(1f)
-                )
-                APIIconItem(
-                    "Poisinousness",
-                    "api value",
-                    determinePoisonousnessIconFor("true"),
-                    "poisonousness icon",
-                    modifier = Modifier.weight(1f)
-                )
-            }
-        }
-
-    }
-    Spacer(modifier = Modifier.height(30.dp))
-
-}
-
 
 @Composable
 fun APIIconItem(
@@ -594,8 +492,6 @@ fun AddPlantWateringContainer(
     ) {
         //HEADLINE
         H3Text(text = "Watering")
-
-        // TODO: Connect to Viewmodel
         CalendarTextField(
             "Select the date of last watering",
             "Select date",

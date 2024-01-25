@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.cc221009.ccl3_leafminder.data.PlantsRepository
+import com.cc221009.ccl3_leafminder.data.SpeciesDetails
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,27 +25,28 @@ data class AddUIState(
     val setWateringDate: (String) -> Unit,
     val setWateringFrequency: (Int) -> Unit,
     val setwaterInterval: (Int) -> Unit,
-    val speciesNames: List<String>,
-    val onSpeciesListTapped: () -> Unit,
+    val speciesItems: List<APISpeciesItem>,
+    val onSpeciesListRequested: () -> Unit,
     val tappingtoSavePlant: (Plant) -> Unit,
     val date: String,
     val size: String,
     val location: String,
     val wellbeing: String,
-
     val wateringDate: String,
-
     val wateringFrequency: String,
     val imagePath: String,
-
     val waterInterval: Int,
+    val speciesDetails: SpeciesDetails?,
+    val onSpeciesSelected: (Int) -> Unit,
+)
 
-
-    )
+data class APISpeciesItem(
+    val speciesName: String,
+    val id: Int,
+)
 
 class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewModel() {
 
-    //for the api: val plantsDetails = MutableLiveData<List<APIPlantsWithDetails>>()
     private val _mainViewState = MutableStateFlow(
         AddUIState(
             name = TextFieldValue(""),
@@ -56,9 +58,10 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
             setWateringDate = ::onWateringDateChange,
             setWateringFrequency = ::onWateringFrequencyChange,
             setwaterInterval = ::onWaterIntervalChange,
-            speciesNames = emptyList(),
-            onSpeciesListTapped = ::fetchSpeciesNames,
+            speciesItems = emptyList(),
+            onSpeciesListRequested = ::fetchSpeciesNames,
             tappingtoSavePlant = ::saveButtonPlant,
+            onSpeciesSelected = ::fetchSpeciesDetails,
 
             date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
             size = "",
@@ -72,10 +75,37 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
 
             waterInterval = 7,
 
+            speciesDetails = null
 
-            )
+        )
     )
+
     val uiState: StateFlow<AddUIState> = _mainViewState.asStateFlow()
+
+    fun fetchSpeciesNames() {
+        viewModelScope.launch {
+            try {
+                val speciesItems = plantsRepository.getAllSpeciesNames("rubrum")
+                _mainViewState.value = uiState.value.copy(speciesItems = speciesItems)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+
+    }
+
+    fun fetchSpeciesDetails(apiId: Int) {
+        viewModelScope.launch {
+            try {
+                val plantDetails = plantsRepository.getSpeciesDetails(apiId)
+                _mainViewState.value = _mainViewState.value.copy(speciesDetails = plantDetails)
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 
     fun onNameChange(name: TextFieldValue) {
         _mainViewState.value = _mainViewState.value.copy(name = name)
@@ -115,19 +145,6 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
         )
     }
 
-    fun fetchSpeciesNames() {
-        viewModelScope.launch {
-            try {
-                val speciesNames = plantsRepository.getAllSpeciesNames("rubrum")
-                _mainViewState.value = _mainViewState.value.copy(speciesNames = speciesNames)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
-
-    }
-
     fun saveButtonPlant(plant: Plant) {
         viewModelScope.launch {
             try {
@@ -139,27 +156,6 @@ class AddPlantViewModel(private val plantsRepository: PlantsRepository) : ViewMo
         }
     }
 
-
-    //API functions (unsure id this is needed):
-    /*class APIViewModel (private val repository: PlantsRepository,apiKey: String): ViewModel() {
-    val plantsDetails = MutableLiveData<List<APIPlantsWithDetails>>()
-
-
-
-    init {
-        viewModelScope.launch {
-            try {
-                val APIdata = repository.getPlantsWithDetails(apiKey)
-                plantsDetails.postValue(APIdata)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
-
-}*/
-
-    //CREATING A FACTORY FOR THE ADDPLANTSVIEWMODEL
     companion object {
         fun provideFactory(plantsRepository: PlantsRepository): ViewModelProvider.Factory {
             return object : ViewModelProvider.Factory {

@@ -21,8 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.cc221009.ccl3_leafminder.R
-import com.cc221009.ccl3_leafminder.data.PlantsRepository
-import com.cc221009.ccl3_leafminder.data.getDatabase
+import com.cc221009.ccl3_leafminder.data.SpeciesDetails
 import com.cc221009.ccl3_leafminder.data.makePlantRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.CameraViewModel
@@ -80,6 +79,7 @@ fun EditView(
                                 wateringDate = state.wateringDate,
                                 wateringFrequency = state.wateringFrequency,
                                 imagePath = capturedImageUri.toString(),
+                                apiId = 0, // TODO: Get the actual api id
                                 id = state.plant?.id ?: 0
                             )
                             state.clickingToDeletePlant(plant)
@@ -142,12 +142,27 @@ fun EditView(
             state.wellbeing,
             setWellbeing = state.onWellbeingChange,
 
+            )
+
+
+        SpeciesChooser(
+            speciesItems = emptyList(), onSpeciesRequested = {},
+            // TODO: Get plant details from ui state
+            selectedSpeciesDetails = SpeciesDetails(
+                0,
+                listOf("sunny"),
+                "frequent",
+                0,
+            ),
+            onSpeciesSelected = {}
         )
 
-
-        AddPlantSpeciesContainer(speciesNames = emptyList(), onDropdownTapped = {})
-
-        AddPlantWateringContainer(state.wateringDate,state.setWateringFrequency, state.setWateringDate, state.waterInterval)
+        AddPlantWateringContainer(
+            state.wateringDate,
+            state.setWateringFrequency,
+            state.setWateringDate,
+            state.waterInterval
+        )
 
         PrimaryButton("Save Changes",
             onClickLogic = {
@@ -160,6 +175,7 @@ fun EditView(
                     wateringDate = state.wateringDate,
                     wateringFrequency = state.wateringFrequency,
                     imagePath = capturedImageUri?.toString() ?: "",
+                    apiId = state.plant!!.apiId,
                     id = state.plant?.id ?: 0
                 )
                 state.onSaveEditedPlant(editedPlant)
