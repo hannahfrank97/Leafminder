@@ -69,6 +69,7 @@ fun AddView(
     val state by vm.uiState.collectAsState()
     val capturedImageUriState = cameraViewModel.capturedImageUri
     val capturedImageUri = capturedImageUriState.value
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
 
 
@@ -133,9 +134,16 @@ fun AddView(
             state.waterInterval
         )
 
+        errorMessage?.let {
+            CopyBoldText(it, colorScheme.error)
+            Spacer(modifier = Modifier.height(10.dp))
+        }
+
         PrimaryButton("Add Plant",
             onClickLogic = {
-                val plant = Plant(
+                if (state.name.text.isNotBlank() && state.size.isNotBlank() &&
+                    state.location.isNotBlank() && state.wellbeing.isNotBlank()) {
+                    val plant = Plant(
                     name = state.name.text,
                     date = state.date,
                     size = state.size,
@@ -146,17 +154,20 @@ fun AddView(
                     imagePath = capturedImageUri?.toString() ?: ""
                 )
                 state.tappingtoSavePlant(plant)
-                println("Button was clicked")
                 cameraViewModel.resetCapturedImageUri()
                 navController.navigate(Screen.PlantListView.route) {
                     popUpTo(Screen.PlantListView.route) {
                         inclusive = true
                     }
                 }
+                } else {
+                    errorMessage = "Please fill in all the blank fields."
+                }
             })
-    }
 
-}
+            }
+    
+    }
 
 // INFO COMPONENTS
 
@@ -539,7 +550,7 @@ fun APIIconItem(
     Column(
         modifier = Modifier
             .background(colorScheme.surface)
-            .padding(top= 20.dp)
+            .padding(top = 20.dp)
             .fillMaxWidth(0.3f)
             .height(100.dp)
             .then(modifier),
