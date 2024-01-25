@@ -29,23 +29,7 @@ class DetailViewModel(private val plantsRepository: PlantsRepository) : ViewMode
     )
 
     val uiState: StateFlow<DetailUIState> = _mainViewState.asStateFlow()
-
-    init {
-        getPlants()
-    }
-
-    fun getPlants() {
-        viewModelScope.launch {
-            try {
-                val plants = plantsRepository.getPlants()
-                _mainViewState.value = _mainViewState.value.copy(fullPlant)
-
-            } catch (e: Exception) {
-                Log.e("PlantListViewModel", "Error saving plant", e)
-            }
-        }
-
-    }
+    
 
     fun getPlantDetails(plantId: Int) {
         viewModelScope.launch {
@@ -62,7 +46,6 @@ class DetailViewModel(private val plantsRepository: PlantsRepository) : ViewMode
             try {
                 val currentDate = LocalDate.now()
                 plantsRepository.upDateWateringDate(plantId, currentDate)
-                getPlants()
             } catch (e: Exception) {
                 Log.e("HomeViewModel", "Error updating watering date", e)
             }

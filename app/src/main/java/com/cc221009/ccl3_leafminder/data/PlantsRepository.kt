@@ -16,6 +16,7 @@ fun makePlantRepository(context: Context): PlantsRepository {
         getDatabase(context).dao,
         plantAPIService,
         "sk-c0FT65b24e11b18903882"
+        //not ideal we know, we will do it differently in the future
     )
 }
 
