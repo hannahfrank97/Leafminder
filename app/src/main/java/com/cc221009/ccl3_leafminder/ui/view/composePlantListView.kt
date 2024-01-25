@@ -33,9 +33,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.R
-import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.checkIfNeedsWater
-import com.cc221009.ccl3_leafminder.data.getDatabase
 import com.cc221009.ccl3_leafminder.data.makePlantRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.PlantListViewModel
@@ -153,10 +151,11 @@ fun PlantListItem(
                         .background(MaterialTheme.colorScheme.secondary),
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.icon_waterdrop_small),
+                        painter = painterResource(id = R.drawable.icon_exclamation_mark),
                         contentDescription = "Waterdrop",
                         modifier = Modifier
                             .align(Alignment.Center)
+                            .size(20.dp)
                     )
                 }
             }
