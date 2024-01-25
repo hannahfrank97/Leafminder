@@ -27,6 +27,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,13 +47,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.R
-import com.cc221009.ccl3_leafminder.data.PlantsRepository
 import com.cc221009.ccl3_leafminder.data.calculateDaysUntilNextWatering
 import com.cc221009.ccl3_leafminder.data.checkIfNeedsWater
-import com.cc221009.ccl3_leafminder.data.getDatabase
 import com.cc221009.ccl3_leafminder.data.makePlantRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.DetailViewModel
+import kotlinx.coroutines.delay
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -126,9 +128,24 @@ fun DetailView(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        val needsWater = checkIfNeedsWater(state.plant!!.wateringFrequency, state.plant!!.wateringDate)
+        var isClicked:Boolean by remember { mutableStateOf(false) }
+        var needsWater:Boolean by remember { mutableStateOf(false) }
+
+        needsWater = checkIfNeedsWater(state.plant!!.wateringFrequency, state.plant!!.wateringDate)
+
         if (needsWater) {
-            PlantDetail_WateringNotification(state.plant!!.name)
+            PlantDetail_WateringNotification(
+                state.plant!!.name,
+                isClicked,
+                clickLogic = {
+                    isClicked = true
+                },
+                updateWateringDate = {
+                    println("INSIDE THE UPDATEWATERINGDATE")
+                    state.updateWateringDate(state.plant!!.id)
+                    needsWater = false
+                }
+            )
         }
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -417,15 +434,30 @@ fun ApiInfoItem(
 
 @Composable
 fun PlantDetail_WateringNotification(
-    text: String
+    text: String,
+    isClicked: Boolean,
+    clickLogic: () -> Unit,
+    updateWateringDate: () -> Unit,
 ) {
+    Row (
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ){
+
+        LaunchedEffect(isClicked) {
+            if (isClicked) {
+                delay(500L)
+                updateWateringDate()
+            }
+        }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(15.dp))
             .background(colorScheme.secondaryContainer)
             .border(width = 3.dp, color = colorScheme.secondary, RoundedCornerShape(15.dp))
-            .padding(20.dp),
+            .padding(start = 20.dp, top = 10.dp, end = 20.dp, bottom = 10.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
 
@@ -457,21 +489,23 @@ fun PlantDetail_WateringNotification(
 
         Box(
             modifier = Modifier
+                .padding(20.dp)
                 .clickable {
-                    // TODO LOGIC FOR MARK AS WATERED
+                    clickLogic()
                 }
-                .padding(start = 20.dp)
-                .clip(CircleShape)
-                .size(45.dp)
-                .background(MaterialTheme.colorScheme.secondary)
+                .border(3.dp, MaterialTheme.colorScheme.secondary, RoundedCornerShape(10.dp))
+                .clip(RoundedCornerShape(15.dp))
+                .background(if (isClicked) MaterialTheme.colorScheme.secondary else Color.Transparent)
+                .size(30.dp)
+                .padding(5.dp)
+
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.icon_tick),
-                contentDescription = "Waterdrop",
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(25.dp),
-            )
+            if (isClicked) {
+                Image(
+                    painter = painterResource(id = R.drawable.icon_tick),
+                    contentDescription = "tick",
+                    contentScale = ContentScale.Fit)
+            }
         }
-    }
+    }}
 }
