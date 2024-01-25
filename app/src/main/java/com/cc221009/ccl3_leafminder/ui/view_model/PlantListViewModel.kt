@@ -37,14 +37,20 @@ class PlantListViewModel(private val plantsRepository: PlantsRepository) : ViewM
             try {
                 val plants = plantsRepository.getPlants()
 
+                // Create a new list for fullPlants
+                val fullPlantsList = mutableListOf<FullPlant>()
+
                 for (plant in plants) {
                     val fullPlant = plantsRepository.makeFullPlant(plant)
-                    _mainViewState.value = _mainViewState.value.copy(
-                        fullPlants = _mainViewState.value.fullPlants + fullPlant
-                    )
+                    fullPlantsList.add(fullPlant)
                 }
+
+                // Update the state with the new list
+                _mainViewState.value = _mainViewState.value.copy(
+                    fullPlants = fullPlantsList
+                )
             } catch (e: Exception) {
-                Log.e("PlantListViewModel", "Error saving plant", e)
+                Log.e("PlantListViewModel", "Error fetching plants", e)
             }
         }
     }
