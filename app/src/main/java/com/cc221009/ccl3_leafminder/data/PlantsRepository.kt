@@ -57,6 +57,26 @@ class PlantsRepository(
         }
     }
 
+    suspend fun getSpeciesNameByApiId(apiId: Int): String {
+        return withContext(Dispatchers.IO) {
+            try {
+                // Fetching the list of all species.
+                val response = apiPlantsService.getSpeciesList(apiKey, "").execute()
+
+                if (response.isSuccessful && response.body() != null) {
+                    // Finding the species that matches the provided apiId.
+                    response.body()?.data?.find { it.id == apiId }?.scientific_name?.firstOrNull() ?: "Unknown"
+                } else {
+                    "Unknown" // Return "Unknown" if the response is unsuccessful or null.
+                }
+            } catch (e: Exception) {
+                Log.e("PlantsRepository", "Error fetching species name: ${e.message}")
+                "Unknown" // Return "Unknown" in case of an exception.
+            }
+        }
+    }
+
+
     suspend fun addPlant(plant: Plant) {
         dao.insertPlant(plant)
     }

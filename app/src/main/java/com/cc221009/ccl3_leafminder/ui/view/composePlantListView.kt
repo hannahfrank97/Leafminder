@@ -49,7 +49,6 @@ fun PlantListView(
         )
     ),
     navController: NavController,
-    speciesName: String,
 
 ) {
     val state by vm.uiState.collectAsState()
@@ -83,7 +82,7 @@ fun PlantListView(
                     PlantListItem(
                         navController,
                         plant = plant,
-                        species = speciesName,
+                        species = state.fetchedSpeciesName
                     )
                 }
             }

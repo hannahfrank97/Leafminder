@@ -16,8 +16,8 @@ data class PlantListUIState(
     val seeAllPlants: () -> Unit,
     val speciesItems: List<APISpeciesItem>,
     val onSpeciesListRequested: () -> Unit,
-    val stupidFunctionUpdate: (Int, String) -> Unit,
-    val speciesNamesMap: Map<Int, String> = mapOf(),
+    val getSpeciesNameById: (Int) -> Unit,
+    val fetchedSpeciesName: String,
 
     )
 
@@ -28,8 +28,8 @@ class PlantListViewModel(private val plantsRepository: PlantsRepository) : ViewM
             seeAllPlants = ::getPlants,
             speciesItems = emptyList(),
             onSpeciesListRequested = ::fetchSpeciesNames,
-            stupidFunctionUpdate = ::updateSpeciesNameForPlant,
-            speciesNamesMap = mapOf(),
+            getSpeciesNameById = ::fetchSpeciesNameById,
+            fetchedSpeciesName = ""
     )
 
             )
@@ -37,22 +37,9 @@ class PlantListViewModel(private val plantsRepository: PlantsRepository) : ViewM
 
     val uiState: StateFlow<PlantListUIState> = _mainViewState.asStateFlow()
 
-    private val _speciesNamesMap = MutableStateFlow<Map<Int, String>>(mapOf())
-    val speciesNamesMap: StateFlow<Map<Int, String>> = _speciesNamesMap
-
     init {
         getPlants()
     }
-
-    fun updateSpeciesNameForPlant(plantId: Int, speciesName: String) {
-        _speciesNamesMap.value = _speciesNamesMap.value.toMutableMap().apply {
-            put(plantId, speciesName)
-        }
-        _mainViewState.value = _mainViewState.value.copy(
-            speciesNamesMap = _speciesNamesMap.value
-        )
-    }
-
 
 
     fun getPlants() {
@@ -78,6 +65,18 @@ class PlantListViewModel(private val plantsRepository: PlantsRepository) : ViewM
             }
         }
 
+
+    }
+
+    fun fetchSpeciesNameById(apiId: Int) {
+        viewModelScope.launch {
+            try {
+                val speciesName = plantsRepository.getSpeciesNameByApiId(apiId)
+                _mainViewState.value = _mainViewState.value.copy(fetchedSpeciesName = speciesName)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
 
     }
 

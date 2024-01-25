@@ -125,8 +125,6 @@ fun AddView(
             selectedSpeciesDetails = state.speciesDetails,
             onSpeciesSelected = {
                 state.onSpeciesSelected(it)
-                state.stupidFunction(it)
-                state.stupidFunctionUpdate(it, state.speciesNamePass)
             }
         )
 
@@ -155,9 +153,7 @@ fun AddView(
                 println("Button was clicked")
                 cameraViewModel.resetCapturedImageUri()
 
-               val speciesNamePass = state.speciesNamePass
-
-                navController.navigate("PlantListView/$speciesNamePass") {
+                navController.navigate(Screen.PlantListView.route) {
                     popUpTo(Screen.PlantListView.route) {
                         inclusive = true
                     }
