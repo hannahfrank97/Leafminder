@@ -33,9 +33,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.cc221009.ccl3_leafminder.R
-import com.cc221009.ccl3_leafminder.data.PlantsRepository
+import com.cc221009.ccl3_leafminder.data.SpeciesDetails
 import com.cc221009.ccl3_leafminder.data.checkIfNeedsWater
-import com.cc221009.ccl3_leafminder.data.getDatabase
 import com.cc221009.ccl3_leafminder.data.makePlantRepository
 import com.cc221009.ccl3_leafminder.data.model.Plant
 import com.cc221009.ccl3_leafminder.ui.view_model.PlantListViewModel
@@ -50,7 +49,7 @@ fun PlantListView(
     ),
     navController: NavController,
 
-) {
+    ) {
     val state by vm.uiState.collectAsState()
 
     LaunchedEffect(key1 = true) {
@@ -66,11 +65,11 @@ fun PlantListView(
             "Your Plants",
             null,
             leftIconLogic = {
-            navController.popBackStack()
+                navController.popBackStack()
             },
             rightIconLogic = {
-            navController.navigate(Screen.EditView.route)
-        })
+                navController.navigate(Screen.EditView.route)
+            })
 
         Spacer(modifier = Modifier.height(30.dp))
 
@@ -78,28 +77,27 @@ fun PlantListView(
             columns = GridCells.Fixed(3),
             horizontalArrangement = Arrangement.SpaceBetween,
             content = {
-                items(state.plants) { plant ->
+                items(state.fullPlants) { fullPlant ->
                     PlantListItem(
                         navController,
-                        plant = plant,
-                        species = state.fetchedSpeciesName
+                        plant = fullPlant.plant,
+                        speciesDetails = fullPlant.speciesDetails,
                     )
                 }
             }
         )
+
 
     }
 
 }
 
 @Composable
-
 fun PlantListItem(
     navController: NavController,
-    species: String?,
     plant: Plant,
-
-    ) {
+    speciesDetails: SpeciesDetails?
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -168,8 +166,9 @@ fun PlantListItem(
         CopyText(text = plant.name)
 
         // Conditionally display textDetail if it's not null
-        species?.let {
-            CopyItalicText(text = it, MaterialTheme.colorScheme.outline)
+        speciesDetails?.let {
+            // NOTE: This might fail if the species has no scientific name
+            CopyItalicText(text = it.scientific_name.first(), MaterialTheme.colorScheme.outline)
 
         }
 

@@ -16,6 +16,7 @@ data class SpeciesListResponse(
 
 data class SpeciesDetails(
     val id: Int,
+    val scientific_name: List<String>,
     val sunlight: List<String>,
     val watering: String,
     /**
